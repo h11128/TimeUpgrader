@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "86689788180",
+    "firebase_url": "https://timeupgrader.firebaseio.com",
+    "project_id": "timeupgrader",
+    "storage_bucket": "timeupgrader.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86689788180:android:050a703e10fdaaec",
+        "android_client_info": {
+          "package_name": "com.example.timeupgrader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86689788180-4f5ahlulql3ehq4meq2m4e81cj7j68ta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.timeupgrader",
+            "certificate_hash": "8ecbc7e5ee71f28eadbf4c4e8a4a666d621578df"
+          }
+        },
+        {
+          "client_id": "86689788180-h2kpm3baqeg738moookl1k5o8a85itup.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.timeupgrader",
+            "certificate_hash": "8d081705c64e2570f6d94de36271a79f7d9fece6"
+          }
+        },
+        {
+          "client_id": "86689788180-stdb34dmlrmo1bsuklumac14vuk5coh3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSCR5wHa6CUh7M8bWKs2xbfnPpTlxZdBQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86689788180-stdb34dmlrmo1bsuklumac14vuk5coh3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
