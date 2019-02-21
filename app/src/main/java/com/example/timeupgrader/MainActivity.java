@@ -1,5 +1,6 @@
 package com.example.timeupgrader;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -24,12 +25,14 @@ public class MainActivity extends AppCompatActivity {
     Button signup;
     Button login;
     FirebaseAuth firebaseAuth;
+    static MainActivity mainActivity;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mainActivity = this;
 
         toolbar = findViewById(R.id.toolbar);
         progressBar = findViewById(R.id.progressBar);
