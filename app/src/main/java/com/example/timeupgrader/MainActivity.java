@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,13 +19,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-    Toolbar toolbar;
+    private static final String TAG = MainActivity.class.getSimpleName();
     ProgressBar progressBar;
     EditText email;
     EditText password;
+    FirebaseAuth firebaseAuth;
+    Toolbar toolbar;
     Button signup;
     Button login;
-    FirebaseAuth firebaseAuth;
     static MainActivity mainActivity;
 
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mainActivity = this;
+        Log.i(TAG, "OnCreate() called");
+
 
         toolbar = findViewById(R.id.toolbar);
         progressBar = findViewById(R.id.progressBar);
