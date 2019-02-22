@@ -23,9 +23,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sendFinishActivityBroadcast(getApplicationContext());
         setContentView(R.layout.activity_profile);
-        if (MainActivity.mainActivity != null) MainActivity.mainActivity.finish();
-        if (LoginActivity.loginActivity != null) LoginActivity.loginActivity.finish();
         Log.i(TAG, "onCreate() called!!!");
 
         toolbar = findViewById(R.id.toolbarProfile);
@@ -92,6 +91,11 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
+    }
+
+    public static void sendFinishActivityBroadcast(Context context) {
+        context.sendBroadcast(new Intent(SignupActivity.RECEIVER_ACTION_FINISH));
+        context.sendBroadcast(new Intent(LoginActivity.RECEIVER_ACTION_FINISH));
     }
 
     private void showNormalDialog(){

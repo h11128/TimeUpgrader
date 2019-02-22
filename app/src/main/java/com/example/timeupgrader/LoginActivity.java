@@ -1,8 +1,9 @@
 package com.example.timeupgrader;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -22,20 +23,22 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
+    public static final String RECEIVER_ACTION_FINISH = "receiver_action_finish";
     Toolbar toolbar;
     ProgressBar progressBar;
     EditText userEmail;
     EditText userPassword;
     Button userLogin;
     FirebaseAuth firebaseAuth;
-    static LoginActivity loginActivity;
+    private LoginActivity.FinishActivityReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        loginActivity = this;
         setContentView(R.layout.activity_login);
         Log.i(TAG, "onCreate() called!!!");
+        mReceiver = new FinishActivityReceiver();
+        registerFinishReceiver();
 
         toolbar = findViewById(R.id.toolbarLogin);
         progressBar = findViewById(R.id.progressBarLogin);
@@ -104,7 +107,25 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+        }
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
+    }
+
+    private class FinishActivityReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (RECEIVER_ACTION_FINISH.equals(intent.getAction())){
+                LoginActivity.this.finish();
+            }
+        }
+    }
+
+    private void registerFinishReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVER_ACTION_FINISH);
+        registerReceiver(mReceiver, intentFilter);
     }
 }
