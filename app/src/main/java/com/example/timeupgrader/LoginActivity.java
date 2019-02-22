@@ -52,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
                 if ((!userEmail.getText().toString().isEmpty()) && (!userPassword.getText().toString().isEmpty())) {
                     progressBar.setVisibility(View.VISIBLE);
                     firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
@@ -60,32 +59,39 @@ public class LoginActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressBar.setVisibility(View.GONE);
-                                    if (task.isSuccessful()) {
-                                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, task.getException().getMessage()
-                                                , Toast.LENGTH_LONG).show();
+                                    if (task.isSuccessful())
+                                    { startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                                     }
-=======
+                                    else
+                                    {
+                                        Toast.makeText(LoginActivity.this, task.getException().getMessage(),
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                                                        }
+                                                   });
                 progressBar.setVisibility(View.VISIBLE);
                 firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
-                                if(task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor=sp.edit();
+                                    SharedPreferences.Editor editor = sp.edit();
                                     editor.putString("email", userEmail.getText().toString());
                                     editor.putString("password", userPassword.getText().toString());
                                     editor.apply();
                                     startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                                }else{
+                                } else {
                                     Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
->>>>>>> e9fc18c4f15ddc716ddf50c2427ff896a85173e7
                                 }
-                            });
-                } else {
+                            }
+
+                            ;
+                        });
+
+                }
+                else {
                     Toast.makeText(getApplicationContext(), "Invalid E-mail or password", Toast.LENGTH_LONG).show();
                 }
             }
