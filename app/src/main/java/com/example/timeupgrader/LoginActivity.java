@@ -1,5 +1,7 @@
 package com.example.timeupgrader;
 
+import java.util.regex.Pattern;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -48,23 +50,28 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE );
-                firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if(task.isSuccessful()){
-                                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                                }else{
-                                    Toast.makeText(LoginActivity.this, task.getException().getMessage()
-                                            , Toast.LENGTH_LONG).show();
+                if ((!userEmail.getText().toString().isEmpty()) && (!userPassword.getText().toString().isEmpty())) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (task.isSuccessful()) {
+                                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, task.getException().getMessage()
+                                                , Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Invalid E-mail or password", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
+
 
     @Override
     protected void onPause() {
@@ -95,4 +102,5 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
     }
+
 }
