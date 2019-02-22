@@ -76,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                             });
                 }
                 else {
+                    Log.i(TAG, "invalid username or password");
                     Toast.makeText(getApplicationContext(), "Empty e-mail or password", Toast.LENGTH_LONG).show();
                 }
             }
