@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     Button signup;
     Button login;
     static MainActivity mainActivity;
-    public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+    public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-_\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
     public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{6,16}$";
 
     @Override
@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                                                 Toast.LENGTH_LONG).show();
                                         email.setText("");
                                         password.setText("");
+                                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                     } else {
                                         Toast.makeText(MainActivity.this, task.getException().getMessage(),
                                                 Toast.LENGTH_LONG).show();
