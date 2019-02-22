@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -30,8 +30,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbarProfile);
         progressBar = findViewById(R.id.progressBarProfile);
-        exit = findViewById(R.id.btnExit);
         signout = findViewById(R.id.btnSignout);
+        exit = findViewById(R.id.btnExit);
+
 
         toolbar.setTitle("TimeUpgrader");
 
