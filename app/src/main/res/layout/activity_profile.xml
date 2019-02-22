@@ -43,6 +43,18 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbarProfile" />
 
     <Button
+        android:id="@+id/btnSignout"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:gravity="center_horizontal"
+        android:text="SIGN OUT"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textExample" />
+
+    <Button
         android:id="@+id/btnExit"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
@@ -52,6 +64,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textExample" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSignout"/>
 
 </android.support.constraint.ConstraintLayout>
