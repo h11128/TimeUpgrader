@@ -53,24 +53,31 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if(task.isSuccessful()){
-                                    SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor=sp.edit();
-                                    editor.putString("email", userEmail.getText().toString());
-                                    editor.putString("password", userPassword.getText().toString());
-                                    editor.apply();
-                                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                                }else{
-                                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                final String em = userEmail.getText().toString();
+                final String pw = userPassword.getText().toString();
+                if (!em.equals("") && !pw.equals("")) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    firebaseAuth.signInWithEmailAndPassword(em, pw)
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (task.isSuccessful()) {
+                                        SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sp.edit();
+                                        editor.putString("email", em);
+                                        editor.putString("password", pw);
+                                        editor.apply();
+                                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                    } else {
+                                        Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Empty e-mail or password", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
