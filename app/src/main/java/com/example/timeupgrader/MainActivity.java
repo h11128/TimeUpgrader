@@ -1,5 +1,7 @@
 package com.example.timeupgrader;
 
+import java.util.regex.Pattern;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     Button signup;
     Button login;
     static MainActivity mainActivity;
-
+    public static final String REGEX_EMAIL = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+    public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{6,16}$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,37 +41,41 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate() called!!!");
 
 
-        toolbar = findViewById(R.id.toolbar);
-        progressBar = findViewById(R.id.progressBar);
+        toolbar = findViewById(R.id.toolbarMain);
+        progressBar = findViewById(R.id.progressBarMain);
         email = findViewById(R.id.etEmail);
         password = findViewById(R.id.etPassword);
         signup = findViewById(R.id.btnSignup);
         login = findViewById(R.id.btnLogin);
 
-        toolbar.setTitle(R.string.app_name);
+        toolbar.setTitle("Welcome to TimeUpgrader!");
 
         firebaseAuth = FirebaseAuth.getInstance();
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if(task.isSuccessful()){
-                                    Toast.makeText(MainActivity.this,"Registered successfully",
-                                            Toast.LENGTH_LONG).show();
-                                    email.setText("");
-                                    password.setText("");
-                                }else{
-                                    Toast.makeText(MainActivity.this, task.getException().getMessage(),
-                                            Toast.LENGTH_LONG).show();
+                if (isEmail(email.getText().toString()) && isPassword(password.getText().toString())) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    progressBar.setVisibility(View.GONE);
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(MainActivity.this, "Registered successfully",
+                                                Toast.LENGTH_LONG).show();
+                                        email.setText("");
+                                        password.setText("");
+                                    } else {
+                                        Toast.makeText(MainActivity.this, task.getException().getMessage(),
+                                                Toast.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
-                        });
-
+                            });
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Invalid E-mail or password", Toast.LENGTH_LONG).show();
+                }
             }
         });
         login.setOnClickListener(new View.OnClickListener() {
@@ -107,5 +114,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
+    }
+
+    public static boolean isPassword(String password) {
+        return Pattern.matches(REGEX_PASSWORD, password);
+    }
+
+    public static boolean isEmail(String email) {
+        return Pattern.matches(REGEX_EMAIL, email);
     }
 }

@@ -35,8 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         loginActivity = this;
         Log.i(TAG, "onCreate() called!!!");
 
-        toolbar = findViewById(R.id.toolbar2);
-        progressBar = findViewById(R.id.progressBar);
+        toolbar = findViewById(R.id.toolbarLogin);
+        progressBar = findViewById(R.id.progressBarLogin);
         userEmail = findViewById(R.id.etUserEmail);
         userPassword = findViewById(R.id.etUserPassword);
         userLogin = findViewById(R.id.btnUserLogin);

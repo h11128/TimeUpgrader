@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,14 +9,17 @@
     tools:context=".LoginActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/toolbarLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorError"
+        android:background="#f25b1a"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints">
         <ProgressBar
-            android:id="@+id/progressBar"
+            android:id="@+id/progressBarLogin"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,24 +31,49 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/textUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="8dp"
+        android:text="E-mail:"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbarLogin"/>
+
     <EditText
         android:id="@+id/etUserEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@+id/textUserEmail"/>
+
+    <TextView
+        android:id="@+id/textUserPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="8dp"
+        android:text="Password:"
+        android:textColor="@android:color/black"
+        android:textSize="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/etUserEmail"/>
+
     <EditText
         android:id="@+id/etUserPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@+id/textUserPassword"/>
 
     <Button
         android:id="@+id/btnUserLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login" />
-</LinearLayout>
+        android:text="Login"
+        app:layout_constraintTop_toBottomOf="@+id/etUserPassword"/>
+
+</android.support.constraint.ConstraintLayout>
