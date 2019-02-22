@@ -53,22 +53,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if ((!userEmail.getText().toString().isEmpty()) && (!userPassword.getText().toString().isEmpty())) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    progressBar.setVisibility(View.GONE);
-                                    if (task.isSuccessful())
-                                    { startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                                    }
-                                    else
-                                    {
-                                        Toast.makeText(LoginActivity.this, task.getException().getMessage(),
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                                                        }
-                                                   });
                 progressBar.setVisibility(View.VISIBLE);
                 firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
