@@ -1,7 +1,9 @@
 package com.example.timeupgrader;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
         loginActivity = this;
+        setContentView(R.layout.activity_login);
         Log.i(TAG, "onCreate() called!!!");
 
         toolbar = findViewById(R.id.toolbarLogin);
@@ -48,22 +50,32 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE );
+                progressBar.setVisibility(View.VISIBLE);
                 firebaseAuth.signInWithEmailAndPassword(userEmail.getText().toString(), userPassword.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if(task.isSuccessful()){
+                                    SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor editor=sp.edit();
+                                    editor.putString("email", userEmail.getText().toString());
+                                    editor.putString("password", userPassword.getText().toString());
+                                    editor.apply();
                                     startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                                 }else{
-                                    Toast.makeText(LoginActivity.this, task.getException().getMessage()
-                                            , Toast.LENGTH_LONG).show();
+                                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart() called!!!");
     }
 
     @Override
