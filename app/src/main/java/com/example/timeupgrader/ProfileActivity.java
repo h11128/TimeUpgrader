@@ -14,11 +14,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 public class ProfileActivity extends AppCompatActivity {
+    private static final String TAG = ProfileActivity.class.getSimpleName();
     Toolbar toolbar;
     ProgressBar progressBar;
     Button exit;
     Button signout;
-    private static final String TAG = ProfileActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,6 @@ public class ProfileActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarProfile);
         signout = findViewById(R.id.btnSignout);
         exit = findViewById(R.id.btnExit);
-
 
         toolbar.setTitle("TimeUpgrader");
 
