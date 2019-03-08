@@ -9,11 +9,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class ViewActivity extends AppCompatActivity {
 
     EditText editTextName;
     Button buttonAddTask;
     Spinner spinnerType;
+    DatabaseReference databaseTasks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +26,7 @@ public class ViewActivity extends AppCompatActivity {
         editTextName = (EditText) findViewById(R.id.editTextName);
         buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
         spinnerType = (Spinner) findViewById(R.id.spinnerType);
-
+        databaseTasks = FirebaseDatabase.getInstance().getReference();
         buttonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
