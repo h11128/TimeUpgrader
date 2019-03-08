@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
         private static final String DB_Name = "task.sqlite";
@@ -90,7 +91,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             cv.put(Column_UGAId, GA.getId());
             cv.put(Column_UserId, user.getId());
             cv.put(Column_ActId, act.getId());
-            return getWritableDatabase().insert(Table_UserGroupActivity, null, cv);
+            return getWritableDatabase().insert(UGASchema.UGA.Table_UserGroupActivity, null, cv);
         }
         public long insert_Activity(Act act){
             ContentValues cv = new ContentValues();
@@ -103,6 +104,6 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             cv.put(Column_IsTiming, act.isTiming());
             cv.put(Column_RewardPoint, act.getRewardPoint());
             cv.put(Column_Status, act.getStatus());
-            return getWritableDatabase().insert(Table_Activity, null, cv);
+            return getWritableDatabase().insert(.Table_Activity, null, cv);
         }
 }

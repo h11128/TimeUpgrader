@@ -2,7 +2,7 @@ package com.example.timeupgrader;
 
 import android.provider.BaseColumns;
 
-public class UGASchema {
+public final class UGASchema {
     private UGASchema(){};
 
     public static class UGA implements BaseColumns {

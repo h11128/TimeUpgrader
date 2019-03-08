@@ -1,7 +1,7 @@
 package com.example.timeupgrader;
 import android.provider.BaseColumns;
 
-public class ActSchema {
+public final class ActSchema {
     private ActSchema(){}
 
     public static class ACT implements BaseColumns{
