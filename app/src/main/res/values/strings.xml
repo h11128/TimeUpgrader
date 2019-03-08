@@ -4,7 +4,7 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <array name = "task_types">
+    <array name="task_types">
         <item>Study</item>
         <item>Reading</item>
         <item>Programming</item>
