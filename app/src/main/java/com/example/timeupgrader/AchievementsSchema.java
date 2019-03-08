@@ -6,9 +6,10 @@ public class AchievementsSchema {
     private AchievementsSchema(){}
 
     public static class AchSchema implements BaseColumns{
-        private static final String Column_AchieveName = "AchieveName";
-        private static final String Column_AchieveDescription = "AchieveDescription";
-        private static final String Column_Criterion = "Criterion";
-        private static final String Column_Threshold = "Threshold";
+        public static final String Table_Achievements = "Achievements"
+        public static final String Column_AchieveName = "AchieveName";
+        public static final String Column_AchieveDescription = "AchieveDescription";
+        public static final String Column_Criterion = "Criterion";
+        public static final String Column_Threshold = "Threshold";
     }
 }

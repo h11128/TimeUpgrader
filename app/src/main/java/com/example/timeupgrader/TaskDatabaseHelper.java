@@ -4,6 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.timeupgrader.UserAccountSchema.*;
+import com.example.timeupgrader.UserAchievementsSchema.*;
+import com.example.timeupgrader.AchievementsSchema.*;
+
 import com.example.timeupgrader.UGASchema.*
 import com.example.timeupgrader.ActSchema.*
 
@@ -19,9 +24,16 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
         public void OnCreate(SQLiteDatabase db) {
 
+<<<<<<< HEAD
             db.execSQL("create table UserAccount (" +
                     "UserId TEXT primary key autoincrement, UserName TEXT, LoginName TEXT," +
                     "Password TEXT, Level INTEGER, Point INTERGER, NumFocuses INTEGER)");
+=======
+            db.execSQL("create table " +  UASchema.Table_UserAccount + "(" +
+                    UASchema.Column_UserId + "TEXT PRIMARY KEY,"+ UASchema.Column_UserName +"TEXT," +
+                    UASchema.Column_Email + "TEXT," + UASchema.Column_Password + "TEXT," + UASchema.Column_Level+ "INTEGER," +
+                    UASchema.Column_Point + "INTEGER," + UASchema.Column_NumFocuses + "INTEGER)");
+>>>>>>> 6154bd80932ef0b42cbed6c3de1287a311451dd8
 
             db.execSQL("create table UserAchievements (" +
                     "UAId INTEGET primary key autoincrement, UserId TEXT, AchieveId INTEGER,AchieveTime INTEGER)");
@@ -47,28 +59,29 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         }
         public long insert_useraccount(User user, Account account) {
             ContentValues cv = new ContentValues();
-            cv.put(Column_UserName, account.getUsername());
-            cv.put(Column_Password, account.getPassword());
-            cv.put(Column_UserId, account.getId());
-            cv.put(Column_Level, user.getLevel());
-            cv.put(Column_Point, user.getPoint());
-            cv.put(Column_NumFocuses, user.getNumFocusesDone());
-            return getWritableDatabase().insert(Table_UserAccount, null, cv);
+            cv.put(UASchema.Column_UserName, account.getUsername());
+            cv.put(UASchema.Column_Password, account.getPassword());
+            cv.put(UASchema.Column_UserId, account.getId());
+            cv.put(UASchema.Column_Email,account.getEmail());
+            cv.put(UASchema.Column_Level, user.getLevel());
+            cv.put(UASchema.Column_Point, user.getPoint());
+            cv.put(UASchema.Column_NumFocuses, user.getNumFocusesDone());
+            return getWritableDatabase().insert(UASchema.Table_UserAccount, null, cv);
         }
         public long insert_UserAchievements(User user, Achievement achievement) {
             ContentValues cv = new ContentValues();
-            cv.put(Column_UserId, user.getId());
-            cv.put(Column_AchieveId, achievement.getId());
-            cv.put(Column_AchieveTime, achievement.getThreshold());
-            return getWritableDatabase().insert(Table_UserAchievements, null, cv);
+            cv.put(UASchema.Column_UserId, user.getId());
+            cv.put(UserAchSchema.Column_AchieveId, achievement.getId());
+            cv.put(UserAchSchema.Column_AchieveTime, achievement.getThreshold());
+            return getWritableDatabase().insert(UserAchSchema.Table_UserAchievements, null, cv);
         }
         public long insert_Achievements(Achievement achievement) {
             ContentValues cv = new ContentValues();
-            cv.put(Column_AchieveDescription, achievement.getDescription());
-            cv.put(Column_AchieveName, achievement.getName());
-            cv.put(Column_Criterion, achievement.getCriterion());
-            cv.put(Column_Threshold, achievement.getThreshold());
-            return getWritableDatabase().insert(Table_Achievements, null, cv);
+            cv.put(AchSchema.Column_AchieveDescription, achievement.getDescription());
+            cv.put(AchSchema.Column_AchieveName, achievement.getName());
+            cv.put(AchSchema.Column_Criterion, achievement.getCriterion());
+            cv.put(AchSchema.Column_Threshold, achievement.getThreshold());
+            return getWritableDatabase().insert(AchSchema.Table_Achievements, null, cv);
         }
         public long insert_UserGroupActivity(GroupAct GA, Act act, User user){
             ContentValues cv = new ContentValues();
@@ -77,7 +90,11 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             cv.put(UGA.Column_MemberStatus, GA.getStatusByUser(user));
             cv.put(UGA.Column_UGAId, GA.getId());
             cv.put(UASchema.Column_UserId, user.getId());
+<<<<<<< HEAD
             cv.put(ACT.Column_ActId, act.getId());
+=======
+            cv.put(.Column_ActId, act.getId());
+>>>>>>> 6154bd80932ef0b42cbed6c3de1287a311451dd8
             return getWritableDatabase().insert(UGA.Table_UserGroupActivity, null, cv);
         }
         public long insert_Activity(Act act){
