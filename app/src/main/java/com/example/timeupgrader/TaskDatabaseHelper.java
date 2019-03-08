@@ -23,21 +23,6 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         private static final String Column_AchieveDescription = "AchieveDescription";
         private static final String Column_Criterion = "Criterion";
         private static final String Column_Threshold = "Threshold";
-        private static final String Table_UserGroupActivity = "UserGroupActivity";
-        private static final String Column_MemberStatus = "MemberStatus";
-        private static final String Column_gTotalTime = "gTotalTime";
-        private static final String Column_gCurTime = "gCurTime";
-        private static final String Column_UGAId = "UGAId";
-        private static final String Table_Activity = "UserGroupActivity";
-        private static final String Column_ActId = "ActId";
-        private static final String Column_ActName = "ActName";
-        private static final String Column_ActDescription = "ActDescription";
-        private static final String Column_ActType = "ActType";
-        private static final String Column_StartTime = "StartTime";
-        private static final String Column_Notify = "Notify";
-        private static final String Column_IsTiming = "IsTiming";
-        private static final String Column_RewardPoint = "RewardPoint";
-        private static final String Column_Status = "Status";
 
         public TaskDatabaseHelper(Context context){
             super(context, DB_Name, null, Version);
@@ -59,16 +44,13 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
             db.execSQL("create table UserGroupActivity (" +
                     "UGAId TEXT primary key, UserId TEXT, ActId TEXT," +
-                    "MemberStatus INTEGER, gTotalTime , gCurTime integer)");
+                    "MemberStatus INTEGER, gTotalTime INTEGER, gCurTime INTERGER)");
 
             db.execSQL("create table Activity (" +
-                    "ActId String primary key, ActName String, ActDescription String," +
-                    "ActType integer, StartTime interger, Notify boolean," +
-                    "IsTiming boolean, RewardPoint integer, Status integer)");
+                    "ActId TEXT primary key, ActName TEXT, ActDescription TEXT," +
+                    "ActType INTEGER, StartTime INTEGER, Notify INTEGER," +
+                    "IsTiming INTEGER, RewardPoint INTEGER, Status INTEGER)");
 
-            db.execSQL("create table useraccount (" +
-                    "UserId UUID primary key, UserName String, LoginName String," +
-                    "Password String, level integer, point integer, numFocuses integer)");
         }
 
         @Override
