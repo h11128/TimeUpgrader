@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_Name = "task.sqlite";
     private static final int Version = 1;
@@ -48,7 +47,6 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table UserGroupActivity ("+
                 "UGAId String primary key, UserId String, ActId String," +
                 "MemberStatus integer, gTotalTime integer, gCurTime integer)");
-
         db.execSQL("create table useraccount ("+
                 "UserId UUID primary key, UserName String, LoginName String," +
                 "Password String, level integer, point integer, numFocuses integer)");
@@ -58,7 +56,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 // Implement schema changes and data massage here when upgrading
     }
-    public long insert_useraccount(User user,Account account) {
+    public long insert_useraccount(User user, Account account) {
         ContentValues cv = new ContentValues();
         cv.put(Column_username, account.getUsername());
         cv.put(Column_password, account.getPassword());
@@ -68,7 +66,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         cv.put(Column_numFocuses, user.getNumFocusesDone());
         return getWritableDatabase().insert(Table_UserAccount, null, cv);
     }
-    public long insert_UserAchievements(User user,Achievement achievement) {
+    public long insert_UserAchievements(User user, Achievement achievement) {
         ContentValues cv = new ContentValues();
         cv.put(Column_userid, user.getId());
         cv.put(Column_AchieveId, achievement.getId());
@@ -83,7 +81,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         cv.put(Column_Threshold, achievement.getThreshold());
         return getWritableDatabase().insert(Table_Achievements, null, cv);
     }
-    public long insert_UserGroupActivity(GroupAct GA, Act act,User user){
+    public long insert_UserGroupActivity(GroupAct GA, Act act, User user){
         ContentValues cv = new ContentValues();
         cv.put(Column_gCurTime, GA.getCurrentTimeByUser(user));
         cv.put(Column_gTotalTime, GA.getTotalTimeByUser(user));
@@ -93,6 +91,4 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         cv.put(Column_ActId, act.getId());
         return getWritableDatabase().insert(Table_UserGroupActivity, null, cv);
     }
-
-
 }
