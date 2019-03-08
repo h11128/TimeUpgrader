@@ -1,13 +1,12 @@
 package com.example.timeupgrader;
 
 import java.util.Date;
-import java.util.UUID;
 
 public abstract class Act {
     public static final int SINGLE = 0;
     public static final int GROUP = 1;
 
-    private UUID id;
+    private String id;
     private String name;
     private String description;
     private int type;
@@ -16,7 +15,7 @@ public abstract class Act {
     private boolean isTiming;
     private int rewardPoint;
 
-    public Act(UUID id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, int rewardPoint) {
+    public Act(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, int rewardPoint) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -27,11 +26,11 @@ public abstract class Act {
         this.rewardPoint = rewardPoint;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

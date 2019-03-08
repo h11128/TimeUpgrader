@@ -1,7 +1,6 @@
 package com.example.timeupgrader;
 
 import java.util.Date;
-import java.util.UUID;
 
 public class SingleAct extends Act {
     public static final int SET = 0;
@@ -14,7 +13,7 @@ public class SingleAct extends Act {
     private int totalTime;
     private int currentTime;
 
-    public SingleAct(UUID id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, int rewardPoint, User owner, int status, int totalTime, int currentTime) {
+    public SingleAct(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, int rewardPoint, User owner, int status, int totalTime, int currentTime) {
         super(id, name, description, type, startTime, notify, isTiming, rewardPoint);
         this.owner = owner;
         this.status = status;

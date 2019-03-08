@@ -1,17 +1,16 @@
 package com.example.timeupgrader;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class User {
-    private UUID id;
+    private String id;
     private String username;
     private int point;
     private int level;
     private int numFocusesDone;
     private ArrayList achievements;
 
-    public User(UUID id, String username, int point, int level, int numFocusesDone, ArrayList achievements) {
+    public User(String id, String username, int point, int level, int numFocusesDone, ArrayList achievements) {
         this.id = id;
         this.username = username;
         this.point = point;
@@ -20,11 +19,11 @@ public class User {
         this.achievements = achievements;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

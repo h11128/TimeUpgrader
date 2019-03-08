@@ -85,9 +85,9 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
     }
     public long insert_UserGroupActivity(GroupAct GA, Act act,User user){
         ContentValues cv = new ContentValues();
-        cv.put(Column_gCurTime, GA.getCurrentTimeByUser());
-        cv.put(Column_gTotalTime, GA.getTotalTimeByUser());
-        cv.put(Column_MemberStatus, GA.getStatusByUser());
+        cv.put(Column_gCurTime, GA.getCurrentTimeByUser(user));
+        cv.put(Column_gTotalTime, GA.getTotalTimeByUser(user));
+        cv.put(Column_MemberStatus, GA.getStatusByUser(user));
         cv.put(Column_UGAId, GA.getId());
         cv.put(Column_userid, user.getId());
         cv.put(Column_ActId, act.getId());
