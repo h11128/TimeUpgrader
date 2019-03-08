@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.example.timeupgrader.UGASchema.*
+import com.example.timeupgrader.ActSchema.*
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
@@ -16,26 +17,25 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             super(context, DB_Name, null, Version);
         }
 
-
         public void OnCreate(SQLiteDatabase db) {
 
             db.execSQL("create table UserAccount (" +
-                    "UserId TEXT primary key, UserName TEXT, LoginName TEXT," +
+                    "UserId TEXT primary key autoincrement, UserName TEXT, LoginName TEXT," +
                     "Password TEXT, Level INTEGER, Point INTERGER, NumFocuses INTEGER)");
 
             db.execSQL("create table UserAchievements (" +
                     "UAId INTEGET primary key autoincrement, UserId TEXT, AchieveId INTEGER,AchieveTime INTEGER)");
 
             db.execSQL("create table Achievements (" +
-                    "AchieveId INTEGER primary key, AchieveName TEXT, AchieveDescription TEXT," +
+                    "AchieveId INTEGER primary key autoincrement, AchieveName TEXT, AchieveDescription TEXT," +
                     "Criterion INTEGER, Threshold INTEGER)");
 
             db.execSQL("create table UserGroupActivity (" +
-                    "UGAId TEXT primary key, UserId TEXT, ActId TEXT," +
+                    "UGAId TEXT primary key autoincrement, UserId TEXT, ActId TEXT," +
                     "MemberStatus INTEGER, gTotalTime INTEGER, gCurTime INTERGER)");
 
             db.execSQL("create table Activity (" +
-                    "ActId TEXT primary key, ActName TEXT, ActDescription TEXT," +
+                    "ActId TEXT primary key autoincrement, ActName TEXT, ActDescription TEXT," +
                     "ActType INTEGER, StartTime INTEGER, Notify INTEGER," +
                     "IsTiming INTEGER, RewardPoint INTEGER, Status INTEGER)");
 
@@ -76,21 +76,21 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             cv.put(UGA.Column_gTotalTime, GA.getTotalTimeByUser(user));
             cv.put(UGA.Column_MemberStatus, GA.getStatusByUser(user));
             cv.put(UGA.Column_UGAId, GA.getId());
-            cv.put(UGA.Column_UserId, user.getId());
-            cv.put(.Column_ActId, act.getId());
+            cv.put(UASchema.Column_UserId, user.getId());
+            cv.put(ACT.Column_ActId, act.getId());
             return getWritableDatabase().insert(UGA.Table_UserGroupActivity, null, cv);
         }
         public long insert_Activity(Act act){
             ContentValues cv = new ContentValues();
-            cv.put(Column_ActId, act.getId());
-            cv.put(Column_ActName, act.getName());
-            cv.put(Column_ActDescription, act.getDescription());
-            cv.put(Column_ActType, act.getType());
-            cv.put(Column_StartTime, act.getStartTime());
-            cv.put(Column_Notify, act.isNotify());
-            cv.put(Column_IsTiming, act.isTiming());
-            cv.put(Column_RewardPoint, act.getRewardPoint());
-            cv.put(Column_Status, act.getStatus());
-            return getWritableDatabase().insert(.Table_Activity, null, cv);
+            cv.put(ACT.Column_ActId, act.getId());
+            cv.put(ACT.Column_ActName, act.getName());
+            cv.put(ACT.Column_ActDescription, act.getDescription());
+            cv.put(ACT.Column_ActType, act.getType());
+            cv.put(ACT.Column_StartTime, act.getStartTime());
+            cv.put(ACT.Column_Notify, act.isNotify());
+            cv.put(ACT.Column_IsTiming, act.isTiming());
+            cv.put(ACT.Column_RewardPoint, act.getRewardPoint());
+            cv.put(ACT.Column_Status, act.getStatus());
+            return getWritableDatabase().insert(ACT.Table_Activity, null, cv);
         }
 }
