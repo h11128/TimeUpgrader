@@ -7,6 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
+<<<<<<< HEAD
+    private static final String DB_Name = "task.sqlite";
+    private static final int Version = 1;
+=======
         private static final String DB_Name = "task.sqlite";
         private static final int Version = 1;
         private static final String Table_UserAccount = "UserAccount";
@@ -24,6 +28,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         private static final String Column_AchieveDescription = "AchieveDescription";
         private static final String Column_Criterion = "Criterion";
         private static final String Column_Threshold = "Threshold";
+>>>>>>> 5a1d7818d9a9524cc013f51377a3a85b4ab4a7c9
 
         public TaskDatabaseHelper(Context context){
             super(context, DB_Name, null, Version);
