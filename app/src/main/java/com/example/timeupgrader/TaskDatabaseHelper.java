@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android
+import com.example.timeupgrader.UGASchema.*
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
@@ -72,13 +72,13 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         }
         public long insert_UserGroupActivity(GroupAct GA, Act act, User user){
             ContentValues cv = new ContentValues();
-            cv.put(Column_gCurTime, GA.getCurrentTimeByUser(user));
-            cv.put(Column_gTotalTime, GA.getTotalTimeByUser(user));
-            cv.put(Column_MemberStatus, GA.getStatusByUser(user));
-            cv.put(Column_UGAId, GA.getId());
-            cv.put(Column_UserId, user.getId());
-            cv.put(Column_ActId, act.getId());
-            return getWritableDatabase().insert(UGASchema.UGA.Table_UserGroupActivity, null, cv);
+            cv.put(UGA.Column_gCurTime, GA.getCurrentTimeByUser(user));
+            cv.put(UGA.Column_gTotalTime, GA.getTotalTimeByUser(user));
+            cv.put(UGA.Column_MemberStatus, GA.getStatusByUser(user));
+            cv.put(UGA.Column_UGAId, GA.getId());
+            cv.put(UGA.Column_UserId, user.getId());
+            cv.put(.Column_ActId, act.getId());
+            return getWritableDatabase().insert(UGA.Table_UserGroupActivity, null, cv);
         }
         public long insert_Activity(Act act){
             ContentValues cv = new ContentValues();
