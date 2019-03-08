@@ -6,10 +6,8 @@ public class UserAchievementsSchema {
     private UserAchievementsSchema(){}
 
     public static class UserAchSchema implements BaseColumns {
-        private static final String Column_AchieveId = "AchieveId";
-        private static final String Column_AchieveTime = "AchieveTime";
-
-        public static final String Table_UserAchievements = "UserAchievements"
+        public static final String Table_UserAchievements = "UserAchievements";
+        public static final String Column_UAId = "UserAchievementId";
         public static final String Column_AchieveId = "AchieveId";
         public static final String Column_AchieveTime = "AchieveTime";
     }
