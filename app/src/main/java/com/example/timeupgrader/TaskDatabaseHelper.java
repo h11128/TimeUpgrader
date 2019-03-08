@@ -4,8 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android
-
+import com.example.timeupgrader.UserAccountSchema.*;
+import com.example.timeupgrader.UserAchievementsSchema.*;
+import com.example.timeupgrader.AchievementsSchema.*;
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_Name = "task.sqlite";

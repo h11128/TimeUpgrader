@@ -7,10 +7,10 @@ public class UserAccountSchema {
 
     public static class UASchema implements BaseColumns{
         public static final String Column_username = "UserName";
-        private static final String Column_password = "Password";
-        private static final String Column_userid = "UserId";
-        private static final String Column_level = "Level";
-        private static final String Column_point = "Point";
-        private static final String Column_numFocuses = "numFocuses";
+        public static final String Column_password = "Password";
+        public static final String Column_userid = "UserId";
+        public static final String Column_level = "Level";
+        public static final String Column_point = "Point";
+        public static final String Column_numFocuses = "numFocuses";
     }
 }
