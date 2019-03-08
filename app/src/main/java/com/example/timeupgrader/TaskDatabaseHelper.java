@@ -8,27 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_Name = "task.sqlite";
     private static final int Version = 1;
-    private static final String Table_UserAccount = "UserAccount";
-    private static final String Column_username = "UserName";
-    private static final String Column_password = "Password";
-    private static final String Column_userid = "UserId";
-    private static final String Column_level = "Level";
-    private static final String Column_point = "Point";
-    private static final String Column_numFocuses = "numFocuses";
-    private static final String Table_UserAchievements = "UserAchievements";
-    private static final String Column_AchieveId = "AchieveId";
-    private static final String Column_AchieveTime = "AchieveTime";
-    private static final String Table_Achievements = "UserAccount";
-    private static final String Column_AchieveName = "AchieveName";
-    private static final String Column_AchieveDescription = "AchieveDescription";
-    private static final String Column_Criterion = "Criterion";
-    private static final String Column_Threshold = "Threshold";
-    private static final String Table_UserGroupActivity = "UserGroupActivity";
-    private static final String Column_ActId = "ActId";
-    private static final String Column_MemberStatus = "MemberStatus";
-    private static final String Column_gTotalTime = "gTotalTime";
-    private static final String Column_gCurTime = "gCurTime";
-    private static final String Column_UGAId = "UGAId";
 
     public TaskDatabaseHelper(Context context){
         super(context, DB_Name, null, Version);
