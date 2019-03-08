@@ -6,68 +6,108 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
+<<<<<<< HEAD
     private static final String DB_Name = "task.sqlite";
     private static final int Version = 1;
+=======
+        private static final String DB_Name = "task.sqlite";
+        private static final int Version = 1;
+        private static final String Table_UserAccount = "UserAccount";
+        private static final String Column_UserName = "UserName";
+        private static final String Column_Password = "Password";
+        private static final String Column_UserId = "UserId";
+        private static final String Column_Level = "Level";
+        private static final String Column_Point = "Point";
+        private static final String Column_NumFocuses = "numFocuses";
+        private static final String Table_UserAchievements = "UserAchievements";
+        private static final String Column_AchieveId = "AchieveId";
+        private static final String Column_AchieveTime = "AchieveTime";
+        private static final String Table_Achievements = "UserAccount";
+        private static final String Column_AchieveName = "AchieveName";
+        private static final String Column_AchieveDescription = "AchieveDescription";
+        private static final String Column_Criterion = "Criterion";
+        private static final String Column_Threshold = "Threshold";
+>>>>>>> 5a1d7818d9a9524cc013f51377a3a85b4ab4a7c9
 
-    public TaskDatabaseHelper(Context context){
-        super(context, DB_Name, null, Version);
-    }
+        public TaskDatabaseHelper(Context context){
+            super(context, DB_Name, null, Version);
+        }
 
 
-    public void OnCreate(SQLiteDatabase db){
-        db.execSQL("create table UserAccount ("+
-                "UserId String primary key, UserName String, LoginName String," +
-                "Password String, level integer, point integer, numFocuses integer)");
-        db.execSQL("create table UserAchievements ("+
-                "UAId String primary key autoincrement, UserId UUID, AchieveId integer,AchieveTime integer)");
-        db.execSQL("create table Achievements ("+
-                "AchieveId String primary key, AchieveName String, AchieveDescription String," +
-                "Criterion integer, Threshold integer)");
-        db.execSQL("create table UserGroupActivity ("+
-                "UGAId String primary key, UserId String, ActId String," +
-                "MemberStatus integer, gTotalTime integer, gCurTime integer)");
-        db.execSQL("create table useraccount ("+
-                "UserId UUID primary key, UserName String, LoginName String," +
-                "Password String, level integer, point integer, numFocuses integer)");
-    }
+        public void OnCreate(SQLiteDatabase db) {
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-// Implement schema changes and data massage here when upgrading
-    }
-    public long insert_useraccount(User user, Account account) {
-        ContentValues cv = new ContentValues();
-        cv.put(Column_username, account.getUsername());
-        cv.put(Column_password, account.getPassword());
-        cv.put(Column_userid, account.getId());
-        cv.put(Column_level, user.getLevel());
-        cv.put(Column_point, user.getPoint());
-        cv.put(Column_numFocuses, user.getNumFocusesDone());
-        return getWritableDatabase().insert(Table_UserAccount, null, cv);
-    }
-    public long insert_UserAchievements(User user, Achievement achievement) {
-        ContentValues cv = new ContentValues();
-        cv.put(Column_userid, user.getId());
-        cv.put(Column_AchieveId, achievement.getId());
-        cv.put(Column_AchieveTime, achievement.getThreshold());
-        return getWritableDatabase().insert(Table_UserAchievements, null, cv);
-    }
-    public long insert_Achievements(Achievement achievement) {
-        ContentValues cv = new ContentValues();
-        cv.put(Column_AchieveDescription, achievement.getDescription());
-        cv.put(Column_AchieveName, achievement.getName());
-        cv.put(Column_Criterion, achievement.getCriterion());
-        cv.put(Column_Threshold, achievement.getThreshold());
-        return getWritableDatabase().insert(Table_Achievements, null, cv);
-    }
-    public long insert_UserGroupActivity(GroupAct GA, Act act, User user){
-        ContentValues cv = new ContentValues();
-        cv.put(Column_gCurTime, GA.getCurrentTimeByUser(user));
-        cv.put(Column_gTotalTime, GA.getTotalTimeByUser(user));
-        cv.put(Column_MemberStatus, GA.getStatusByUser(user));
-        cv.put(Column_UGAId, GA.getId());
-        cv.put(Column_userid, user.getId());
-        cv.put(Column_ActId, act.getId());
-        return getWritableDatabase().insert(Table_UserGroupActivity, null, cv);
-    }
+            db.execSQL("create table UserAccount (" +
+                    "UserId TEXT primary key, UserName TEXT, LoginName TEXT," +
+                    "Password TEXT, Level INTEGER, Point INTERGER, NumFocuses INTEGER)");
+
+            db.execSQL("create table UserAchievements (" +
+                    "UAId INTEGET primary key autoincrement, UserId TEXT, AchieveId INTEGER,AchieveTime INTEGER)");
+
+            db.execSQL("create table Achievements (" +
+                    "AchieveId INTEGER primary key, AchieveName TEXT, AchieveDescription TEXT," +
+                    "Criterion INTEGER, Threshold INTEGER)");
+
+            db.execSQL("create table UserGroupActivity (" +
+                    "UGAId TEXT primary key, UserId TEXT, ActId TEXT," +
+                    "MemberStatus INTEGER, gTotalTime INTEGER, gCurTime INTERGER)");
+
+            db.execSQL("create table Activity (" +
+                    "ActId TEXT primary key, ActName TEXT, ActDescription TEXT," +
+                    "ActType INTEGER, StartTime INTEGER, Notify INTEGER," +
+                    "IsTiming INTEGER, RewardPoint INTEGER, Status INTEGER)");
+
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    // Implement schema changes and data massage here when upgrading
+        }
+        public long insert_useraccount(User user, Account account) {
+            ContentValues cv = new ContentValues();
+            cv.put(Column_UserName, account.getUsername());
+            cv.put(Column_Password, account.getPassword());
+            cv.put(Column_UserId, account.getId());
+            cv.put(Column_Level, user.getLevel());
+            cv.put(Column_Point, user.getPoint());
+            cv.put(Column_NumFocuses, user.getNumFocusesDone());
+            return getWritableDatabase().insert(Table_UserAccount, null, cv);
+        }
+        public long insert_UserAchievements(User user, Achievement achievement) {
+            ContentValues cv = new ContentValues();
+            cv.put(Column_UserId, user.getId());
+            cv.put(Column_AchieveId, achievement.getId());
+            cv.put(Column_AchieveTime, achievement.getThreshold());
+            return getWritableDatabase().insert(Table_UserAchievements, null, cv);
+        }
+        public long insert_Achievements(Achievement achievement) {
+            ContentValues cv = new ContentValues();
+            cv.put(Column_AchieveDescription, achievement.getDescription());
+            cv.put(Column_AchieveName, achievement.getName());
+            cv.put(Column_Criterion, achievement.getCriterion());
+            cv.put(Column_Threshold, achievement.getThreshold());
+            return getWritableDatabase().insert(Table_Achievements, null, cv);
+        }
+        public long insert_UserGroupActivity(GroupAct GA, Act act, User user){
+            ContentValues cv = new ContentValues();
+            cv.put(Column_gCurTime, GA.getCurrentTimeByUser(user));
+            cv.put(Column_gTotalTime, GA.getTotalTimeByUser(user));
+            cv.put(Column_MemberStatus, GA.getStatusByUser(user));
+            cv.put(Column_UGAId, GA.getId());
+            cv.put(Column_UserId, user.getId());
+            cv.put(Column_ActId, act.getId());
+            return getWritableDatabase().insert(Table_UserGroupActivity, null, cv);
+        }
+        public long insert_Activity(Act act){
+            ContentValues cv = new ContentValues();
+            cv.put(Column_ActId, act.getId());
+            cv.put(Column_ActName, act.getName());
+            cv.put(Column_ActDescription, act.getDescription());
+            cv.put(Column_ActType, act.getType());
+            cv.put(Column_StartTime, act.getStartTime());
+            cv.put(Column_Notify, act.isNotify());
+            cv.put(Column_IsTiming, act.isTiming());
+            cv.put(Column_RewardPoint, act.getRewardPoint());
+            cv.put(Column_Status, act.getStatus());
+            return getWritableDatabase().insert(Table_Activity, null, cv);
+        }
 }
