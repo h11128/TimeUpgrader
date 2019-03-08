@@ -9,7 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MoreActivity"></activity>
+        <activity android:name=".GroupActivity"></activity>
+        <activity android:name=".HistoryActivity" />
+        <activity android:name=".FocusActivity" />
+        <activity android:name=".AddFocusActivity" />
+        <activity android:name=".HelpActivity" />
+        <activity android:name=".AchievementActivity" />
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".MoreActivity" />
         <activity android:name=".ViewActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
