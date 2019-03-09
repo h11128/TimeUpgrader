@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     public static final String RECEIVER_ACTION_FINISH = "receiver_action_finish";
+
     Toolbar toolbar;
     ProgressBar progressBar;
     EditText userEmail;

@@ -21,7 +21,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         public TaskDatabaseHelper(Context context){
             super(context, DB_Name, null, Version);
         }
-        
+
         @Override
         public void OnCreate(SQLiteDatabase db) {
 
@@ -61,7 +61,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     // Implement schema changes and data massage here when upgrading
         }
-        public long insert_useraccount(User user, Account account) {
+        public long insert_UserAccount(User user, Account account) {
             ContentValues cv = new ContentValues();
             cv.put(UASchema.Column_UserName, account.getUsername());
             cv.put(UASchema.Column_Password, account.getPassword());
