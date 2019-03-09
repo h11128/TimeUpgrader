@@ -57,7 +57,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     // Implement schema changes and data massage here when upgrading
-            
+
     }
     public long insert_UserAccount(Account account) {
             ContentValues cv = new ContentValues();
@@ -113,7 +113,8 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             String selection = UASchema.Column_UserName + " LIKE ?";
             String[] selectionArgs = { account.getUsername() };
             int deletedRows = getWritableDatabase().delete(UASchema.Table_UserAccount, selection, selectionArgs);
-        };
+            return deletedRows;
+        }
 
-};
+}
 
