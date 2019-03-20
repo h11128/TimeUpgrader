@@ -72,7 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         InsertData();
-
+                                        LogData();
+                                        UpdateData();
+                                        LogData();
                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sp.edit();
                                         editor.putString("email", em);
@@ -96,13 +98,19 @@ public class LoginActivity extends AppCompatActivity {
 
     public void InsertData() {
         Log.i(TAG, "Inserting!!!");
-        Account mAccount = new Account("1",userEmail.getText().toString(),
+        Account mAccount = new Account(userEmail.getText().toString(),userEmail.getText().toString(),
+                userEmail.getText().toString(),userPassword.getText().toString());
+        dbHelper.insert_UserAccount(mAccount);
+    }
+    public void UpdateData() {
+        Log.i(TAG, "Updateting!!!");
+        Account mAccount = new Account(userEmail.getText().toString(),userEmail.getText().toString(),
                 userEmail.getText().toString(),userPassword.getText().toString());
         dbHelper.insert_UserAccount(mAccount);
     }
     public void LogData(){
         Log.i(TAG, "Logging!!!");
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String[] projection = {
                 UASchema.Column_UserId,
                 UASchema.Column_UserName,
@@ -110,28 +118,18 @@ public class LoginActivity extends AppCompatActivity {
                 UASchema.Column_Email,
                 UASchema.Column_UserId
         };
-        Account mAccount = new Account("1",userEmail.getText().toString(),
-                userEmail.getText().toString(),userPassword.getText().toString());
-        String selection = UASchema.Column_UserName + " LIKE ?";
-        String[] selectionArgs = { mAccount.getUsername() };
-        Cursor cursor = db.query(
-                UASchema.Table_UserAccount,   // The table to query
-                null,             // The array of columns to return (pass null to get all)
-                selection,              // The columns for the WHERE clause
-                selectionArgs,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null               // The sort order
-        );
+        //Account mAccount = new Account(userEmail.getText().toString(),"asdasdasda",
+        //        userEmail.getText().toString(),userPassword.getText().toString());
+        String selection = UASchema.Column_UserName + " = ?";
 
-        while(cursor.moveToNext()) {
-            String password = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_Password));
-            String username = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_UserName));
-            String row = password + " " + username;
-            Log.i(TAG, row);
-        }
-
-        cursor.close();
+        String[] selectionArgs = { "cgy@123.com" };
+        ContentValues values = new ContentValues();
+        values.put(UASchema.Column_UserName, "asdasd");
+        int count = db.update(
+                UASchema.Table_UserAccount,
+                values,
+                selection,
+                selectionArgs);
     }
 
     public void DeleteData(){
@@ -146,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "onStart() called!!!");
-        LogData();
+
     }
 
     @Override
@@ -181,7 +179,7 @@ public class LoginActivity extends AppCompatActivity {
             unregisterReceiver(mReceiver);
         }
 
-        DeleteData();
+        //DeleteData();
         dbHelper.close();
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
