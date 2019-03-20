@@ -103,26 +103,12 @@ public class LoginActivity extends AppCompatActivity {
         dbHelper.insert_UserAccount(mAccount);
     }
     public void UpdateData() {
-        Log.i(TAG, "Updateting!!!");
-        Account mAccount = new Account(userEmail.getText().toString(),userEmail.getText().toString(),
-                userEmail.getText().toString(),userPassword.getText().toString());
-        dbHelper.insert_UserAccount(mAccount);
-    }
-    public void LogData(){
-        Log.i(TAG, "Logging!!!");
+        Log.i(TAG, "updating!!!");
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String[] projection = {
-                UASchema.Column_UserId,
-                UASchema.Column_UserName,
-                UASchema.Column_Password,
-                UASchema.Column_Email,
-                UASchema.Column_UserId
-        };
-        //Account mAccount = new Account(userEmail.getText().toString(),"asdasdasda",
-        //        userEmail.getText().toString(),userPassword.getText().toString());
+
         String selection = UASchema.Column_UserName + " = ?";
 
-        String[] selectionArgs = { "cgy@123.com" };
+        String[] selectionArgs = { userEmail.getText().toString() };
         ContentValues values = new ContentValues();
         values.put(UASchema.Column_UserName, "asdasd");
         int count = db.update(
@@ -130,6 +116,35 @@ public class LoginActivity extends AppCompatActivity {
                 values,
                 selection,
                 selectionArgs);
+    }
+    public void LogData(){
+        Log.i(TAG, "Logging!!!");
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                UASchema.Column_UserId,
+                UASchema.Column_UserName,
+                UASchema.Column_Password,
+                UASchema.Column_Email,
+                UASchema.Column_UserId
+        };
+        Cursor cursor = db.query(
+                UASchema.Table_UserAccount,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        while(cursor.moveToNext()) {
+            String password = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_Password));
+            String username = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_UserName));
+            String row = password + " " + username;
+            Log.i(TAG, row);
+        }
+
+        cursor.close();
     }
 
     public void DeleteData(){
