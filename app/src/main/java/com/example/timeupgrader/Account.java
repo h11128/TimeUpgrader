@@ -9,12 +9,12 @@ public class Account {
     private String password;
     private Date timeCreated;
 
-    public Account(String id, String email, String username, String password, Date timeCreated) {
+    public Account(String id, String email, String username, String password) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
-        this.timeCreated = timeCreated;
+        //this.timeCreated = timeCreated;
     }
 
     public String getId() {

@@ -1,10 +1,14 @@
 package com.example.timeupgrader;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,15 +19,18 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.util.Log;
-
+import com.example.timeupgrader.UserAccountSchema.UASchema;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     public static final String RECEIVER_ACTION_FINISH = "receiver_action_finish";
+    TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(this.getApplicationContext());
+
     Toolbar toolbar;
     ProgressBar progressBar;
     EditText userEmail;
@@ -63,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
+                                        InsertData();
+
                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sp.edit();
                                         editor.putString("email", em);
@@ -77,22 +86,70 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
                     Log.i(TAG, "invalid username or password");
+
                     Toast.makeText(getApplicationContext(), "Empty e-mail or password", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
+
+    public void InsertData() {
+        Account mAccount = new Account("1",userEmail.getText().toString(),
+                userEmail.getText().toString(),userPassword.getText().toString());
+        dbHelper.insert_UserAccount(mAccount);
+    }
+    public void LogData(){
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] projection = {
+                UASchema.Column_UserId,
+                UASchema.Column_UserName,
+                UASchema.Column_Password,
+                UASchema.Column_Email,
+                UASchema.Column_UserId
+        };
+        Account mAccount = new Account("1",userEmail.getText().toString(),
+                userEmail.getText().toString(),userPassword.getText().toString());
+        String selection = UASchema.Column_UserName + " LIKE ?";
+        String[] selectionArgs = { mAccount.getUsername() };
+        Cursor cursor = db.query(
+                UASchema.Table_UserAccount,   // The table to query
+                null,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                selectionArgs,          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        while(cursor.moveToNext()) {
+            String password = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_Password));
+            String username = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_UserName));
+            String row = password + " " + username;
+            Log.i(TAG, row);
+        }
+
+        cursor.close();
+
+    }
+
+    public void DeleteData(){
+        Account mAccount = new Account("1",userEmail.getText().toString(),
+                userEmail.getText().toString(),userPassword.getText().toString());
+        dbHelper.delete_UserAccount(mAccount);
+    }
     @Override
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "onStart() called!!!");
+        LogData();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.i(TAG, "onPause() called!!!");
+
     }
 
     @Override
@@ -111,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.i(TAG, "onRestart() called!!!");
+
     }
 
     @Override
@@ -118,6 +176,9 @@ public class LoginActivity extends AppCompatActivity {
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }
+
+        DeleteData();
+        dbHelper.close();
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
     }
