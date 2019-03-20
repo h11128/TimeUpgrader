@@ -149,11 +149,11 @@ public class LoginActivity extends AppCompatActivity {
 
     public void DeleteData(){
         Log.i(TAG, "Deleting!!!");
-        Account mAccount = new Account("1",userEmail.getText().toString(),
-                userEmail.getText().toString(),userPassword.getText().toString());
+        Account mAccount = new Account(userEmail.getText().toString(),userEmail.getText().toString(),
+                "asdasd",userPassword.getText().toString());
         dbHelper.delete_UserAccount(mAccount);
+        LogData();
     }
-
 
     @Override
     protected void onStart() {
@@ -193,8 +193,7 @@ public class LoginActivity extends AppCompatActivity {
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }
-
-        //DeleteData();
+        DeleteData();
         dbHelper.close();
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
