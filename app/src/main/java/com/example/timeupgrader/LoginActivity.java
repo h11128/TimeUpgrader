@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         InsertData();
-
+                                        LogData();
                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sp.edit();
                                         editor.putString("email", em);
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void InsertData() {
         Log.i(TAG, "Inserting!!!");
-        Account mAccount = new Account("1",userEmail.getText().toString(),
+        Account mAccount = new Account(userEmail.getText().toString(),userEmail.getText().toString(),
                 userEmail.getText().toString(),userPassword.getText().toString());
         dbHelper.insert_UserAccount(mAccount);
     }
@@ -110,15 +110,15 @@ public class LoginActivity extends AppCompatActivity {
                 UASchema.Column_Email,
                 UASchema.Column_UserId
         };
-        Account mAccount = new Account("1",userEmail.getText().toString(),
+        Account mAccount = new Account(userEmail.getText().toString(),userEmail.getText().toString(),
                 userEmail.getText().toString(),userPassword.getText().toString());
         String selection = UASchema.Column_UserName + " LIKE ?";
         String[] selectionArgs = { mAccount.getUsername() };
         Cursor cursor = db.query(
                 UASchema.Table_UserAccount,   // The table to query
                 null,             // The array of columns to return (pass null to get all)
-                selection,              // The columns for the WHERE clause
-                selectionArgs,          // The values for the WHERE clause
+                null,              // The columns for the WHERE clause
+                null,          // The values for the WHERE clause
                 null,                   // don't group the rows
                 null,                   // don't filter by row groups
                 null               // The sort order
@@ -146,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.i(TAG, "onStart() called!!!");
-        LogData();
+
     }
 
     @Override
@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
             unregisterReceiver(mReceiver);
         }
 
-        DeleteData();
+        //DeleteData();
         dbHelper.close();
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
