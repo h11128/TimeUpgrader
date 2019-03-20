@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     public static final String RECEIVER_ACTION_FINISH = "receiver_action_finish";
-    TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(this.getApplicationContext());
+    TaskDatabaseHelper dbHelper;
 
     Toolbar toolbar;
     ProgressBar progressBar;
@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.i(TAG, "onCreate() called!!!");
+        dbHelper = new TaskDatabaseHelper(this.getApplicationContext());
         mReceiver = new FinishActivityReceiver();
         registerFinishReceiver();
 
@@ -86,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else {
                     Log.i(TAG, "invalid username or password");
-
                     Toast.makeText(getApplicationContext(), "Empty e-mail or password", Toast.LENGTH_LONG).show();
                 }
             }
@@ -95,11 +95,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void InsertData() {
+        Log.i(TAG, "Inserting!!!");
         Account mAccount = new Account("1",userEmail.getText().toString(),
                 userEmail.getText().toString(),userPassword.getText().toString());
         dbHelper.insert_UserAccount(mAccount);
     }
     public void LogData(){
+        Log.i(TAG, "Logging!!!");
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {
                 UASchema.Column_UserId,
@@ -130,14 +132,16 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         cursor.close();
-
     }
 
     public void DeleteData(){
+        Log.i(TAG, "Deleting!!!");
         Account mAccount = new Account("1",userEmail.getText().toString(),
                 userEmail.getText().toString(),userPassword.getText().toString());
         dbHelper.delete_UserAccount(mAccount);
     }
+
+
     @Override
     protected void onStart() {
         super.onStart();
