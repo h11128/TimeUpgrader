@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,12 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-public class ProfileActivity extends AppCompatActivity {
-    private static final String TAG = ProfileActivity.class.getSimpleName();
+public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
     Toolbar toolbar;
     ProgressBar progressBar;
     Button exit;
     Button signout;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarProfile);
         signout = findViewById(R.id.btnSignout);
         exit = findViewById(R.id.btnExit);
+        fab = findViewById(R.id.addactivity);
 
         toolbar.setTitle("TimeUpgrader");
 
@@ -50,8 +53,15 @@ public class ProfileActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = sp.edit();
                 editor.clear();
                 editor.apply();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+        });
 
-                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ViewActivity.class));
                 finish();
             }
         });
@@ -100,14 +110,14 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showNormalDialog(){
         final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(ProfileActivity.this);
+                new AlertDialog.Builder(MainActivity.this);
         normalDialog.setTitle("Exit");
         normalDialog.setMessage("Are you sure to exit?");
         normalDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        ProfileActivity.this.finish();
+                        MainActivity.this.finish();
                     }
                 });
         normalDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

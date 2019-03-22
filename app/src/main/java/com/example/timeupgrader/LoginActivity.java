@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                                         editor.putString("email", em);
                                         editor.putString("password", pw);
                                         editor.apply();
-                                        startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                     } else {
                                         Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                     }
