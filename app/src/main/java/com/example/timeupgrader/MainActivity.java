@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sendFinishActivityBroadcast(getApplicationContext());
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_main);
         Log.i(TAG, "onCreate() called!!!");
 
         toolbar = findViewById(R.id.toolbarProfile);
