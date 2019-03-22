@@ -72,17 +72,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
-        android:layout_marginStart="301dp"
-        android:layout_marginEnd="339dp"
-        android:src="@drawable/baseline_add_circle_black_48"
-        app:backgroundTint="@color/common_google_signin_btn_tint"
+
+        android:layout_marginEnd="317dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/baseline_add_circle_outline_white_48"
+        app:backgroundTint="@android:color/holo_orange_light"
         app:fabCustomSize="@android:dimen/notification_large_icon_height"
         app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btnExit"
+        app:layout_constraintTop_toBottomOf="@+id/textExample"
+        app:layout_constraintVertical_bias="0.792"
         app:maxImageSize="@android:dimen/notification_large_icon_height"
-        tools:layout_editor_absoluteY="529dp" />
+        app:rippleColor="@color/colorPrimary"
+        tools:backgroundTint="#f25b1a"
+        tools:maxImageSize="78dp" />
 
 
 </android.support.constraint.ConstraintLayout>
