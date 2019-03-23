@@ -1,21 +1,28 @@
 package com.example.timeupgrader;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
-    private BottomNavigationView bottomNavigationView;
     private Fragment[] fragments;
     private int lastFragment;
+    Toolbar toolbar;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +31,39 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.i(TAG, "onCreate() called!!!");
         initFragment();
+
+        toolbar = findViewById(R.id.toolbarProfile);
+        progressBar = findViewById(R.id.progressBarProfile);
+        toolbar.setTitle("TimeUpgrader");
+        setSupportActionBar(toolbar);
+
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_top_1:
+                        startActivity(new Intent(MainActivity.this, AccountActivity.class));
+                        break;
+                    case R.id.item_top_2:
+                        startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                        break;
+                    case R.id.item_top_3:
+                        SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        editor.apply();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        finish();
+                        break;
+                    case R.id.item_top_4:
+                        showNormalDialog();
+                        break;
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -62,7 +102,15 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onDestroy() called!!!");
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_options, menu);
+        return true;
+    }
+
     private void initFragment() {
+        BottomNavigationView bottomNavigationView;
         MainFragment fragment1 = new MainFragment();
         FocusFragment fragment2 = new FocusFragment();
         GroupFragment fragment3 = new GroupFragment();
@@ -129,5 +177,25 @@ public class MainActivity extends AppCompatActivity {
     public static void sendFinishActivityBroadcast(Context context) {
         context.sendBroadcast(new Intent(SignupActivity.RECEIVER_ACTION_FINISH));
         context.sendBroadcast(new Intent(LoginActivity.RECEIVER_ACTION_FINISH));
+    }
+
+    private void showNormalDialog(){
+        final AlertDialog.Builder normalDialog = new AlertDialog.Builder(this);
+        normalDialog.setTitle("Exit");
+        normalDialog.setMessage("Are you sure to exit?");
+        normalDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        normalDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        normalDialog.create().show();
     }
 }

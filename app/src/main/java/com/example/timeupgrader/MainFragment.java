@@ -18,8 +18,6 @@ import android.widget.ProgressBar;
 
 
 public class MainFragment extends Fragment {
-    Toolbar toolbar;
-    ProgressBar progressBar;
     Button exit;
     Button signout;
     FloatingActionButton fab;
@@ -41,13 +39,9 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        toolbar = getActivity().findViewById(R.id.toolbarProfile);
-        progressBar = getActivity().findViewById(R.id.progressBarProfile);
         signout = getActivity().findViewById(R.id.btnSignout);
         exit = getActivity().findViewById(R.id.btnExit);
         fab = getActivity().findViewById(R.id.addactivity);
-
-        toolbar.setTitle("TimeUpgrader");
 
         exit.setOnClickListener(new View.OnClickListener() {
 
@@ -79,8 +73,7 @@ public class MainFragment extends Fragment {
     }
 
     private void showNormalDialog(){
-        final AlertDialog.Builder normalDialog =
-                new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder normalDialog = new AlertDialog.Builder(getActivity());
         normalDialog.setTitle("Exit");
         normalDialog.setMessage("Are you sure to exit?");
         normalDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
