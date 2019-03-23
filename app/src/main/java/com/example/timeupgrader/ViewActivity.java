@@ -38,7 +38,7 @@ public class ViewActivity extends AppCompatActivity {
     }
 
     public void openDialog(){
-        
+
     }
 
     private void addTask(){
