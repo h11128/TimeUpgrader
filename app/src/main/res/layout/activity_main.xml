@@ -15,8 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-        app:popupTheme="@style/ToolbarPopupTheme">
+        app:popupTheme="@style/ToolbarPopupTheme"
+        tools:ignore="MissingConstraints">
 
         <ProgressBar
             android:id="@+id/progressBarProfile"
@@ -29,8 +29,7 @@
             tools:layout_editor_absoluteY="16dp" />
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/container_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
