@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_bottom_1"
+        android:icon="@drawable/ic_action_calendar_month"
+        android:title="To do" />
+    <item
+        android:id="@+id/item_bottom_2"
+        android:icon="@drawable/ic_action_alarm"
+        android:title="Focus" />
+    <item
+        android:id="@+id/item_bottom_3"
+        android:icon="@drawable/ic_action_users"
+        android:title="Group" />
+    <item
+        android:id="@+id/item_bottom_4"
+        android:icon="@drawable/ic_action_paste"
+        android:title="History" />
+    <item
+        android:id="@+id/item_bottom_5"
+        android:icon="@drawable/ic_action_overflow"
+        android:title="More" />
+
+</menu>

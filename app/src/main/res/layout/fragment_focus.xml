@@ -1,15 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/fName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textColor="#000000"
-        android:textSize="48sp"
-        android:text="fragment"/>
+        android:layout_marginTop="80dp"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="44sp"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/fDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/fName" />
+
+    <com.example.timeupgrader.FocusCircleTimer
+        android:id="@+id/focusTimer"
+        android:layout_width="240dip"
+        android:layout_height="240dip"
+        android:layout_marginTop="60dp"
+        app:ci="STROKE"
+        app:circleColor="#fff"
+        app:circleWidth="6dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fDescription"
+        app:max="1080"
+        app:progressColor="#f25b1a"
+        app:startAngle="-90" />
+
+    <TextView
+        android:id="@+id/fRemainingTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="32sp"
+        app:layout_constraintTop_toBottomOf="@id/fDescription" />
+
+</android.support.constraint.ConstraintLayout>

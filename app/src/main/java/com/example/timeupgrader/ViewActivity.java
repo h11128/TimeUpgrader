@@ -16,6 +16,7 @@ public class ViewActivity extends AppCompatActivity {
 
     EditText editTextName;
     Button buttonAddTask;
+    Button buttonPickTime;
     Spinner spinnerType;
     DatabaseReference databaseTasks;
     @Override
@@ -26,13 +27,18 @@ public class ViewActivity extends AppCompatActivity {
         editTextName = (EditText) findViewById(R.id.editTextName);
         buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
         spinnerType = (Spinner) findViewById(R.id.spinnerType);
+        buttonPickTime = (Button) findViewById(R.id.buttonPickTime);
         databaseTasks = FirebaseDatabase.getInstance().getReference();
-        buttonAddTask.setOnClickListener(new View.OnClickListener() {
+        buttonPickTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                openDialog();
             }
         });
+    }
+
+    public void openDialog(){
+
     }
 
     private void addTask(){
