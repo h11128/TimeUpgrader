@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     private void initFragment() {
         BottomNavigationView bottomNavigationView;
         MainFragment fragment1 = new MainFragment();
-        FocusFragment fragment2 = new FocusFragment();
+        AddFocusFragment fragment2 = new AddFocusFragment();
         GroupFragment fragment3 = new GroupFragment();
         HistoryFragment fragment4 = new HistoryFragment();
         MoreFragment fragment5 = new MoreFragment();

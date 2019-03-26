@@ -1,118 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="20dp"
-    android:paddingBottom="20dp"
-    android:paddingStart="20dp"
-    android:paddingEnd="20dp">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/fName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_add_focus"
-        android:orientation="vertical">
+        android:layout_marginTop="80dp"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="44sp"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:background="#f25b1a"
-            android:text="Start a new task to focus on!"
-            android:textColor="#fff"
-            android:textSize="18sp" />
+    <TextView
+        android:id="@+id/fDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/fName" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:text="Task name:"
-            android:textColor="#000"
-            android:textSize="14sp" />
+    <com.example.timeupgrader.FocusCircleTimer
+        android:id="@+id/focusTimer"
+        android:layout_width="240dip"
+        android:layout_height="240dip"
+        android:layout_marginTop="60dp"
+        app:ci="STROKE"
+        app:circleColor="#fff"
+        app:circleWidth="6dip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fDescription"
+        app:max="1080"
+        app:progressColor="#f25b1a"
+        app:startAngle="-90" />
 
-        <EditText
-            android:id="@+id/focusName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
+    <TextView
+        android:id="@+id/fRemainingTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="32sp"
+        app:layout_constraintTop_toBottomOf="@id/fDescription" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:text="Description:"
-            android:textColor="#000"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/focusDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:orientation="horizontal">
-
-            <NumberPicker
-                android:id="@+id/focusHr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="hr" />
-
-            <NumberPicker
-                android:id="@+id/focusMin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="min" />
-
-            <NumberPicker
-                android:id="@+id/focusSec"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="sec" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btnStartFocus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center_horizontal"
-            android:paddingStart="30dp"
-            android:paddingEnd="30dp"
-            android:background="@drawable/button_ripple1"
-            android:textColor="#fff"
-            android:text="Start focusing"/>
-
-    </LinearLayout>
-
-</ScrollView>
+</android.support.constraint.ConstraintLayout>
