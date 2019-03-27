@@ -40,13 +40,14 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
 
         mSyncButton =(Button) view.findViewById(R.id.btnSync);
         mSyncButton.setOnClickListener(this);
+        onClick(view);
         return view;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onClick(view);
+
 
 
 

@@ -52,16 +52,20 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         mChangePasswordButton =(Button) view.findViewById(R.id.btnNickName);
         mChangePasswordButton.setOnClickListener(this);
+
+        mUserName.setText(mUser.getDisplayName());
+
+        onClick(view);
         return view;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUserName.setText(mUser.getDisplayName());
 
-        onClick(view);
+
+
+
     }
     public void onClick(View view){
         switch(view.getId()){
@@ -89,7 +93,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.btnNickName:
-
+                mUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (mUser != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
