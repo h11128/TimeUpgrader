@@ -9,6 +9,8 @@ public class Account {
     private String password;
     private Date timeCreated;
 
+    private static Account currentAccount;
+
     public Account(String id, String email, String username, String password) {
         this.id = id;
         this.email = email;
@@ -55,5 +57,9 @@ public class Account {
 
     public void setTimeCreated(Date timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public static Account getCurrentAccount() {
+        return currentAccount;
     }
 }

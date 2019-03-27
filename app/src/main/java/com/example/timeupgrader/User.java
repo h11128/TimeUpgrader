@@ -10,6 +10,8 @@ public class User {
     private int numFocusesDone;
     private ArrayList achievements;
 
+    private static User currentUser;
+
     public User(String id, String username, int point, int level, int numFocusesDone, ArrayList achievements) {
         this.id = id;
         this.username = username;
@@ -121,5 +123,9 @@ public class User {
 
     public boolean generateReport() {
         return true;
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
     }
 }
