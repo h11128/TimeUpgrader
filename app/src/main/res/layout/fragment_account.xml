@@ -16,17 +16,27 @@
 
 
 
+
+    <Button
+        android:id="@+id/btnIcon"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="49dp"
+        android:drawableEnd="@drawable/baseline_account_circle_black_24"
+        android:gravity="start|center_vertical"
+        android:text="@string/Icon" />
+
     <TextView
         android:id="@+id/oldUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_below="@+id/btnIcon"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="163dp"
-        android:drawableTop="@id/btnNickName"
-        android:text="Event Name "
+        android:text="@string/Nickname"
         tools:textSize="24sp" />
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -41,16 +51,6 @@
             android:inputType="text" />
 
     </android.support.design.widget.TextInputLayout>
-    <Button
-        android:id="@+id/btnIcon"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="49dp"
-        android:drawableRight="@drawable/baseline_account_circle_black_24"
-        android:gravity="left|center_vertical"
-        android:text="@string/Icon" />
 
     <Button
         android:id="@+id/btnChangePassword"
@@ -61,7 +61,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="23dp"
 
-        android:gravity="left|center_vertical"
+        android:gravity="start|center_vertical"
         android:text="@string/ChangePassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -76,7 +76,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="100dp"
-        android:gravity="left|center_vertical"
+        android:gravity="start|center_vertical"
         android:text="@string/Nickname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
