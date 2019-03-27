@@ -25,5 +25,6 @@
     <string name="Icon">Icon</string>
     <string name="ChangePassword">ChangePassword</string>
     <string name="Nickname">Nickname</string>
+    <string name="NewUserName">NewUserName</string>
 
 </resources>
