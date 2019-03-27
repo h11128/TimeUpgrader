@@ -39,7 +39,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fDescription"
-        app:max="1080"
+        app:max="3600"
         app:progressColor="#f25b1a"
         app:startAngle="-90" />
 

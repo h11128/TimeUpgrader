@@ -12,12 +12,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class AddFocusFragment extends Fragment {
 
     NumberPicker hr;
     NumberPicker min;
     NumberPicker sec;
+    EditText focusName;
+    EditText focusDescription;
 
     public AddFocusFragment() {}
 
@@ -30,7 +33,7 @@ public class AddFocusFragment extends Fragment {
         min = v.findViewById(R.id.focusMin);
         sec = v.findViewById(R.id.focusSec);
 
-        hr.setMaxValue(24);
+        hr.setMaxValue(23);
         hr.setMinValue(0);
         hr.setValue(0);
         min.setMaxValue(59);
@@ -44,19 +47,35 @@ public class AddFocusFragment extends Fragment {
         min.setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
         sec.setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
 
-        final EditText focusName = v.findViewById(R.id.focusName);
-        final EditText focusDescription = v.findViewById(R.id.focusDescription);
+        focusName = v.findViewById(R.id.focusName);
+        focusDescription = v.findViewById(R.id.focusDescription);
         Button startFocus = v.findViewById(R.id.btnStartFocus);
         startFocus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FocusActivity.class);
-                intent.putExtra("name", focusName.getText().toString());
-                intent.putExtra("description", focusDescription.getText().toString());
-                intent.putExtra("hr", hr.getValue());
-                intent.putExtra("min", min.getValue());
-                intent.putExtra("sec", sec.getValue());
-                startActivity(intent);
+                if (focusName.getText().toString().equals("")) {
+                    Toast.makeText(getActivity(),"Please enter a valid focus name", Toast.LENGTH_LONG).show();
+                }
+                else if (hr.getValue() == 0 && min.getValue() == 0 && sec.getValue() == 0) {
+                    Toast.makeText(getActivity(),"Please enter a valid time duration", Toast.LENGTH_LONG).show();
+                }
+                /*else if (hr.getValue() == 0 && min.getValue() < 10) {
+                    Toast.makeText(getActivity(),"Focus time can not be less than 10 minutes", Toast.LENGTH_LONG).show();
+                }*/
+                else {
+                    Intent intent = new Intent(getActivity(), FocusActivity.class);
+                    intent.putExtra("name", focusName.getText().toString());
+                    intent.putExtra("description", focusDescription.getText().toString());
+                    intent.putExtra("hr", hr.getValue());
+                    intent.putExtra("min", min.getValue());
+                    intent.putExtra("sec", sec.getValue());
+                    hr.setValue(0);
+                    min.setValue(0);
+                    sec.setValue(0);
+                    focusName.setText("");
+                    focusDescription.setText("");
+                    startActivity(intent);
+                }
             }
         });
 
