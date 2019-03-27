@@ -1,20 +1,28 @@
 package com.example.timeupgrader;
 
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.Fragment;
+// import android.content.pm.PackageManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.List;
+import java.util.TreeMap;
 
 public class FocusActivity extends AppCompatActivity {
 
     boolean starting;
     boolean locked;
+    boolean atTop;
     private FocusActivity.ScreenBroadcastReceiver mScreenReceiver;
     private FocusFragment fragment;
     private ToFragmentListener mToFragmentListener;
@@ -26,6 +34,7 @@ public class FocusActivity extends AppCompatActivity {
 
         starting = true;
         locked = false;
+        atTop = true;
 
         mScreenReceiver = new ScreenBroadcastReceiver();
         startScreenBroadcastReceiver();
@@ -47,6 +56,7 @@ public class FocusActivity extends AppCompatActivity {
         }
         starting = false;
         locked = false;
+        atTop = true;
     }
 
     @Override
@@ -64,7 +74,24 @@ public class FocusActivity extends AppCompatActivity {
             action = intent.getAction();
             if (Intent.ACTION_SCREEN_OFF.equals(action)) {
                 // screen off
-                locked = true;
+                ComponentName runningTopActivity = new ComponentName("", "");
+                UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
+                long time = System.currentTimeMillis();
+                List<UsageStats> stats;
+                stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 30 * 1000, time);
+                if(stats != null) {
+                    TreeMap<Long, UsageStats> sortedMap = new TreeMap<>();
+                    for (UsageStats usageStats : stats) {
+                        sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                    }
+                    if(!sortedMap.isEmpty()) {
+                        runningTopActivity = new ComponentName(sortedMap.get(sortedMap.lastKey()).getPackageName(), "");
+                        Log.i("running top", runningTopActivity.getPackageName());
+                    }
+                }
+                if (runningTopActivity.getPackageName().equals("com.example.timeupgrader")) {
+                    locked = true;
+                }
             }
             /*else if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 // screen on
