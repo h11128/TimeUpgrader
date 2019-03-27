@@ -10,13 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 public class MoreFragment extends Fragment implements View.OnClickListener {
+
+    public MoreFragment() {}
     private Button mAccountButton;
     private Button mSettingButton;
     private Button mAchievementButton;
     private Button mThemeButton;
     private Button mHelpButton;
     private Button mSyncButton;
-    public MoreFragment() {}
     View view;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
