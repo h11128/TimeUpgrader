@@ -17,36 +17,35 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_Name = "task.db";
     private static final int Version = 1;
 
-
     public TaskDatabaseHelper(Context context){
         super(context, DB_Name, null, Version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " +  UASchema.Table_UserAccount + " (" +
+        db.execSQL("create table if not exists " +  UASchema.Table_UserAccount + " (" +
                 UASchema.Column_UserId + " TEXT PRIMARY KEY,"+ UASchema.Column_UserName +" TEXT," +
                 UASchema.Column_Email + " TEXT," + UASchema.Column_Password + " TEXT," +
                 UASchema.Column_Level+ " INTEGER," + UASchema.Column_Point + " INTEGER," +
                 UASchema.Column_NumFocuses + " INTEGER)");
 
-        db.execSQL("create table "+UserAchSchema.Table_UserAchievements +"(" +
+        db.execSQL("create table if not exists "+UserAchSchema.Table_UserAchievements +"(" +
                 UserAchSchema.Column_UAId +" INTEGER primary key autoincrement,"+
                 UASchema.Column_UserId +" TEXT,"+ AchSchema.Column_AchieveId +" INTEGER,"+
                 UserAchSchema.Column_AchieveTime +" INTEGER)");
 
-        db.execSQL("create table "+ AchSchema.Table_Achievements +" (" +
+        db.execSQL("create table if not exists "+ AchSchema.Table_Achievements +" (" +
                 AchSchema.Column_AchieveId +" INTEGER primary key autoincrement,"+
                 AchSchema.Column_AchieveName +" TEXT,"+ AchSchema.Column_AchieveDescription +" TEXT," +
                 AchSchema.Column_Criterion +" INTEGER,"+ AchSchema.Column_Threshold +" INTEGER)");
 
-        db.execSQL("create table "+ UGA.Table_UserGroupActivity +" (" +
+        db.execSQL("create table if not exists "+ UGA.Table_UserGroupActivity +" (" +
                 UGA.Column_UGAId +" INTEGER primary key autoincrement,"+
                 UASchema.Column_UserId +" TEXT,"+ ACT.Column_ActId +" TEXT," +
                 UGA.Column_MemberStatus +" INTEGER,"+ UGA.Column_gTotalTime +" INTEGER,"+
                 UGA.Column_gCurTime +" INTERGER)");
 
-        db.execSQL("create table "+ ACT.Table_Activity + " (" +
+        db.execSQL("create table if not exists "+ ACT.Table_Activity + " (" +
                 ACT.Column_ActId +" INTEGER primary key autoincrement,"+
                 ACT.Column_ActName +" TEXT,"+ ACT.Column_ActDescription +" TEXT," +
                 ACT.Column_ActType +" INTEGER,"+ ACT.Column_StartTime +" INTEGER,"+

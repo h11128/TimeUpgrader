@@ -19,6 +19,7 @@ public class User {
         this.level = level;
         this.numFocusesDone = numFocusesDone;
         this.achievements = achievements;
+        currentUser = this;
     }
 
     public String getId() {

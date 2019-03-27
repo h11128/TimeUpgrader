@@ -17,6 +17,7 @@ public class Account {
         this.username = username;
         this.password = password;
         //this.timeCreated = timeCreated;
+        currentAccount = this;
     }
 
     public String getId() {
