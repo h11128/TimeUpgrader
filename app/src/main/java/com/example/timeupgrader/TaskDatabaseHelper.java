@@ -156,5 +156,17 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 selection,
                 selectionArgs);
     }
+    
+    public int updateUsername(User user, String name) {
+        String selection = UASchema.Column_Email + " = ?";
+        String[] selectionArgs = { user.getEmail() };
+        ContentValues values = new ContentValues();
+        values.put(UASchema.Column_UserName, name);
+        return getWritableDatabase().update(
+                UASchema.Table_UserAccount,
+                values,
+                selection,
+                selectionArgs);
+    }
 }
 
