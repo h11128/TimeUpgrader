@@ -117,10 +117,13 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         return getWritableDatabase().insert(ACT.Table_Activity, null, cv);
     }
 
-    public long delete_Activity_ById(String actId){
+    public long update_Activity_Status(String actId, int status){
         String selection = ACT.Column_ActId + " = ?";
         String[] selectionArgs = { actId };
-        return getWritableDatabase().delete(ACT.Table_Activity, selection, selectionArgs);
+        ContentValues values = new ContentValues();
+        values.put(ACT.Column_Status, status);
+        values.put(ACT.Column_Synced, 0);
+        return getWritableDatabase().update(ACT.Table_Activity, values, selection, selectionArgs);
     }
 
     public int delete_UserAccount(Account account){
