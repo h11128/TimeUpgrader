@@ -26,30 +26,30 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table if not exists " +  UASchema.Table_UserAccount + " (" +
-                /*UASchema.Column_UserId + " TEXT PRIMARY KEY," +*/ UASchema.Column_UserName +" TEXT," +
+        db.execSQL("create table if not exists " + UASchema.Table_UserAccount + " (" +
+                /*UASchema.Column_UserId + " TEXT PRIMARY KEY," +*/UASchema.Column_UserName +" TEXT," +
                 UASchema.Column_Email + " TEXT PRIMARY KEY," + UASchema.Column_Password + " TEXT," +
-                UASchema.Column_Level+ " INTEGER," + UASchema.Column_Point + " INTEGER," +
+                UASchema.Column_Level + " INTEGER," + UASchema.Column_Point + " INTEGER," +
                 UASchema.Column_NumFocuses + " INTEGER," + UASchema.Column_TimeCreated + " TEXT)");
-        db.execSQL("create table if not exists "+UserAchSchema.Table_UserAchievements +"(" +
-                UserAchSchema.Column_UAId +" INTEGER primary key autoincrement,"+
-                UASchema.Column_UserId +" TEXT,"+ AchSchema.Column_AchieveId +" INTEGER,"+
-                UserAchSchema.Column_AchieveTime +" INTEGER)");
-        db.execSQL("create table if not exists "+ AchSchema.Table_Achievements +" (" +
-                AchSchema.Column_AchieveId +" INTEGER primary key autoincrement,"+
-                AchSchema.Column_AchieveName +" TEXT,"+ AchSchema.Column_AchieveDescription +" TEXT," +
-                AchSchema.Column_Criterion +" INTEGER,"+ AchSchema.Column_Threshold +" INTEGER)");
-        db.execSQL("create table if not exists "+ UGA.Table_UserGroupActivity +" (" +
-                UGA.Column_UGAId +" INTEGER primary key autoincrement,"+
-                UASchema.Column_UserId +" TEXT,"+ ACT.Column_ActId +" TEXT," +
-                UGA.Column_MemberStatus +" INTEGER,"+ UGA.Column_gTotalTime +" INTEGER,"+
-                UGA.Column_gCurTime +" INTERGER)");
-        db.execSQL("create table if not exists "+ ACT.Table_Activity + " (" +
-                ACT.Column_ActId +" INTEGER primary key autoincrement,"+
-                ACT.Column_ActName +" TEXT,"+ ACT.Column_ActDescription +" TEXT," +
-                ACT.Column_ActType +" INTEGER,"+ ACT.Column_StartTime +" INTEGER,"+
-                ACT.Column_Notify +" INTEGER," + ACT.Column_IsTiming +" INTEGER,"+
-                ACT.Column_RewardPoint +" INTEGER,"+ ACT.Column_Status +" INTEGER)");
+        db.execSQL("create table if not exists "+ UserAchSchema.Table_UserAchievements + "(" +
+                UserAchSchema.Column_UAId + " INTEGER primary key autoincrement," +
+                UASchema.Column_UserId + " TEXT," + AchSchema.Column_AchieveId + " INTEGER," +
+                UserAchSchema.Column_AchieveTime + " INTEGER)");
+        db.execSQL("create table if not exists " + AchSchema.Table_Achievements + " (" +
+                AchSchema.Column_AchieveId + " INTEGER primary key autoincrement," +
+                AchSchema.Column_AchieveName + " TEXT," + AchSchema.Column_AchieveDescription + " TEXT," +
+                AchSchema.Column_Criterion + " INTEGER," + AchSchema.Column_Threshold +" INTEGER)");
+        db.execSQL("create table if not exists " + UGA.Table_UserGroupActivity + " (" +
+                UGA.Column_UGAId + " INTEGER primary key autoincrement," +
+                UASchema.Column_UserId + " TEXT," + ACT.Column_ActId + " TEXT," +
+                UGA.Column_MemberStatus + " INTEGER," + UGA.Column_gTotalTime + " INTEGER," +
+                UGA.Column_gCurTime + " INTERGER)");
+        db.execSQL("create table if not exists " + ACT.Table_Activity + " (" +
+                ACT.Column_ActId + " INTEGER primary key autoincrement," +
+                ACT.Column_ActName + " TEXT," + ACT.Column_ActDescription + " TEXT," +
+                ACT.Column_ActType + " INTEGER," + ACT.Column_StartTime + " INTEGER," +
+                ACT.Column_Notify + " INTEGER," + ACT.Column_IsTiming + " INTEGER," +
+                ACT.Column_RewardPoint + " INTEGER," + ACT.Column_Status + " INTEGER)");
     }
 
     @Override
@@ -118,6 +118,30 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             String[] selectionArgs = { account.getUsername() };
             int deletedRows = getWritableDatabase().delete(UASchema.Table_UserAccount, selection, selectionArgs);
             return deletedRows;
+    }
+
+    public int updatePoint(User user, long point) {
+        String selection = UASchema.Column_Email + " = ?";
+        String[] selectionArgs = { user.getEmail() };
+        ContentValues values = new ContentValues();
+        values.put(UASchema.Column_Point, point);
+        return getWritableDatabase().update(
+                UASchema.Table_UserAccount,
+                values,
+                selection,
+                selectionArgs);
+    }
+
+    public int updateNumFocus(User user, long num) {
+        String selection = UASchema.Column_Email + " = ?";
+        String[] selectionArgs = { user.getEmail() };
+        ContentValues values = new ContentValues();
+        values.put(UASchema.Column_NumFocuses, num);
+        return getWritableDatabase().update(
+                UASchema.Table_UserAccount,
+                values,
+                selection,
+                selectionArgs);
     }
 }
 

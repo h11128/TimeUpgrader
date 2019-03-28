@@ -72,6 +72,7 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
                     if (!interrupted) {
                         Intent intent = new Intent(getActivity(), EndFocusActivity.class);
                         intent.putExtra("name", name.getText());
+                        intent.putExtra("time", total);
                         startActivity(intent);
                         getActivity().finish();
                     }

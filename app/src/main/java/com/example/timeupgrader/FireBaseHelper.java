@@ -1,6 +1,7 @@
 package com.example.timeupgrader;
 
 import android.util.Log;
+// import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -9,25 +10,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
+// import java.util.Date;
 
 public class FireBaseHelper {
 
     private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-    String uEmail, uId, uUsername;
-    long uLevel = -1, uPoint = -1, uNumFocusesDone = -1, uTimeCreated = -1;
-    User u;
+    private String uEmail, uId, uUsername;
+    private long uLevel = -1, uPoint = -1, uNumFocusesDone = -1, uTimeCreated = -1;
+    private User u;
 
     public void getLoginUser(String email) {
         String cleanEmail = email.replace('.', ',');
         final DatabaseReference user = mDatabase.child("users").child(cleanEmail);
-        final DatabaseReference userEmail = user.child("email");
+        /*final DatabaseReference userEmail = user.child("email");
         final DatabaseReference userId = user.child("id");
         final DatabaseReference userLevel = user.child("level");
         final DatabaseReference userPoint = user.child("point");
         final DatabaseReference userNumFocusesDone = user.child("numFocusesDone");
         final DatabaseReference userUsername = user.child("username");
-        final DatabaseReference userTimeCreated = user.child("timeCreated");
+        final DatabaseReference userTimeCreated = user.child("timeCreated");*/
         user.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -40,6 +41,8 @@ public class FireBaseHelper {
                 uTimeCreated = (Long) dataSnapshot.child("timeCreated").getValue();
                 u = new User(uId, uEmail, uUsername, uPoint, uLevel, uNumFocusesDone, new ArrayList(), uTimeCreated);
                 Log.i("uEmail", u.getEmail());
+                Log.i("uPoint", u.getPoint() + "");
+                Log.i("uTimeCreated", u.getTimeCreated() + "");
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {}
