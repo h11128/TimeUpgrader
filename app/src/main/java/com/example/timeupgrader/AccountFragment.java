@@ -96,15 +96,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 Log.i(TAG, "in AccountFragment btnNickName pressed!!");
                 mUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (mUser != null) {
-
                     changenameDialog();
-
-
-                } else {
+                }
+                else {
                     Toast.makeText(getActivity(), "You are not sign in yet!!", Toast.LENGTH_SHORT).show();
                 }
                 break;
-
         }
     }
     private void changenameDialog() {
@@ -119,8 +116,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         Log.i(TAG, "1!!");
                         dialog.dismiss();
                         Log.i(TAG, "2!!");
-                        Log.i(TAG, mInput.getText().toString());
+
                         mNewUserName = mInput.getText().toString();
+                        Log.i(TAG, mNewUserName);
                         Log.i(TAG, "3!!");
                         String newUserName = "Nickname: " + mAccount.getUsername();
                         Log.i(TAG, "4!!");
