@@ -25,7 +25,7 @@ import static android.support.constraint.Constraints.TAG;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
 
-    private Account mAccount;
+    private User u;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mUser;
     private Button mIconButton;
@@ -46,7 +46,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         dialogOn = false;
         view = inflater.inflate(R.layout.fragment_account, container, false);
 
-
+        u = User.getCurrentUser();
 
         mIconButton = view.findViewById(R.id.btnIcon);
         mIconButton.setOnClickListener(this);
@@ -80,7 +80,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
                 Log.i(TAG, "in AccountFragment btnChangePassword pressed!!");
                 mFirebaseAuth = FirebaseAuth.getInstance();
-                mFirebaseAuth.sendPasswordResetEmail(mAccount.getEmail())
+                mFirebaseAuth.sendPasswordResetEmail(u.getEmail())
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
