@@ -103,11 +103,11 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
     public long insert_Activity(SingleAct act){
         ContentValues cv = new ContentValues();
         cv.put(ACT.Column_ActId, act.getId());
-        cv.put(ACT.Column_Owner, act.getOwner().getEmail());
+        cv.put(ACT.Column_Owner, act.getOwner());
         cv.put(ACT.Column_ActName, act.getName());
         cv.put(ACT.Column_ActDescription, act.getDescription());
         cv.put(ACT.Column_ActType, act.getType());
-        cv.put(ACT.Column_StartTime, act.getStartTime().getTime());
+        cv.put(ACT.Column_StartTime, act.getStartTime());
         cv.put(ACT.Column_Notify, act.isNotify() ? 1 : 0);
         cv.put(ACT.Column_IsTiming, act.isTiming() ? 1 : 0);
         cv.put(ACT.Column_Duration, act.getDuration());

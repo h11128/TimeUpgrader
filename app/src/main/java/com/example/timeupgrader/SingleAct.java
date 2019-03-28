@@ -1,7 +1,5 @@
 package com.example.timeupgrader;
 
-import java.util.Date;
-
 public class SingleAct extends Act {
     public static final int SET = 0;
     public static final int START = 1;
@@ -9,13 +7,13 @@ public class SingleAct extends Act {
     public static final int END = 3;
     public static final int DELETE = 4;
 
-    private User owner;
+    private String owner;
     private int status;
     private long duration;
     private long currentTime;
     private boolean synced;
 
-    public SingleAct(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, long rewardPoint, User owner, int status, long duration, int currentTime, boolean synced) {
+    public SingleAct(String id, String name, String description, int type, long startTime, boolean notify, boolean isTiming, long rewardPoint, String owner, int status, long duration, int currentTime, boolean synced) {
         super(id, name, description, type, startTime, notify, isTiming, rewardPoint);
         this.owner = owner;
         this.status = status;
@@ -24,11 +22,11 @@ public class SingleAct extends Act {
         this.synced = synced;
     }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 

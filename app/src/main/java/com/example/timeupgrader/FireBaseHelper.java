@@ -21,7 +21,7 @@ public class FireBaseHelper {
 
     public void getLoginUser(String email) {
         String cleanEmail = email.replace('.', ',');
-        final DatabaseReference user = mDatabase.child("users").child(cleanEmail);
+        DatabaseReference user = mDatabase.child("users").child(cleanEmail);
         /*final DatabaseReference userEmail = user.child("email");
         final DatabaseReference userId = user.child("id");
         final DatabaseReference userLevel = user.child("level");
@@ -107,5 +107,15 @@ public class FireBaseHelper {
             public void onCancelled(DatabaseError databaseError) {}
         });*/
         // return new User(uId, uEmail, uUsername, uPoint, uLevel, uNumFocusesDone, new ArrayList(), uTimeCreated);
+    }
+
+    public void insertAct(SingleAct act) {
+        String cleanOwnerEmail = act.getOwner().replace('.', ',');
+        mDatabase.child("userAct").child(cleanOwnerEmail).child(act.getId()).setValue(true);
+        mDatabase.child("act").child(act.getId()).setValue(act);
+    }
+
+    public void updateActStatus(SingleAct act, int status) {
+        mDatabase.child("act").child(act.getId()).child("status").setValue(status);
     }
 }
