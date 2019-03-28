@@ -48,10 +48,6 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
-
-
     }
     public void onClick(View view){
         switch(view.getId()){

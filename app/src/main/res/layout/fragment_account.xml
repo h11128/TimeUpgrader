@@ -14,9 +14,6 @@
         android:textColor="#000000"
         android:textSize="48sp" />
 
-
-
-
     <Button
         android:id="@+id/btnIcon"
         android:layout_width="fill_parent"
@@ -27,30 +24,6 @@
         android:drawableEnd="@drawable/baseline_account_circle_black_24"
         android:gravity="start|center_vertical"
         android:text="@string/Icon" />
-
-    <TextView
-        android:id="@+id/oldUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btnIcon"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="163dp"
-        android:text="@string/Nickname"
-        tools:textSize="24sp" />
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <AutoCompleteTextView
-            android:id="@+id/input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/NewUserName"
-            android:imeOptions="actionDone"
-            android:inputType="text" />
-
-    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/btnChangePassword"
