@@ -72,7 +72,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 //
                 break;
             case R.id.btnHelp:
-                //
+                startActivity(new Intent(getActivity(), HelpActivity.class));
                 break;
             case R.id.btnSync:
                 //
