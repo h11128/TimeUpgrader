@@ -11,12 +11,12 @@ public class Account {
 
     private static Account currentAccount;
 
-    public Account(String id, String email, String username, String password) {
+    public Account(String id, String email, String username, String password, Date timeCreated) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
-        //this.timeCreated = timeCreated;
+        this.timeCreated = timeCreated;
         currentAccount = this;
     }
 

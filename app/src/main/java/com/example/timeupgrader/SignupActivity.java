@@ -1,5 +1,8 @@
 package com.example.timeupgrader;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import android.content.BroadcastReceiver;
@@ -7,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,10 +27,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = SignupActivity.class.getSimpleName();
     public static final String RECEIVER_ACTION_FINISH = "receiver_action_finish";
+    TaskDatabaseHelper dbHelper;
+    private DatabaseReference mDatabase;
+    private FireBaseHelper fbHelper = new FireBaseHelper();
+
     ProgressBar progressBar;
     EditText email;
     EditText password;
@@ -37,12 +51,17 @@ public class SignupActivity extends AppCompatActivity {
     public static final String REGEX_PASSWORD = "^[a-zA-Z0-9]{6,16}$";
     String savedEmail;
     String savedPassword;
+    String em;
+    String pw;
+
     private FinishActivityReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate() called!!!");
+        dbHelper = new TaskDatabaseHelper(this.getApplicationContext());
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mReceiver = new FinishActivityReceiver();
         registerFinishReceiver();
 
@@ -56,7 +75,8 @@ public class SignupActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
+                                fbHelper.getLoginUser(savedEmail);
                                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                 finish();
                             }else{
@@ -83,15 +103,26 @@ public class SignupActivity extends AppCompatActivity {
             signup.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isEmail(email.getText().toString()) && isPassword(password.getText().toString())) {
+                    em = email.getText().toString();
+                    pw = password.getText().toString();
+                    if (isEmail(em) && isPassword(pw)) {
                         progressBar.setVisibility(View.VISIBLE);
-                        firebaseAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                        firebaseAuth.createUserWithEmailAndPassword(em, pw)
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         progressBar.setVisibility(View.GONE);
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(SignupActivity.this, "Registered successfully",
+                                            Date d = new Date();
+                                            Log.i("Time Created", d.toString());
+                                            Log.i("email", em);
+                                            Log.i("password", pw);
+                                            Account newAccount = new Account("", em, "", pw, d);
+                                            User newUser = new User("", em,"", 0, 0, 0, new ArrayList(), d.getTime());
+                                            dbHelper.insert_UserAccount(newAccount, newUser);
+                                            String cleanEmail = em.replace('.', ',');
+                                            mDatabase.child("users").child(cleanEmail).setValue(newUser);
+                                            Toast.makeText(SignupActivity.this, "Signed up successfully",
                                                     Toast.LENGTH_LONG).show();
                                             email.setText("");
                                             password.setText("");
@@ -150,11 +181,12 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy() called!!!");
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }
-        super.onDestroy();
-        Log.i(TAG, "onDestroy() called!!!");
+        dbHelper.close();
     }
 
     private class FinishActivityReceiver extends BroadcastReceiver {

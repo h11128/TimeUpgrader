@@ -1,24 +1,29 @@
 package com.example.timeupgrader;
 
 import java.util.ArrayList;
+// import java.util.Date;
 
 public class User {
     private String id;
+    private String email;
     private String username;
-    private int point;
-    private int level;
-    private int numFocusesDone;
+    private long point;
+    private long level;
+    private long numFocusesDone;
     private ArrayList achievements;
+    private long timeCreated;
 
     private static User currentUser;
 
-    public User(String id, String username, int point, int level, int numFocusesDone, ArrayList achievements) {
+    public User(String id, String email, String username, long point, long level, long numFocusesDone, ArrayList achievements, long timeCreated) {
         this.id = id;
+        this.email = email;
         this.username = username;
         this.point = point;
         this.level = level;
         this.numFocusesDone = numFocusesDone;
         this.achievements = achievements;
+        this.timeCreated = timeCreated;
         currentUser = this;
     }
 
@@ -38,39 +43,39 @@ public class User {
         this.username = username;
     }
 
-    public int getPoint() {
+    public long getPoint() {
         return point;
     }
 
-    public void setPoint(int point) {
+    public void setPoint(long point) {
         this.point = point;
     }
 
-    public boolean addPoint(int point) {
+    public boolean addPoint(long point) {
         return true;
     }
 
-    public boolean subtractPoint(int point) {
+    public boolean subtractPoint(long point) {
         return true;
     }
 
-    public int getLevel() {
+    public long getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
+    public void setLevel(long level) {
         this.level = level;
     }
 
-    public boolean setLevelByPoint(int point) {
+    public boolean setLevelByPoint(long point) {
         return true;
     }
 
-    public int getNumFocusesDone() {
+    public long getNumFocusesDone() {
         return numFocusesDone;
     }
 
-    public void setNumFocusesDone(int numFocusesDone) {
+    public void setNumFocusesDone(long numFocusesDone) {
         this.numFocusesDone = numFocusesDone;
     }
 
@@ -80,6 +85,14 @@ public class User {
 
     public void setAchievements(ArrayList achievements) {
         this.achievements = achievements;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public long getTimeCreated() {
+        return timeCreated;
     }
 
     public Act createAct() {

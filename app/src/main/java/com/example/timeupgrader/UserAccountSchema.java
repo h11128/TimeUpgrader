@@ -14,5 +14,6 @@ public class UserAccountSchema {
         public static final String Column_Level = "Level";
         public static final String Column_Point = "Point";
         public static final String Column_NumFocuses = "numFocuses";
+        public static final String Column_TimeCreated = "timeCreated";
     }
 }
