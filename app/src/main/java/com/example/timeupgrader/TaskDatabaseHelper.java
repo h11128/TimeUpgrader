@@ -32,7 +32,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 UASchema.Column_Level + " INTEGER," + UASchema.Column_Point + " INTEGER," +
                 UASchema.Column_NumFocuses + " INTEGER," + UASchema.Column_TimeCreated + " TEXT)");
         db.execSQL("create table if not exists "+ UserAchSchema.Table_UserAchievements + "(" +
-                UserAchSchema.Column_UAId + " INTEGER primary key autoincrement," +
+                UserAchSchema.Column_UAId + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 UASchema.Column_UserId + " TEXT," + AchSchema.Column_AchieveId + " INTEGER," +
                 UserAchSchema.Column_AchieveTime + " INTEGER)");
         db.execSQL("create table if not exists " + AchSchema.Table_Achievements + " (" +
@@ -45,11 +45,12 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 UGA.Column_MemberStatus + " INTEGER," + UGA.Column_gTotalTime + " INTEGER," +
                 UGA.Column_gCurTime + " INTERGER)");
         db.execSQL("create table if not exists " + ACT.Table_Activity + " (" +
-                ACT.Column_ActId + " INTEGER primary key autoincrement," +
+                ACT.Column_ActId + " TEXT PRIMARY KEY," + ACT.Column_Owner + "TEXT," +
                 ACT.Column_ActName + " TEXT," + ACT.Column_ActDescription + " TEXT," +
                 ACT.Column_ActType + " INTEGER," + ACT.Column_StartTime + " INTEGER," +
                 ACT.Column_Notify + " INTEGER," + ACT.Column_IsTiming + " INTEGER," +
-                ACT.Column_RewardPoint + " INTEGER," + ACT.Column_Status + " INTEGER)");
+                ACT.Column_Duration + " INTEGER," + ACT.Column_RewardPoint + " INTEGER," +
+                ACT.Column_Status + " INTEGER," + ACT.Column_Synced + " INTEGER)");
     }
 
     @Override
@@ -99,18 +100,27 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
             return getWritableDatabase().insert(UGA.Table_UserGroupActivity, null, cv);
     }
 
-    public long insert_Activity(Act act){
-            ContentValues cv = new ContentValues();
-            cv.put(ACT.Column_ActId, act.getId());
-            cv.put(ACT.Column_ActName, act.getName());
-            cv.put(ACT.Column_ActDescription, act.getDescription());
-            cv.put(ACT.Column_ActType, act.getType());
-            //cv.put(ACT.Column_StartTime, act.getStartTime());
-            cv.put(ACT.Column_Notify, act.isNotify());
-            cv.put(ACT.Column_IsTiming, act.isTiming());
-            cv.put(ACT.Column_RewardPoint, act.getRewardPoint());
-            //cv.put(ACT.Column_Status, act.getStatus());
-            return getWritableDatabase().insert(ACT.Table_Activity, null, cv);
+    public long insert_Activity(SingleAct act){
+        ContentValues cv = new ContentValues();
+        cv.put(ACT.Column_ActId, act.getId());
+        cv.put(ACT.Column_Owner, act.getOwner().getEmail());
+        cv.put(ACT.Column_ActName, act.getName());
+        cv.put(ACT.Column_ActDescription, act.getDescription());
+        cv.put(ACT.Column_ActType, act.getType());
+        cv.put(ACT.Column_StartTime, act.getStartTime().getTime());
+        cv.put(ACT.Column_Notify, act.isNotify() ? 1 : 0);
+        cv.put(ACT.Column_IsTiming, act.isTiming() ? 1 : 0);
+        cv.put(ACT.Column_Duration, act.getDuration());
+        cv.put(ACT.Column_RewardPoint, act.getRewardPoint());
+        cv.put(ACT.Column_Status, act.getStatus());
+        cv.put(ACT.Column_Synced, act.isSynced() ? 1 : 0);
+        return getWritableDatabase().insert(ACT.Table_Activity, null, cv);
+    }
+
+    public long delete_Activity_ById(String actId){
+        String selection = ACT.Column_ActId + " = ?";
+        String[] selectionArgs = { actId };
+        return getWritableDatabase().delete(ACT.Table_Activity, selection, selectionArgs);
     }
 
     public int delete_UserAccount(Account account){

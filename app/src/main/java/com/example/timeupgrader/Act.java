@@ -13,9 +13,9 @@ public abstract class Act {
     private Date startTime;
     private boolean notify;
     private boolean isTiming;
-    private int rewardPoint;
+    private long rewardPoint;
 
-    public Act(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, int rewardPoint) {
+    public Act(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, long rewardPoint) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -82,11 +82,11 @@ public abstract class Act {
         isTiming = timing;
     }
 
-    public int getRewardPoint() {
+    public long getRewardPoint() {
         return rewardPoint;
     }
 
-    public void setRewardPoint(int rewardPoint) {
+    public void setRewardPoint(long rewardPoint) {
         this.rewardPoint = rewardPoint;
     }
 }

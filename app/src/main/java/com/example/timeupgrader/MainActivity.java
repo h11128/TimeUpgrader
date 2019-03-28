@@ -110,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
+
     private void initFragment() {
         BottomNavigationView bottomNavigationView;
         MainFragment fragment1 = new MainFragment();

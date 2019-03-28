@@ -7,18 +7,21 @@ public class SingleAct extends Act {
     public static final int START = 1;
     public static final int PAUSE = 2;
     public static final int END = 3;
+    public static final int DELETE = 4;
 
     private User owner;
     private int status;
-    private int totalTime;
-    private int currentTime;
+    private long duration;
+    private long currentTime;
+    private boolean synced;
 
-    public SingleAct(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, int rewardPoint, User owner, int status, int totalTime, int currentTime) {
+    public SingleAct(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, long rewardPoint, User owner, int status, long duration, int currentTime, boolean synced) {
         super(id, name, description, type, startTime, notify, isTiming, rewardPoint);
         this.owner = owner;
         this.status = status;
-        this.totalTime = totalTime;
+        this.duration = duration;
         this.currentTime = currentTime;
+        this.synced = synced;
     }
 
     public User getOwner() {
@@ -37,20 +40,28 @@ public class SingleAct extends Act {
         this.status = status;
     }
 
-    public int getTotalTime() {
-        return totalTime;
+    public long getDuration() {
+        return duration;
     }
 
-    public void setTotalTime(int totalTime) {
-        this.totalTime = totalTime;
+    public void setTotalTime(int duration) {
+        this.duration = duration;
     }
 
-    public int getCurrentTime() {
+    public long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(int currentTime) {
+    public void setCurrentTime(long currentTime) {
         this.currentTime = currentTime;
+    }
+
+    public boolean isSynced() {
+        return synced;
+    }
+
+    public void setSynced(boolean synced) {
+        this.synced = synced;
     }
 
     public boolean startAct() {
