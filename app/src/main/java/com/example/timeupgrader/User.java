@@ -52,10 +52,12 @@ public class User {
     }
 
     public boolean addPoint(long point) {
+        if (point >= 0 && this.point <= Long.MAX_VALUE - point) this.point += point;
         return true;
     }
 
     public boolean subtractPoint(long point) {
+        if (point >= 0 && this.point >= point) this.point -= point;
         return true;
     }
 

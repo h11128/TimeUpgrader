@@ -71,10 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
-                                        /*InsertData();
-                                        LogData();
-                                        UpdateData();
-                                        LogData();*/
                                         fbHelper.getLoginUser(em);
                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sp.edit();
@@ -195,7 +191,6 @@ public class LoginActivity extends AppCompatActivity {
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }
-        //DeleteData();
         dbHelper.close();
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");
