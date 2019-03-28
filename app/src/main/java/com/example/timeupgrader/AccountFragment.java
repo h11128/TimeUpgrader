@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -30,7 +31,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private Button mIconButton;
     private Button mNickNameButton;
     private Button mChangePasswordButton;
-    private String mNewUserName;
+
     private Context mContext;
     private EditText mInput;
     boolean dialogOn;
@@ -44,9 +45,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
         dialogOn = false;
         view = inflater.inflate(R.layout.fragment_account, container, false);
-        mAccount = Account.getCurrentAccount();
-        mContext = getContext();
-        Log.i(TAG, "getcontext!!!");
+
+
+
         mIconButton = view.findViewById(R.id.btnIcon);
         mIconButton.setOnClickListener(this);
         Log.i(TAG, "getFirstButton!!!");
@@ -96,6 +97,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 Log.i(TAG, "in AccountFragment btnNickName pressed!!");
                 mUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (mUser != null) {
+                    String oldname = mUser.getDisplayName();
+                    String newUserName = "Nickname: " + oldname;
+                    mNickNameButton.setText(newUserName);
                     changenameDialog();
                 }
                 else {
@@ -106,30 +110,49 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     }
     private void changenameDialog() {
         dialogOn = true;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(R.layout.dialog_changename);
+
+
+        AlertDialog builder = new AlertDialog.Builder(getActivity()).create();
+        mInput = new EditText(getActivity());
+        builder.setCancelable(false);
         builder.setTitle("Change Nickname");
-        mInput = view.findViewById(R.id.ChangeName);
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setView(mInput);
+        //mInput = (EditText) view.findViewById(R.id.ChangeName);
+        //view.findViewById(R.id.ChangeName)
+        builder.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.i(TAG, "1!!");
                         dialog.dismiss();
                         Log.i(TAG, "2!!");
 
-                        mNewUserName = mInput.getText().toString();
+                        String mNewUserName = mInput.getText().toString();
                         Log.i(TAG, mNewUserName);
                         Log.i(TAG, "3!!");
-                        String newUserName = "Nickname: " + mAccount.getUsername();
+                        String newUserName = "Nickname: " + mNewUserName;
                         Log.i(TAG, "4!!");
                         mNickNameButton.setText(newUserName);
                         Log.i(TAG, "5!!");
-                        mAccount.setUsername(newUserName);
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(mNewUserName).build();
+                        mUser.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.i(TAG, "User profile updated.");
+                                        }
+                                        else{
+                                            Log.i(TAG, "Some error happens");
+                                        }
+                                    }
+                                });
                         Log.i(TAG, "6!!");
                         dialogOn = false;
 
                     }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                });
+        builder.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -137,7 +160,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        builder.create().show();
+        builder.show();
 
 
     }

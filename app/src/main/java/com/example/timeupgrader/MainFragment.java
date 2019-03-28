@@ -9,10 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class MainFragment extends Fragment {
     Button exit;
@@ -24,6 +27,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i(TAG, "in Main onCreateView called!!!");
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -35,7 +39,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        Log.i(TAG, "in Main onActivityCreated called!!!");
         signout = getActivity().findViewById(R.id.btnSignout);
         exit = getActivity().findViewById(R.id.btnExit);
         fab = getActivity().findViewById(R.id.addactivity);
@@ -70,6 +74,7 @@ public class MainFragment extends Fragment {
     }
 
     private void showNormalDialog(){
+        Log.i(TAG, "in Main showNormalDialog called!!!");
         final AlertDialog.Builder normalDialog = new AlertDialog.Builder(getActivity());
         normalDialog.setTitle("Exit");
         normalDialog.setMessage("Are you sure to exit?");
