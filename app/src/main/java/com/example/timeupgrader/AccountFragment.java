@@ -59,6 +59,9 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         mChangePasswordButton.setOnClickListener(this);
         Log.i(TAG, "get all the buttons!!!");
 
+        mButtonText = "Nickname: " + mUser.getUsername();
+        Log.i(TAG, "in AccountFragment changetext!!");
+        mNickNameButton.setText(mButtonText);
         onClick(view);
 
 
@@ -96,14 +99,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
                 break;
             case R.id.btnNickName:
-                mButtonText = "Nickname: " + mUser.getUsername();
-                mNickNameButton.setText(mButtonText);
-
                 Log.i(TAG, "in AccountFragment btnNickName pressed!!");
+
+                Log.i(TAG, "in AccountFragment btnNickName 2!!");
+
                 mFUser = FirebaseAuth.getInstance().getCurrentUser();
+                Log.i(TAG, "in AccountFragment btnNickName 3!!");
                 if (mFUser != null) {
 
                     changenameDialog();
+                    Toast.makeText(getActivity(), "changed!!", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Toast.makeText(getActivity(), "You are not sign in yet!!", Toast.LENGTH_SHORT).show();
@@ -126,15 +131,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         dialog.dismiss();
 
                         String mNewUserName = mInput.getText().toString();
-                        Log.i(TAG, mNewUserName);
+                        Log.i(TAG, "your user name is"+mNewUserName);
 
                         mButtonText = "Nickname: " + mNewUserName;
                         mNickNameButton.setText(mButtonText);
 
                         //TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getActivity().getApplicationContext());
                         //dbHelper.updateUsername(mUser,mNewUserName);
-
+                        Log.i(TAG, "On account 1");
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                        Log.i(TAG, "On account 2");
                         mDatabase.child("users").child(mUser.getEmail().replace('.', ',')).child("username").setValue(mNewUserName)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -147,8 +153,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                         }
                                     }
                                 });
+                        Log.i(TAG, "On account 3");
                         mUser.setUsername(mNewUserName);
+                        Log.i(TAG, "On account 4");
                         dialogOn = false;
+                        Log.i(TAG, "On account 5");
 
                     }
                 });
