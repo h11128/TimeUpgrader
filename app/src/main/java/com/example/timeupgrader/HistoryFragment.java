@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,29 +29,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static android.support.constraint.Constraints.TAG;
+
 public class HistoryFragment extends Fragment {
     private View view;
     private FirebaseUser mFUser;
     private User mUser;
     private ListView mActList;
     private DatabaseReference mDatabaseReference;
-    String[] ActName = {
-            "Title 1", "Title 2",
-            "Title 3", "Title 4",
-            "Title 5",
-    };
-
-    String[] ActDuration = {
-            "Sub Title 1", "Sub Title 2",
-            "Sub Title 3", "Sub Title 4",
-            "Sub Title 5",
-    };
-
-    Integer[] ActIcon = {
-            R.drawable.baseline_account_circle_black_24, R.drawable.baseline_account_circle_black_24,
-            R.drawable.baseline_account_circle_black_24, R.drawable.baseline_account_circle_black_24,
-            R.drawable.baseline_account_circle_black_24,
-    };
+    private ArrayList<String> ActName;
+    private ArrayList<Long> ActDuration;
+    private ArrayList<Integer> ActIcon;
 
     public HistoryFragment() {
     }
@@ -59,31 +48,17 @@ public class HistoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_history, container, false);
+
         mFUser = FirebaseAuth.getInstance().getCurrentUser();
         mUser = User.getCurrentUser();
-
-
-        ActListAdapter adapter = new ActListAdapter(getActivity(), ActName, ActDuration, ActIcon);
-
+        ActName = new ArrayList<>();
+        ActDuration = new ArrayList<>();
+        ActIcon = new ArrayList<>();
+        Log.i(TAG, "in history finsh variable!!!");
+        final ActListAdapter adapter = new ActListAdapter(getActivity(), ActName, ActDuration, ActIcon);
+        Log.i(TAG, "in history 1");
         mActList = view.findViewById(R.id.ActList);
         mActList.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-        /*mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("user")
-            .child(mUser.getEmail()).child("userAct");
-        mDatabaseReference.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //Get map of users in datasnapshot
-                        UpdateList((Map<String,Object>) dataSnapshot.getValue());
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //handle databaseError
-                    }
-                });
-
-        */
         mActList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -103,6 +78,31 @@ public class HistoryFragment extends Fragment {
                 }
             }
         });
+        Log.i(TAG, "in history finsh 2!!!");
+
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("userAct")
+            .child("chengguoyao@hotmail.com".replace('.', ','));
+        mDatabaseReference.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        UpdateList((Map<String,Object>) dataSnapshot.getValue());
+                        adapter.notifyDataSetChanged();
+
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(getActivity(), "Some error happens", Toast.LENGTH_SHORT).show();
+                        //handle databaseError
+                    }
+                });
+        Log.i(TAG, "in history finsh 3!!!");
+        adapter.notifyDataSetChanged();
+        Log.i(TAG, "in history finsh 4!!!");
+
+
+
 
         return view;
 
@@ -115,16 +115,11 @@ public class HistoryFragment extends Fragment {
 
     public void UpdateList(Map<String,Object> userAct) {
 
-        ArrayList<Long> singleAct = new ArrayList<>();
-
-
         for (Map.Entry<String, Object> entry : userAct.entrySet()){
-
-
             Map singleActivity = (Map) entry.getValue();
-
-
-            singleActivity.get("ActName");
+            ActName.add((String)singleActivity.get("name"));
+            ActDuration.add((Long)singleActivity.get("duration"));
+            ActIcon.add((Integer) R.drawable.baseline_account_circle_black_24);
         }
 
 
@@ -133,17 +128,18 @@ public class HistoryFragment extends Fragment {
     public class ActListAdapter extends ArrayAdapter<String> {
 
         private final Activity context;
-        private final String[] ActName;
-        private final String[] ActDuration;
-        private final Integer[] ActIcon;
+        private final ArrayList<String> ActName;
+        private final ArrayList<Long> ActDuration;
+        private final ArrayList<Integer> ActIcon;
 
-        public ActListAdapter(Activity context, String[] ActName,String[] ActDuration, Integer[] ActIcon) {
+        public ActListAdapter(Activity context, ArrayList<String> ActName,ArrayList<Long> ActDuration
+                , ArrayList<Integer> ActIcon) {
             super(context, R.layout.list_activity, ActName);
             this.context=context;
             this.ActName=ActName;
             this.ActDuration=ActDuration;
             this.ActIcon=ActIcon;
-
+            Log.i(TAG, "in history finsh initialize!!!");
         }
 
         public View getView(int position,View view,ViewGroup parent) {
@@ -154,14 +150,16 @@ public class HistoryFragment extends Fragment {
             TextView subtitleText = (TextView) rowView.findViewById(R.id.ActDuration);
             ImageView imageView = (ImageView) rowView.findViewById(R.id.ActIcon);
 
-
-            titleText.setText(ActName[position]);
-            subtitleText.setText(ActDuration[position]);
-            imageView.setImageResource(ActIcon[position]);
-
+            for(int i = 0; i < ActName.size(); i++)
+            {
+                titleText.setText(ActName.get(i));
+                subtitleText.setText(String.format("%d", ActDuration.get(i)));
+                imageView.setImageResource(ActIcon.get(i));
+            }
+            Log.i(TAG, "in history finsh getview!!!");
             return rowView;
 
-        };
+        }
     }
 }
 

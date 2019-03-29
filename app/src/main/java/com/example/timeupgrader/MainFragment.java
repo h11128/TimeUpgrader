@@ -73,7 +73,8 @@ public class MainFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mData = new ArrayList<>();
         User u = User.getCurrentUser();
-        Query query = mDatabase.child("userAct").child(u.getEmail().replace('.', ','))
+        Log.i(TAG, "in Main begin query databse!!!");
+        Query query = mDatabase.child("userAct").child("chengguoyao@hotmail.com".replace('.', ','))
                 /*.endAt(SingleAct.END, "status").orderByChild("startTime")*/;
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -106,12 +107,14 @@ public class MainFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
+        Log.i(TAG, "in Main finish query databse!!!");
 
         mRecyclerView = v.findViewById(R.id.mainRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        Log.i(TAG, "in Main finsh building recyclerview!!!");
         /*adapter = new MainAdapter(mData);
         mRecyclerView.setAdapter(adapter);*/
 
