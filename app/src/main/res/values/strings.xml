@@ -22,5 +22,6 @@
     <string name="settings">settings</string>
     <string name="account">Account</string>
     <string name="sync">Sync</string>
+    <string name="choose_date_or_time">Choose Date or Time:</string>
 
 </resources>
