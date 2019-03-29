@@ -1,5 +1,4 @@
 package com.example.timeupgrader;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
