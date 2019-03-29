@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +24,7 @@ public class MainFragment extends Fragment {
     Button exit;
     Button signout;
     FloatingActionButton fab;
+    /*RecyclerView mRecyclerView;*/
 
     public MainFragment() {}
 
@@ -28,7 +32,17 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.i(TAG, "in Main onCreateView called!!!");
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View v = inflater.inflate(R.layout.fragment_main, container, false);
+
+        /*mRecyclerView = v.findViewById(R.id.mainRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);*/
+        /*mRecyclerView.setAdapter(recycleAdapter);
+        mRecyclerView.addItemDecoration(new DividerGridItemDecoration(this));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());*/
+
+        return v;
     }
 
     @Override
@@ -40,19 +54,19 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.i(TAG, "in Main onActivityCreated called!!!");
-        signout = getActivity().findViewById(R.id.btnSignout);
-        exit = getActivity().findViewById(R.id.btnExit);
+        /*signout = getActivity().findViewById(R.id.btnSignout);
+        exit = getActivity().findViewById(R.id.btnExit);*/
         fab = getActivity().findViewById(R.id.addactivity);
 
-        exit.setOnClickListener(new View.OnClickListener() {
+        /*exit.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 showNormalDialog();
             }
-        });
+        });*/
 
-        signout.setOnClickListener(new View.OnClickListener() {
+        /*signout.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -63,7 +77,7 @@ public class MainFragment extends Fragment {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().finish();
             }
-        });
+        });*/
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

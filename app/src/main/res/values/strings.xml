@@ -22,13 +22,10 @@
     <string name="settings">settings</string>
     <string name="account">Account</string>
     <string name="sync">Sync</string>
-<<<<<<< HEAD
     <string name="choose_date_or_time">Choose Date or Time:</string>
-=======
     <string name="Icon">Icon</string>
     <string name="ChangePassword">ChangePassword</string>
     <string name="Nickname">Nickname: NickName</string>
     <string name="NewUserName">NewUserName</string>
->>>>>>> 96c3499fa94abade2ef72b7c64571077b1427f4d
 
 </resources>
