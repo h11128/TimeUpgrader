@@ -4,24 +4,36 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder>{
+public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder>{
 
-    public static class MainHolder extends RecyclerView.ViewHolder{
-        public MainHolder(View v) {
-            super(v);
-        }
-    }
+    private List<SingleAct> mData;
 
-    private List<String> mDatas;
-    public MainAdapter(List<String> data) {
-        this.mDatas = data;
+    public MainAdapter(List<SingleAct> data) {
+        this.mData = data;
     }
 
     @Override
-    public void onBindViewHolder(MainHolder holder, int position) {
+    public void onBindViewHolder(MainViewHolder holder, int position) {
+        final SingleAct act = getItem(position);
+
+        holder.name.setText(act.getName());
+        holder.description.setText(act.getDescription());
+        holder.status.setText(act.getStatusText());
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
+        holder.startTime.setText("Start: " + sdf1.format(act.getStartTime()));
+        holder.duration.setText("Duration: " + sdf2.format(act.getDuration()));
+        holder.root.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {}
+        });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {}
@@ -30,12 +42,41 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainHolder>{
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return mData.size();
+    }
+
+    protected SingleAct getItem(int position){
+        return mData.get(position);
     }
 
     @Override
-    public MainHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_main, parent, false);
-        return new MainHolder(v);
+    public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main, parent, false);
+        return new MainViewHolder(v);
+    }
+
+    public static class MainViewHolder extends RecyclerView.ViewHolder{
+        public LinearLayout root;
+        public TextView name;
+        public TextView description;
+        public TextView status;
+        public TextView startTime;
+        public TextView duration;
+        public Button start;
+        public Button pause;
+        public Button delete;
+
+        public MainViewHolder(View v) {
+            super(v);
+            root = itemView.findViewById(R.id.list_root);
+            name = itemView.findViewById(R.id.aName);
+            description = itemView.findViewById(R.id.aDescription);
+            status = itemView.findViewById(R.id.aStatus);
+            startTime = itemView.findViewById(R.id.aStartTime);
+            duration = itemView.findViewById(R.id.aDuration);
+            start = itemView.findViewById(R.id.aStart);
+            pause = itemView.findViewById(R.id.aPause);
+            delete = itemView.findViewById(R.id.aDelete);
+        }
     }
 }

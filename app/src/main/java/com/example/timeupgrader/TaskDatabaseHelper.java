@@ -14,6 +14,7 @@ import com.example.timeupgrader.UGASchema.*;
 import com.example.timeupgrader.ActSchema.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
@@ -56,6 +57,42 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Implement schema changes and data massage here when upgrading
+    }
+
+    public void getLoginUser(String email) {
+
+        String selection = UASchema.Column_Email + " = ?";
+        String[] projection = {
+                UASchema.Column_UserName,
+                UASchema.Column_Email,
+                UASchema.Column_Password,
+                UASchema.Column_Level,
+                UASchema.Column_Point,
+                UASchema.Column_NumFocuses,
+                UASchema.Column_TimeCreated
+        };
+
+        Cursor cursor = getReadableDatabase().query(
+                UASchema.Table_UserAccount,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                new String[] {email},          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        while (cursor.moveToNext()) {
+            String uEmail = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_Email));
+            String uUsername = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_UserName));
+            long uPoint = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_Point));
+            long uLevel = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_Level));
+            long uNumFocusesDone = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_NumFocuses));
+            long uTimeCreated = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_TimeCreated));
+            User u = new User("", uEmail, uUsername, uPoint, uLevel, uNumFocusesDone, new ArrayList(), uTimeCreated);
+        }
+
+        cursor.close();
     }
 
     public long insert_UserAccount(Account account, User user) {

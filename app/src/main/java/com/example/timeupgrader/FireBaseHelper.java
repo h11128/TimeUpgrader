@@ -111,7 +111,7 @@ public class FireBaseHelper {
 
     public void insertAct(SingleAct act) {
         String cleanOwnerEmail = act.getOwner().replace('.', ',');
-        mDatabase.child("userAct").child(cleanOwnerEmail).child(act.getId()).setValue(true);
+        mDatabase.child("userAct").child(cleanOwnerEmail).child(act.getId()).setValue(act);
         mDatabase.child("act").child(act.getId()).setValue(act);
     }
 
