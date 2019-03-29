@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class FocusFragment extends Fragment implements FocusActivity.ToFragmentListener {
 
     TextView name;
@@ -20,6 +23,7 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
     TextView remainingTime;
     FocusCircleTimer focusTimer;
     CountDownTimer cTimer;
+    User mUser;
     int hr;
     int min;
     int sec;
@@ -27,6 +31,7 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
     long progress = 0;
     boolean dialogOn;
     boolean interrupted;
+
 
     public FocusFragment() {}
 
@@ -73,6 +78,14 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
                         Intent intent = new Intent(getActivity(), EndFocusActivity.class);
                         intent.putExtra("name", name.getText());
                         intent.putExtra("time", total);
+
+                        mUser = User.getCurrentUser();
+                        mUser.setNumFocusesDone(mUser.getNumFocusesDone()+1);
+                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                        mDatabase.child("users").child(mUser.getEmail()).child("username").setValue(mUser.getNumFocusesDone());
+                        TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getActivity().getApplicationContext());
+                        dbHelper.updateNumFocus(mUser,mUser.getNumFocusesDone());
+
                         startActivity(intent);
                         getActivity().finish();
                     }

@@ -26,5 +26,7 @@
     <string name="ChangePassword">ChangePassword</string>
     <string name="Nickname">Nickname: NickName</string>
     <string name="NewUserName">NewUserName</string>
+    <string name="actname">ActName</string>
+    <string name="actduration">ActDuration</string>
 
 </resources>
