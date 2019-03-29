@@ -20,7 +20,7 @@
             android:paddingEnd="30dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:background="@color/colorMain"
+            android:background="?attr/allColor"
             android:text="Start a new task to focus on!"
             android:textColor="#fff"
             android:textSize="18sp" />

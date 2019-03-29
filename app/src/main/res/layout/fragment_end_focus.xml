@@ -76,7 +76,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="Return"
-        android:textColor="@color/colorMain"
+        android:textColor="?attr/allColor"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

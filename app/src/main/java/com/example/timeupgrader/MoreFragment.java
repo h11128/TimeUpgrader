@@ -87,16 +87,24 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(), "Selected Item: ", Toast.LENGTH_SHORT).show();
                         switch (item.getItemId()) {
                             case R.id.color_1:
-                                ChangeColor(R.id.color_1);
+                                getActivity().setTheme(R.style.AppTheme);
+                                getActivity().finish();
+                                startActivity(getActivity().getIntent());
                                 return true;
                             case R.id.color_2:
-                                // do your code
+                                getActivity().setTheme(R.style.AppTheme2);
+                                getActivity().finish();
+                                startActivity(getActivity().getIntent());
                                 return true;
                             case R.id.color_3:
-                                // do your code
+                                getActivity().setTheme(R.style.AppTheme3);
+                                getActivity().finish();
+                                startActivity(getActivity().getIntent());
                                 return true;
                             case R.id.color_4:
-                                // do your code
+                                getActivity().setTheme(R.style.AppTheme4);
+                                getActivity().finish();
+                                startActivity(getActivity().getIntent());
                                 return true;
                             default:
                                 return false;
