@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         sendFinishActivityBroadcast(getApplicationContext());
         setContentView(R.layout.activity_main);
-        Log.i(TAG, "onCreate() called!!!");
+        Log.i(TAG, "in Main onCreate() called!!!");
         initFragment();
 
         toolbar = findViewById(R.id.toolbarProfile);
@@ -69,44 +69,50 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i(TAG, "onStart() called!!!");
+        Log.i(TAG, "in Main onStart() called!!!");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.i(TAG, "onPause() called!!!");
+        Log.i(TAG, "in Main onPause() called!!!");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.i(TAG, "onResume() called!!!");
+        Log.i(TAG, "in Main onResume() called!!!");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i(TAG, "onStop() called!!!");
+        Log.i(TAG, "in Main onStop() called!!!");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        Log.i(TAG, "onRestart() called!!!");
+        Log.i(TAG, "in Main onRestart() called!!!");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i(TAG, "onDestroy() called!!!");
+        Log.i(TAG, "in Main onDestroy() called!!!");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i(TAG, "in Main CreateOptionsMenu called!!!");
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_options, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 
     private void initFragment() {

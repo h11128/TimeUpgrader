@@ -1,7 +1,5 @@
 package com.example.timeupgrader;
 
-import java.util.Date;
-
 public abstract class Act {
     public static final int SINGLE = 0;
     public static final int GROUP = 1;
@@ -10,12 +8,12 @@ public abstract class Act {
     private String name;
     private String description;
     private int type;
-    private Date startTime;
+    private long startTime;
     private boolean notify;
     private boolean isTiming;
-    private int rewardPoint;
+    private long rewardPoint;
 
-    public Act(String id, String name, String description, int type, Date startTime, boolean notify, boolean isTiming, int rewardPoint) {
+    public Act(String id, String name, String description, int type, long startTime, boolean notify, boolean isTiming, long rewardPoint) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -58,11 +56,11 @@ public abstract class Act {
         this.type = type;
     }
 
-    public Date getStartTime() {
+    public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(long startTime) {
         this.startTime = startTime;
     }
 
@@ -82,11 +80,11 @@ public abstract class Act {
         isTiming = timing;
     }
 
-    public int getRewardPoint() {
+    public long getRewardPoint() {
         return rewardPoint;
     }
 
-    public void setRewardPoint(int rewardPoint) {
+    public void setRewardPoint(long rewardPoint) {
         this.rewardPoint = rewardPoint;
     }
 }

@@ -1,13 +1,13 @@
 package com.example.timeupgrader;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
+// import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+// import android.database.Cursor;
+// import android.database.sqlite.SQLiteDatabase;
 
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,17 +19,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.util.Log;
-import com.example.timeupgrader.UserAccountSchema.UASchema;
+// import com.example.timeupgrader.UserAccountSchema.UASchema;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     public static final String RECEIVER_ACTION_FINISH = "receiver_action_finish";
     TaskDatabaseHelper dbHelper;
+    private FireBaseHelper fbHelper = new FireBaseHelper();
 
     Toolbar toolbar;
     ProgressBar progressBar;
@@ -71,10 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
-                                        InsertData();
-                                        LogData();
-                                        UpdateData();
-                                        LogData();
+                                        fbHelper.getLoginUser(em);
                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sp.edit();
                                         editor.putString("email", em);
@@ -95,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-
+    /*
     public void InsertData() {
         Log.i(TAG, "Inserting!!!");
         Account mAccount = new Account(userEmail.getText().toString(),userEmail.getText().toString(),
@@ -154,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
         dbHelper.delete_UserAccount(mAccount);
         LogData();
     }
+    */
 
     @Override
     protected void onStart() {
@@ -193,7 +191,6 @@ public class LoginActivity extends AppCompatActivity {
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);
         }
-        DeleteData();
         dbHelper.close();
         super.onDestroy();
         Log.i(TAG, "onDestroy() called!!!");

@@ -9,12 +9,15 @@ public class Account {
     private String password;
     private Date timeCreated;
 
-    public Account(String id, String email, String username, String password) {
+    private static Account currentAccount;
+
+    public Account(String id, String email, String username, String password, Date timeCreated) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.password = password;
-        //this.timeCreated = timeCreated;
+        this.timeCreated = timeCreated;
+        currentAccount = this;
     }
 
     public String getId() {
@@ -55,5 +58,9 @@ public class Account {
 
     public void setTimeCreated(Date timeCreated) {
         this.timeCreated = timeCreated;
+    }
+
+    public static Account getCurrentAccount() {
+        return currentAccount;
     }
 }
