@@ -35,6 +35,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
+        <service android:enabled="true" android:name=".NotificationService" android:process="system"></service>
     </application>
 
 </manifest>

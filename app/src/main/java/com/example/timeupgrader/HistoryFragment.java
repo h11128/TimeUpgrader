@@ -81,14 +81,16 @@ public class HistoryFragment extends Fragment {
         Log.i(TAG, "in history finsh 2!!!");
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("userAct")
-            .child("chengguoyao@hotmail.com".replace('.', ','));
+            .child(mUser.getEmail().replace('.', ','));
         mDatabaseReference.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        UpdateList((Map<String,Object>) dataSnapshot.getValue());
-                        adapter.notifyDataSetChanged();
+                        if (dataSnapshot.getValue() != null) {
+                            UpdateList((Map<String, Object>) dataSnapshot.getValue());
+                            adapter.notifyDataSetChanged();
+                        }
 
                     }
                     @Override

@@ -73,8 +73,8 @@ public class MainFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mData = new ArrayList<>();
         User u = User.getCurrentUser();
-        Log.i(TAG, "in Main begin query databse!!!");
-        Query query = mDatabase.child("userAct").child("chengguoyao@hotmail.com".replace('.', ','))
+        Log.i(TAG, "in Main begin query database!!!");
+        Query query = mDatabase.child("userAct").child(u.getEmail().replace('.', ','))
                 /*.endAt(SingleAct.END, "status").orderByChild("startTime")*/;
         query.addValueEventListener(new ValueEventListener() {
             @Override
