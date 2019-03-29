@@ -71,6 +71,7 @@ public class SignupActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 dbHelper.getLoginUser(savedEmail);
+                                Email e = new Email(savedEmail);
                                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                 finish();
                             }else{

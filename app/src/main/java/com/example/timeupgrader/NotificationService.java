@@ -29,22 +29,23 @@ public class NotificationService extends Service {
         mBuilder = new Notification.Builder(mContext);
     }
 
-
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+
         Intent newIntent = new Intent();
-        newIntent.setClass(this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(mContext,0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        newIntent.setClass(NotificationService.this, MainActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notification = mBuilder.setContentTitle(intent.getStringExtra("title"))
                 .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle("")
-                .setContentText(intent.getStringExtra("contentText"))
+                .setContentTitle(intent.getStringExtra("title"))
+                .setContentText(intent.getStringExtra("text"))
                 .setContentIntent(contentIntent)
                 .build();
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notification.flags |= Notification.DEFAULT_LIGHTS;
         notification.flags |= Notification.DEFAULT_VIBRATE;
         notificationManager.notify(0, notification);
+
         return START_REDELIVER_INTENT;
     }
 }

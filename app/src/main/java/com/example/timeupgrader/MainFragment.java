@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +37,9 @@ public class MainFragment extends Fragment {
     private MainAdapter adapter;
     private List<SingleAct> mData;
     private DatabaseReference mDatabase;
+    private FireBaseHelper fbHelper;
+    private Button sp;
+    private Button delete;
 
     public MainFragment() {}
 
@@ -74,7 +79,15 @@ public class MainFragment extends Fragment {
         mData = new ArrayList<>();
         User u = User.getCurrentUser();
         Log.i(TAG, "in Main begin query database!!!");
-        Query query = mDatabase.child("userAct").child(u.getEmail().replace('.', ','))
+        String userEmail = Email.getCurrentEmail().getEmail();
+        /*if (u != null) {
+            userEmail = u.getEmail();
+        }
+        else {
+            userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            fbHelper.getLoginUser(userEmail);
+        }*/
+        Query query = mDatabase.child("userAct").child(userEmail.replace('.', ','));
                 /*.endAt(SingleAct.END, "status").orderByChild("startTime")*/;
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -99,7 +112,7 @@ public class MainFragment extends Fragment {
                                 return Long.compare(o1.getStartTime(), o2.getStartTime());
                             }
                         });
-                        adapter = new MainAdapter(mData);
+                        adapter = new MainAdapter(mData, getContext());
                         mRecyclerView.setAdapter(adapter);
                     }
                 }

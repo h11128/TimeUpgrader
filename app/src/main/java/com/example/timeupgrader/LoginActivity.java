@@ -72,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         dbHelper.getLoginUser(em);
+                                        Email e = new Email(em);
                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sp.edit();
                                         editor.putString("email", em);
