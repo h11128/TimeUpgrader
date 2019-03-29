@@ -4,14 +4,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,6 +34,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     private Button mThemeButton;
     private Button mHelpButton;
     private Button mSyncButton;
+    private PopupMenu mColorMenu;
     View view;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -74,8 +80,33 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), AchievementActivity.class));
                 break;
             case R.id.btnTheme:
-                //
+                mColorMenu = new PopupMenu(getActivity(), view);
+                mColorMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Toast.makeText(getActivity(), "Selected Item: ", Toast.LENGTH_SHORT).show();
+                        switch (item.getItemId()) {
+                            case R.id.color_1:
+                                ChangeColor(R.id.color_1);
+                                return true;
+                            case R.id.color_2:
+                                // do your code
+                                return true;
+                            case R.id.color_3:
+                                // do your code
+                                return true;
+                            case R.id.color_4:
+                                // do your code
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                mColorMenu.inflate(R.menu.menu_changecolor);
+                mColorMenu.show();
                 break;
+
             case R.id.btnHelp:
                 startActivity(new Intent(getActivity(), HelpActivity.class));
                 break;
@@ -85,31 +116,12 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
 
         }
     }
-    private void changeColorDialog() {
 
-
-
-        AlertDialog builder = new AlertDialog.Builder(getActivity()).create();
-        mInput = new EditText(getActivity());
-        builder.setCancelable(false);
-        builder.setTitle("Change Nickname");
-        builder.setView(mInput);
-        builder.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
-
-
-
-            }
-        });
-        builder.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-
-            }
-        });
-
-        builder.show();
-
-
+    public void ChangeColor(Integer id){
+        ConstraintLayout li=view.findViewById(R.id.splashActivity);
+        li.setBackgroundColor(id);
     }
+
+
+
 }

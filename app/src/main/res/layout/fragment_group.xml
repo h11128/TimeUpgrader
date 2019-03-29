@@ -23,7 +23,7 @@
         android:layout_marginTop="360dp"
         android:layout_marginEnd="49dp"
         android:src="@drawable/baseline_add_circle_outline_white_48"
-        app:backgroundTint="#f25b1a"
+        app:backgroundTint="@color/colorMain"
         app:fabCustomSize="@android:dimen/notification_large_icon_height"
         app:fabSize="auto"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +31,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:maxImageSize="@android:dimen/notification_large_icon_height"
         app:rippleColor="#3f3f3f"
-        tools:backgroundTint="#f25b1a"
+        tools:backgroundTint="@color/colorMain"
         tools:maxImageSize="78dp" />
 </RelativeLayout>
