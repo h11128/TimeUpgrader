@@ -82,7 +82,7 @@ public class HistoryFragment extends Fragment {
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("userAct")
             .child(mUser.getEmail().replace('.', ','));
-        mDatabaseReference.addListenerForSingleValueEvent(
+        mDatabaseReference.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
