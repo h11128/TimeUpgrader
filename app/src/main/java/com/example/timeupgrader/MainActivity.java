@@ -26,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences mThemeprefs = getSharedPreferences(
+                "theme", Context.MODE_PRIVATE);
+        if (mThemeprefs!=null) {
+            Integer sTheme =(int)(long) mThemeprefs.getLong("myTheme", R.style.AppTheme);
+            setTheme(sTheme);
+        }
         super.onCreate(savedInstanceState);
         sendFinishActivityBroadcast(getApplicationContext());
         setContentView(R.layout.activity_main);

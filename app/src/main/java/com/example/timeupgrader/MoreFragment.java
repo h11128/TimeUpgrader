@@ -1,7 +1,9 @@
 package com.example.timeupgrader;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -36,6 +38,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     private Button mHelpButton;
     private Button mSyncButton;
     private PopupMenu mColorMenu;
+    SharedPreferences mThemeprefs;
     View view;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -81,6 +84,9 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), AchievementActivity.class));
                 break;
             case R.id.btnTheme:
+                mThemeprefs = getActivity().getSharedPreferences(
+                        "theme", Context.MODE_PRIVATE);
+
                 mColorMenu = new PopupMenu(getActivity(), view);
                 mColorMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -88,21 +94,20 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(), "Selected Item", Toast.LENGTH_SHORT).show();
                         switch (item.getItemId()) {
                             case R.id.color_1:
-                                getActivity().setTheme(R.style.AppTheme);
-                                recreate(getActivity().getintent());
-                                //ChangeColor();
+                                mThemeprefs.edit().putLong("myTheme", R.style.AppTheme).apply();
+                                ChangeColor();
                                 return true;
                             case R.id.color_2:
-                                getActivity().setTheme(R.style.AppTheme2);
-                                //ChangeColor();
+                                mThemeprefs.edit().putLong("myTheme", R.style.AppTheme2).apply();
+                                ChangeColor();
                                 return true;
                             case R.id.color_3:
-                                getActivity().setTheme(R.style.AppTheme3);
-                                //ChangeColor();
+                                mThemeprefs.edit().putLong("myTheme", R.style.AppTheme3).apply();
+                                ChangeColor();
                                 return true;
                             case R.id.color_4:
-                                getActivity().setTheme(R.style.AppTheme4);
-                                //ChangeColor();
+                                mThemeprefs.edit().putLong("myTheme", R.style.AppTheme4).apply();
+                                ChangeColor();
                                 return true;
                             default:
                                 return false;

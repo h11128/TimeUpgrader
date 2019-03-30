@@ -55,6 +55,12 @@ public class SignupActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences mThemeprefs = getSharedPreferences(
+                "theme", Context.MODE_PRIVATE);
+        if (mThemeprefs!=null) {
+            Integer sTheme =(int)(long) mThemeprefs.getLong("myTheme", R.style.AppTheme);
+            setTheme(sTheme);
+        }
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate() called!!!");
         dbHelper = new TaskDatabaseHelper(this.getApplicationContext());

@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 // import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,12 @@ public class FocusActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences mThemeprefs = getSharedPreferences(
+                "theme", Context.MODE_PRIVATE);
+        if (mThemeprefs!=null) {
+            Integer sTheme =(int)(long) mThemeprefs.getLong("myTheme", R.style.AppTheme);
+            setTheme(sTheme);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_focus);
 

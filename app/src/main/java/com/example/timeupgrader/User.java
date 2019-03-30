@@ -15,7 +15,8 @@ public class User {
 
     private static User currentUser;
 
-    public User(String id, String email, String username, long point, long level, long numFocusesDone, ArrayList achievements, long timeCreated) {
+    public User(String id, String email, String username, long point, long level, long numFocusesDone,
+                ArrayList achievements, long timeCreated) {
         this.id = id;
         this.email = email;
         this.username = username;

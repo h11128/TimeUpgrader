@@ -1,6 +1,8 @@
 package com.example.timeupgrader;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,12 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences mThemeprefs = getSharedPreferences(
+                "theme", Context.MODE_PRIVATE);
+        if (mThemeprefs!=null) {
+            Integer sTheme =(int)(long) mThemeprefs.getLong("myTheme", R.style.AppTheme);
+            setTheme(sTheme);
+        }
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
