@@ -80,13 +80,14 @@ public class HistoryFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.child("status").getValue(Integer.class) == SingleAct.END) {
+                        mData.clear();
                         mData.add(new SingleAct(snapshot.child("id").getValue().toString(),
                                 snapshot.child("name").getValue().toString(),
                                 snapshot.child("description").getValue().toString(),
                                 snapshot.child("type").getValue(Integer.class),
                                 (long) snapshot.child("startTime").getValue(),
                                 (boolean) snapshot.child("notify").getValue(),
-                                (boolean) snapshot.child("isTiming").getValue(),
+                                (boolean) snapshot.child("timing").getValue(),
                                 (long) snapshot.child("rewardPoint").getValue(),
                                 snapshot.child("owner").getValue().toString(),
                                 snapshot.child("status").getValue(Integer.class),

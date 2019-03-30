@@ -64,10 +64,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             public void onClick(View v) {
                 if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
                     act.setStatus(SingleAct.END);
-                    notifyDataSetChanged();
+                    mData.remove(position);
+                    notifyItemRemoved(position);
                     dbHelper.updateActivityStatus(act.getId(), SingleAct.END);
                     fbHelper.updateActStatus(act, SingleAct.END);
-                    holder.complete.setVisibility(View.GONE);
                 }
             }
         });
@@ -77,7 +77,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             public void onClick(View v) {
                 mData.remove(position);
                 notifyItemRemoved(position);
-                notifyDataSetChanged();
                 dbHelper.updateActivityStatus(act.getId(), SingleAct.DELETE);
                 fbHelper.updateActStatus(act, SingleAct.DELETE);
             }
