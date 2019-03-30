@@ -24,8 +24,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = SignupActivity.class.getSimpleName();
@@ -70,8 +73,7 @@ public class SignupActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                dbHelper.getLoginUser(savedEmail);
-                                Email e = new Email(savedEmail);
+                                tryLoadUser(savedEmail);
                                 startActivity(new Intent(SignupActivity.this, MainActivity.class));
                                 finish();
                             }else{
@@ -112,11 +114,9 @@ public class SignupActivity extends AppCompatActivity {
                                             Log.i("Time Created", d.toString());
                                             Log.i("email", em);
                                             Log.i("password", pw);
-                                            Account newAccount = new Account("", em, "", pw, d);
                                             User newUser = new User("", em,"", 0, 0, 0, new ArrayList(), d.getTime());
-                                            dbHelper.insert_UserAccount(newAccount, newUser);
-                                            String cleanEmail = em.replace('.', ',');
-                                            mDatabase.child("users").child(cleanEmail).setValue(newUser);
+                                            dbHelper.insert_User(newUser);
+                                            fbHelper.insertUser(newUser);
                                             Toast.makeText(SignupActivity.this, "Signed up successfully",
                                                     Toast.LENGTH_LONG).show();
                                             email.setText("");
@@ -205,5 +205,35 @@ public class SignupActivity extends AppCompatActivity {
 
     public static boolean isEmail(String email) {
         return Pattern.matches(REGEX_EMAIL, email);
+    }
+
+    private void tryLoadUser(String email) {
+        dbHelper.getLoginUser(email);
+        Email e = new Email(email);
+        if (User.getCurrentUser() == null) {
+            String cleanEmail = email.replace('.', ',');
+            DatabaseReference udr = mDatabase.child("users").child(cleanEmail);
+            udr.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String uEmail = dataSnapshot.child("email").getValue(String.class);
+                    String uId = dataSnapshot.child("id").getValue(String.class);
+                    Long uLevel = dataSnapshot.child("level").getValue(Long.class);
+                    Long uPoint = dataSnapshot.child("point").getValue(Long.class);
+                    Long uNumFocusesDone = dataSnapshot.child("numFocusesDone").getValue(Long.class);
+                    String uUsername = dataSnapshot.child("username").getValue(String.class);
+                    Long uTimeCreated = dataSnapshot.child("timeCreated").getValue(Long.class);
+                    User u = new User(uId, uEmail, uUsername, uPoint, uLevel, uNumFocusesDone, new ArrayList(), uTimeCreated);
+                    dbHelper.insert_User(u);
+                    Log.i("uEmail", u.getEmail());
+                    Log.i("uPoint", u.getPoint() + "");
+                    Log.i("uTimeCreated", u.getTimeCreated() + "");
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.i("Firebase error: ", databaseError.getMessage());
+                }
+            });
+        }
     }
 }

@@ -24,12 +24,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
     public static final String RECEIVER_ACTION_FINISH = "receiver_action_finish";
     TaskDatabaseHelper dbHelper;
-    private FireBaseHelper fbHelper = new FireBaseHelper();
 
     Toolbar toolbar;
     ProgressBar progressBar;
@@ -71,8 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
-                                        dbHelper.getLoginUser(em);
-                                        Email e = new Email(em);
+                                        tryLoadUser(em);
                                         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = sp.edit();
                                         editor.putString("email", em);
@@ -210,5 +215,35 @@ public class LoginActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(RECEIVER_ACTION_FINISH);
         registerReceiver(mReceiver, intentFilter);
+    }
+
+    private void tryLoadUser(String email) {
+        dbHelper.getLoginUser(email);
+        Email e = new Email(email);
+        if (User.getCurrentUser() == null) {
+            String cleanEmail = email.replace('.', ',');
+            DatabaseReference udr = FirebaseDatabase.getInstance().getReference().child("users").child(cleanEmail);
+            udr.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String uEmail = dataSnapshot.child("email").getValue(String.class);
+                    String uId = dataSnapshot.child("id").getValue(String.class);
+                    Long uLevel = dataSnapshot.child("level").getValue(Long.class);
+                    Long uPoint = dataSnapshot.child("point").getValue(Long.class);
+                    Long uNumFocusesDone = dataSnapshot.child("numFocusesDone").getValue(Long.class);
+                    String uUsername = dataSnapshot.child("username").getValue(String.class);
+                    Long uTimeCreated = dataSnapshot.child("timeCreated").getValue(Long.class);
+                    User u = new User(uId, uEmail, uUsername, uPoint, uLevel, uNumFocusesDone, new ArrayList(), uTimeCreated);
+                    dbHelper.insert_User(u);
+                    Log.i("uEmail", u.getEmail());
+                    Log.i("uPoint", u.getPoint() + "");
+                    Log.i("uTimeCreated", u.getTimeCreated() + "");
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.i("Firebase error: ", databaseError.getMessage());
+                }
+            });
+        }
     }
 }
