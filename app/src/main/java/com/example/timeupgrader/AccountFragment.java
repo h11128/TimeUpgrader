@@ -133,7 +133,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(), "changed!!", Toast.LENGTH_SHORT).show();
 
                         TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getActivity().getApplicationContext());
-                        dbHelper.updateUsername(mUser,mNewUserName);
+                        dbHelper.updateUsername(mUser, mNewUserName);
                         Log.i(TAG, "On account 1");
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
                         mDatabase.child("users").child(mUser.getEmail().replace('.', ',')).child("username").setValue(mNewUserName)

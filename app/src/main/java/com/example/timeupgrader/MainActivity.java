@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment[] fragments;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = sp.edit();
                         editor.clear();
                         editor.apply();
+                        FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         finish();
                         break;

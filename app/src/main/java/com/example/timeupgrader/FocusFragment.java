@@ -32,7 +32,6 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
     boolean dialogOn;
     boolean interrupted;
 
-
     public FocusFragment() {}
 
     @Override

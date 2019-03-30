@@ -6,10 +6,13 @@ import java.util.regex.Pattern;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -68,85 +71,102 @@ public class SignupActivity extends AppCompatActivity {
         mReceiver = new FinishActivityReceiver();
         registerFinishReceiver();
 
-        firebaseAuth = FirebaseAuth.getInstance();
-
         SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
         savedEmail = sp.getString("email", null);
         savedPassword = sp.getString("password", null);
-        if (savedEmail != null && !savedEmail.equals("") && savedPassword != null && !savedPassword.equals("")) {
-            firebaseAuth.signInWithEmailAndPassword(savedEmail, savedPassword)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                tryLoadUser(savedEmail);
-                                startActivity(new Intent(SignupActivity.this, MainActivity.class));
-                                finish();
-                            }else{
-                                Toast.makeText(SignupActivity.this, task.getException().getMessage()
-                                        , Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                                finish();
+
+        if (ConnectionUtils.isConn(getApplicationContext())) {
+            firebaseAuth = FirebaseAuth.getInstance();
+            Log.i("FirebaseAuthInstance", firebaseAuth.toString());
+            if (savedEmail != null && !savedEmail.equals("") && savedPassword != null && !savedPassword.equals("")) {
+                firebaseAuth.signInWithEmailAndPassword(savedEmail, savedPassword)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Log.i("Login email", savedEmail);
+                                    tryLoadUser(savedEmail);
+                                    startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                    finish();
+                                }
+                                else {
+                                    Toast.makeText(SignupActivity.this, task.getException().getMessage()
+                                            , Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                                    finish();
+                                }
                             }
+                        });
+            }
+            else {
+                setContentView(R.layout.activity_signup);
+
+                toolbar = findViewById(R.id.toolbarMain);
+                progressBar = findViewById(R.id.progressBarMain);
+                email = findViewById(R.id.etEmail);
+                password = findViewById(R.id.etPassword);
+                signup = findViewById(R.id.btnSignup);
+                login = findViewById(R.id.btnLogin);
+
+                toolbar.setTitle("Welcome to TimeUpgrader!");
+
+                signup.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        em = email.getText().toString();
+                        pw = password.getText().toString();
+                        if (isEmail(em) && isPassword(pw)) {
+                            progressBar.setVisibility(View.VISIBLE);
+                            firebaseAuth.createUserWithEmailAndPassword(em, pw)
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            progressBar.setVisibility(View.GONE);
+                                            if (task.isSuccessful()) {
+                                                Date d = new Date();
+                                                Log.i("Time Created", d.toString());
+                                                Log.i("email", em);
+                                                Log.i("password", pw);
+                                                User newUser = new User("", em, "", 0, 0, 0, new ArrayList(), d.getTime());
+                                                dbHelper.insert_User(newUser);
+                                                fbHelper.insertUser(newUser);
+                                                Toast.makeText(SignupActivity.this, "Signed up successfully",
+                                                        Toast.LENGTH_LONG).show();
+                                                email.setText("");
+                                                password.setText("");
+                                                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                                                finish();
+                                            }
+                                            else {
+                                                Toast.makeText(SignupActivity.this, task.getException().getMessage(),
+                                                        Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Invalid E-mail or password", Toast.LENGTH_LONG).show();
                         }
-                    });
+                    }
+                });
+
+                login.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                    }
+                });
+            }
         }
         else {
-            setContentView(R.layout.activity_signup);
-
-            toolbar = findViewById(R.id.toolbarMain);
-            progressBar = findViewById(R.id.progressBarMain);
-            email = findViewById(R.id.etEmail);
-            password = findViewById(R.id.etPassword);
-            signup = findViewById(R.id.btnSignup);
-            login = findViewById(R.id.btnLogin);
-
-            toolbar.setTitle("Welcome to TimeUpgrader!");
-
-            signup.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    em = email.getText().toString();
-                    pw = password.getText().toString();
-                    if (isEmail(em) && isPassword(pw)) {
-                        progressBar.setVisibility(View.VISIBLE);
-                        firebaseAuth.createUserWithEmailAndPassword(em, pw)
-                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<AuthResult> task) {
-                                        progressBar.setVisibility(View.GONE);
-                                        if (task.isSuccessful()) {
-                                            Date d = new Date();
-                                            Log.i("Time Created", d.toString());
-                                            Log.i("email", em);
-                                            Log.i("password", pw);
-                                            User newUser = new User("", em,"", 0, 0, 0, new ArrayList(), d.getTime());
-                                            dbHelper.insert_User(newUser);
-                                            fbHelper.insertUser(newUser);
-                                            Toast.makeText(SignupActivity.this, "Signed up successfully",
-                                                    Toast.LENGTH_LONG).show();
-                                            email.setText("");
-                                            password.setText("");
-                                            startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                                            finish();
-                                        } else {
-                                            Toast.makeText(SignupActivity.this, task.getException().getMessage(),
-                                                    Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Invalid E-mail or password", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-            login.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                }
-            });
+            Toast.makeText(getApplicationContext(), "No network connection!", Toast.LENGTH_LONG).show();
+            if (savedEmail == null || savedEmail.equals("")) {
+                showNetworkDialog();
+            }
+            else {
+                dbHelper.getLoginUser(savedEmail);
+                Email e = new Email(savedEmail);
+                startActivity(new Intent(SignupActivity.this, MainActivity.class));
+            }
         }
     }
 
@@ -241,5 +261,27 @@ public class SignupActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void showNetworkDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Oops!");
+        builder.setMessage("No network connection.");
+        builder.setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                startActivity(new Intent(Settings.ACTION_SETTINGS));
+                finish();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                finish();
+            }
+        });
+        builder.create().show();
     }
 }

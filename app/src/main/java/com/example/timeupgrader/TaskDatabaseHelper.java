@@ -15,6 +15,7 @@ import com.example.timeupgrader.ActSchema.*;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
@@ -46,7 +47,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 UGA.Column_MemberStatus + " INTEGER," + UGA.Column_gTotalTime + " INTEGER," +
                 UGA.Column_gCurTime + " INTERGER)");
         db.execSQL("create table if not exists " + ACT.Table_Activity + " (" +
-                ACT.Column_ActId + " TEXT PRIMARY KEY," + ACT.Column_Owner + "TEXT," +
+                ACT.Column_ActId + " TEXT PRIMARY KEY," + ACT.Column_Owner + " TEXT," +
                 ACT.Column_ActName + " TEXT," + ACT.Column_ActDescription + " TEXT," +
                 ACT.Column_ActType + " INTEGER," + ACT.Column_StartTime + " INTEGER," +
                 ACT.Column_Notify + " INTEGER," + ACT.Column_IsTiming + " INTEGER," +
@@ -202,6 +203,67 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 values,
                 selection,
                 selectionArgs);
+    }
+
+    public List<SingleAct> loadActivityByStatus(String email, int[] status) {
+
+        List<SingleAct> listAct = new ArrayList<>();
+
+        String selection = ACT.Column_Owner + " = ?";
+        String[] projection = {
+                ACT.Column_ActId,
+                ACT.Column_Owner,
+                ACT.Column_ActName,
+                ACT.Column_ActDescription,
+                ACT.Column_ActType,
+                ACT.Column_StartTime,
+                ACT.Column_Notify,
+                ACT.Column_IsTiming,
+                ACT.Column_Duration,
+                ACT.Column_RewardPoint,
+                ACT.Column_Status,
+                ACT.Column_Synced,
+        };
+
+        Cursor cursor = getReadableDatabase().query(
+                ACT.Table_Activity,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                new String[] {email},          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        while (cursor.moveToNext()) {
+            int curStatus = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Status));
+            boolean flag = false;
+            for (int s : status) {
+                if (curStatus == s) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (flag) {
+                String id = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActId));
+                String owner = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_Owner));
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActName));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActDescription));
+                int type = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_ActType));
+                long startTime = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_StartTime));
+                boolean notify = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Notify)) == 1;
+                boolean isTiming = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_IsTiming)) == 1;
+                long duration = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_Duration));
+                long rewardPoint = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_RewardPoint));
+                boolean synced = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Synced)) == 1;
+                listAct.add(new SingleAct(id, name, description, type, startTime, notify, isTiming,
+                        rewardPoint, owner, curStatus, duration, 0, synced));
+            }
+        }
+
+        cursor.close();
+
+        return listAct;
     }
 }
 

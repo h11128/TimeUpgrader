@@ -114,7 +114,7 @@ public class AddFocusFragment extends Fragment {
         normalDialog.setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
                     startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                 }
                 dialog.dismiss();

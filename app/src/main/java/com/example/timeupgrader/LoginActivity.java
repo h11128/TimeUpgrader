@@ -3,13 +3,16 @@ package com.example.timeupgrader;
 import android.content.BroadcastReceiver;
 // import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 // import android.database.Cursor;
 // import android.database.sqlite.SQLiteDatabase;
 
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -74,32 +77,40 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                final String em = userEmail.getText().toString();
-                final String pw = userPassword.getText().toString();
-                if (!em.equals("") && !pw.equals("")) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    firebaseAuth.signInWithEmailAndPassword(em, pw)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    progressBar.setVisibility(View.GONE);
-                                    if (task.isSuccessful()) {
-                                        tryLoadUser(em);
-                                        SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = sp.edit();
-                                        editor.putString("email", em);
-                                        editor.putString("password", pw);
-                                        editor.apply();
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                    } else {
-                                        Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                if (ConnectionUtils.isConn(getApplicationContext())) {
+                    final String em = userEmail.getText().toString();
+                    final String pw = userPassword.getText().toString();
+                    if (!em.equals("") && !pw.equals("")) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        firebaseAuth.signInWithEmailAndPassword(em, pw)
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        progressBar.setVisibility(View.GONE);
+                                        if (task.isSuccessful()) {
+                                            Log.i("Login email", em);
+                                            tryLoadUser(em);
+                                            SharedPreferences sp = getSharedPreferences("login", Context.MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = sp.edit();
+                                            editor.putString("email", em);
+                                            editor.putString("password", pw);
+                                            editor.apply();
+                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                        }
+                                        else {
+                                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        }
                                     }
-                                }
-                            });
+                                });
+                    }
+                    else {
+                        Log.i(TAG, "invalid username or password");
+                        Toast.makeText(getApplicationContext(), "Empty e-mail or password", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else {
-                    Log.i(TAG, "invalid username or password");
-                    Toast.makeText(getApplicationContext(), "Empty e-mail or password", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "No network connection", Toast.LENGTH_LONG).show();
+                    showNetworkDialog();
                 }
             }
         });
@@ -252,5 +263,24 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void showNetworkDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Oops!");
+        builder.setMessage("No network connection.");
+        builder.setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startActivity(new Intent(Settings.ACTION_SETTINGS));
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 }

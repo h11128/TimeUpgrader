@@ -14,7 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+// import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,36 +35,11 @@ public class MainFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private MainAdapter adapter;
     private List<SingleAct> mData;
+    private TaskDatabaseHelper dbHelper;
     private DatabaseReference mDatabase;
     private FireBaseHelper fbHelper;
 
     public MainFragment() {}
-
-    /*public class ViewHolder extends RecyclerView.ViewHolder {
-
-        public LinearLayout root;
-        public TextView name;
-        public TextView description;
-        public TextView status;
-        public TextView startTime;
-        public TextView duration;
-        public Button start;
-        public Button pause;
-        public Button delete;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-            root = itemView.findViewById(R.id.list_root);
-            name = itemView.findViewById(R.id.aName);
-            description = itemView.findViewById(R.id.aDescription);
-            status = itemView.findViewById(R.id.aStatus);
-            startTime = itemView.findViewById(R.id.aStartTime);
-            duration = itemView.findViewById(R.id.aDuration);
-            start = itemView.findViewById(R.id.aStart);
-            pause = itemView.findViewById(R.id.aPause);
-            delete = itemView.findViewById(R.id.aDelete);
-        }
-    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,62 +47,78 @@ public class MainFragment extends Fragment {
         Log.i(TAG, "in Main onCreateView called!!!");
         View v = inflater.inflate(R.layout.fragment_main, container, false);
 
+        dbHelper = new TaskDatabaseHelper(getContext());
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mData = new ArrayList<>();
-        User u = User.getCurrentUser();
-        Log.i(TAG, "in Main begin query database!!!");
-        String userEmail = Email.getCurrentEmail().getEmail();
-        /*if (u != null) {
-            userEmail = u.getEmail();
-        }
-        else {
-            userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-            fbHelper.getLoginUser(userEmail);
-        }*/
-        Query query = mDatabase.child("userAct").child(userEmail.replace('.', ','));
-                /*.endAt(SingleAct.END, "status").orderByChild("startTime")*/;
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mData.clear();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    if (snapshot.child("status").getValue(Integer.class) < SingleAct.PAUSE) {
-                        mData.add(new SingleAct(snapshot.child("id").getValue().toString(),
-                                snapshot.child("name").getValue().toString(),
-                                snapshot.child("description").getValue().toString(),
-                                snapshot.child("type").getValue(Integer.class),
-                                (long) snapshot.child("startTime").getValue(),
-                                (boolean) snapshot.child("notify").getValue(),
-                                (boolean) snapshot.child("timing").getValue(),
-                                (long) snapshot.child("rewardPoint").getValue(),
-                                snapshot.child("owner").getValue().toString(),
-                                snapshot.child("status").getValue(Integer.class),
-                                (long) snapshot.child("duration").getValue(),
-                                (long) snapshot.child("currentTime").getValue(),
-                                (boolean) snapshot.child("synced").getValue()));
-                        Collections.sort(mData, new Comparator<SingleAct>() {
-                            public int compare(SingleAct o1, SingleAct o2) {
-                                return Long.compare(o1.getStartTime(), o2.getStartTime());
-                            }
-                        });
-                        adapter = new MainAdapter(mData, getContext());
-                        mRecyclerView.setAdapter(adapter);
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "Firebase error: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-        Log.i(TAG, "in Main finish query database!!!");
-
         mRecyclerView = v.findViewById(R.id.mainRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        Log.i(TAG, "in Main finish building recyclerview!!!");
+
+        final User u = User.getCurrentUser();
+        Log.i(TAG, "in Main begin query database!!!");
+        if (ConnectionUtils.isConn(getContext())) {
+            Query query;
+            if (u != null) {
+                query = mDatabase.child("userAct").child(u.getEmail().replace('.', ','));
+            } else {
+                query = mDatabase.child("userAct").child(Email.getCurrentEmail().getEmail().replace('.', ','));
+            }
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mData.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        if (snapshot.child("status").getValue(Integer.class) < SingleAct.PAUSE) {
+                            mData.add(new SingleAct(snapshot.child("id").getValue().toString(),
+                                    snapshot.child("name").getValue().toString(),
+                                    snapshot.child("description").getValue().toString(),
+                                    snapshot.child("type").getValue(Integer.class),
+                                    (long) snapshot.child("startTime").getValue(),
+                                    (boolean) snapshot.child("notify").getValue(),
+                                    (boolean) snapshot.child("timing").getValue(),
+                                    (long) snapshot.child("rewardPoint").getValue(),
+                                    snapshot.child("owner").getValue().toString(),
+                                    snapshot.child("status").getValue(Integer.class),
+                                    (long) snapshot.child("duration").getValue(),
+                                    (long) snapshot.child("currentTime").getValue(),
+                                    (boolean) snapshot.child("synced").getValue()));
+                        }
+                    }
+                    Collections.sort(mData, new Comparator<SingleAct>() {
+                        public int compare(SingleAct o1, SingleAct o2) {
+                            return Long.compare(o1.getStartTime(), o2.getStartTime());
+                        }
+                    });
+                    adapter = new MainAdapter(mData, getContext());
+                    mRecyclerView.setAdapter(adapter);
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Toast.makeText(getContext(), "Firebase error: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                    mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.SET, SingleAct.START});
+                    Collections.sort(mData, new Comparator<SingleAct>() {
+                        public int compare(SingleAct o1, SingleAct o2) {
+                            return Long.compare(o1.getStartTime(), o2.getStartTime());
+                        }
+                    });
+                    adapter = new MainAdapter(mData, getContext());
+                    mRecyclerView.setAdapter(adapter);
+                }
+            });
+        }
+        else {
+            mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.SET, SingleAct.START});
+            Collections.sort(mData, new Comparator<SingleAct>() {
+                public int compare(SingleAct o1, SingleAct o2) {
+                    return Long.compare(o1.getStartTime(), o2.getStartTime());
+                }
+            });
+            adapter = new MainAdapter(mData, getContext());
+            mRecyclerView.setAdapter(adapter);
+        }
+        Log.i(TAG, "in Main finish query database!!!");
         /*adapter = new MainAdapter(mData);
         mRecyclerView.setAdapter(adapter);*/
 
