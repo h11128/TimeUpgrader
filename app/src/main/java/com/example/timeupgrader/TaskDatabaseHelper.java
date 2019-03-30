@@ -14,6 +14,7 @@ import com.example.timeupgrader.UGASchema.*;
 import com.example.timeupgrader.ActSchema.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
@@ -28,7 +29,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table if not exists " + UASchema.Table_UserAccount + " (" +
                 /*UASchema.Column_UserId + " TEXT PRIMARY KEY," +*/UASchema.Column_UserName +" TEXT," +
-                UASchema.Column_Email + " TEXT PRIMARY KEY," + UASchema.Column_Password + " TEXT," +
+                UASchema.Column_Email + " TEXT PRIMARY KEY," + /*UASchema.Column_Password + " TEXT," +*/
                 UASchema.Column_Level + " INTEGER," + UASchema.Column_Point + " INTEGER," +
                 UASchema.Column_NumFocuses + " INTEGER," + UASchema.Column_TimeCreated + " TEXT)");
         db.execSQL("create table if not exists "+ UserAchSchema.Table_UserAchievements + "(" +
@@ -58,46 +59,81 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         // Implement schema changes and data massage here when upgrading
     }
 
-    public long insert_UserAccount(Account account, User user) {
+    public void getLoginUser(String email) {
+
+        String selection = UASchema.Column_Email + " = ?";
+        String[] projection = {
+                UASchema.Column_UserName,
+                UASchema.Column_Email,
+                UASchema.Column_Level,
+                UASchema.Column_Point,
+                UASchema.Column_NumFocuses,
+                UASchema.Column_TimeCreated
+        };
+
+        Cursor cursor = getReadableDatabase().query(
+                UASchema.Table_UserAccount,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                new String[] {email},          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        while (cursor.moveToNext()) {
+            String uEmail = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_Email));
+            String uUsername = cursor.getString(cursor.getColumnIndexOrThrow(UASchema.Column_UserName));
+            long uPoint = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_Point));
+            long uLevel = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_Level));
+            long uNumFocusesDone = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_NumFocuses));
+            long uTimeCreated = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_TimeCreated));
+            User u = new User("", uEmail, uUsername, uPoint, uLevel, uNumFocusesDone, new ArrayList(), uTimeCreated);
+        }
+
+        cursor.close();
+    }
+
+    public long insert_User(User user) {
         ContentValues cv = new ContentValues();
-        cv.put(UASchema.Column_UserName, account.getUsername());
-        cv.put(UASchema.Column_Password, account.getPassword());
+        cv.put(UASchema.Column_UserName, user.getUsername());
+        // cv.put(UASchema.Column_Password, account.getPassword());
         // cv.put(UASchema.Column_UserId, account.getId());
-        cv.put(UASchema.Column_Email, account.getEmail());
+        cv.put(UASchema.Column_Email, user.getEmail());
         cv.put(UASchema.Column_Level, user.getLevel());
         cv.put(UASchema.Column_Point, user.getPoint());
         cv.put(UASchema.Column_NumFocuses, user.getNumFocusesDone());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        cv.put(UASchema.Column_TimeCreated, sdf.format(account.getTimeCreated()));
+        cv.put(UASchema.Column_TimeCreated, sdf.format(user.getTimeCreated()));
         return getWritableDatabase().insert(UASchema.Table_UserAccount, null, cv);
     }
 
     public long insert_UserAchievements(User user, Achievement achievement) {
-            ContentValues cv = new ContentValues();
-            cv.put(UASchema.Column_UserId, user.getId());
-            cv.put(AchSchema.Column_AchieveId, achievement.getId());
-            cv.put(UserAchSchema.Column_AchieveTime, achievement.getThreshold());
-            return getWritableDatabase().insert(UserAchSchema.Table_UserAchievements, null, cv);
+        ContentValues cv = new ContentValues();
+        cv.put(UASchema.Column_UserId, user.getId());
+        cv.put(AchSchema.Column_AchieveId, achievement.getId());
+        cv.put(UserAchSchema.Column_AchieveTime, achievement.getThreshold());
+        return getWritableDatabase().insert(UserAchSchema.Table_UserAchievements, null, cv);
     }
 
     public long insert_Achievements(Achievement achievement) {
-            ContentValues cv = new ContentValues();
-            cv.put(AchSchema.Column_AchieveDescription, achievement.getDescription());
-            cv.put(AchSchema.Column_AchieveName, achievement.getName());
-            cv.put(AchSchema.Column_Criterion, achievement.getCriterion());
-            cv.put(AchSchema.Column_Threshold, achievement.getThreshold());
-            return getWritableDatabase().insert(AchSchema.Table_Achievements, null, cv);
+        ContentValues cv = new ContentValues();
+        cv.put(AchSchema.Column_AchieveDescription, achievement.getDescription());
+        cv.put(AchSchema.Column_AchieveName, achievement.getName());
+        cv.put(AchSchema.Column_Criterion, achievement.getCriterion());
+        cv.put(AchSchema.Column_Threshold, achievement.getThreshold());
+        return getWritableDatabase().insert(AchSchema.Table_Achievements, null, cv);
     }
 
     public long insert_UserGroupActivity(GroupAct GA, Act act, User user){
-            ContentValues cv = new ContentValues();
-            cv.put(UGA.Column_gCurTime, GA.getCurrentTimeByUser(user));
-            cv.put(UGA.Column_gTotalTime, GA.getTotalTimeByUser(user));
-            cv.put(UGA.Column_MemberStatus, GA.getStatusByUser(user));
-            cv.put(UGA.Column_UGAId, GA.getId());
-            cv.put(UASchema.Column_UserId, user.getId());
-            cv.put(ACT.Column_ActId, act.getId());
-            return getWritableDatabase().insert(UGA.Table_UserGroupActivity, null, cv);
+        ContentValues cv = new ContentValues();
+        cv.put(UGA.Column_gCurTime, GA.getCurrentTimeByUser(user));
+        cv.put(UGA.Column_gTotalTime, GA.getTotalTimeByUser(user));
+        cv.put(UGA.Column_MemberStatus, GA.getStatusByUser(user));
+        cv.put(UGA.Column_UGAId, GA.getId());
+        cv.put(UASchema.Column_UserId, user.getId());
+        cv.put(ACT.Column_ActId, act.getId());
+        return getWritableDatabase().insert(UGA.Table_UserGroupActivity, null, cv);
     }
 
     public long insert_Activity(SingleAct act){
@@ -117,20 +153,19 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         return getWritableDatabase().insert(ACT.Table_Activity, null, cv);
     }
 
-    public long update_Activity_Status(String actId, int status){
+    public int delete_User(User user){
+            String selection = UASchema.Column_UserName + " = ?";
+            String[] selectionArgs = { user.getUsername() };
+            return getWritableDatabase().delete(UASchema.Table_UserAccount, selection, selectionArgs);
+    }
+
+    public long updateActivityStatus(String actId, int status){
         String selection = ACT.Column_ActId + " = ?";
         String[] selectionArgs = { actId };
         ContentValues values = new ContentValues();
         values.put(ACT.Column_Status, status);
         values.put(ACT.Column_Synced, 0);
         return getWritableDatabase().update(ACT.Table_Activity, values, selection, selectionArgs);
-    }
-
-    public int delete_UserAccount(Account account){
-            String selection = UASchema.Column_UserName + " LIKE ?";
-            String[] selectionArgs = { account.getUsername() };
-            int deletedRows = getWritableDatabase().delete(UASchema.Table_UserAccount, selection, selectionArgs);
-            return deletedRows;
     }
 
     public int updatePoint(User user, long point) {

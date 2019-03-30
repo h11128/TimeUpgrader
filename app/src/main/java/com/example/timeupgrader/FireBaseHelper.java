@@ -1,7 +1,6 @@
 package com.example.timeupgrader;
 
 import android.util.Log;
-// import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -10,7 +9,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-// import java.util.Date;
 
 public class FireBaseHelper {
 
@@ -45,7 +43,9 @@ public class FireBaseHelper {
                 Log.i("uTimeCreated", u.getTimeCreated() + "");
             }
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+                Log.i("Firebase error: ", databaseError.getMessage());
+            }
         });
         /*userEmail.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -109,9 +109,14 @@ public class FireBaseHelper {
         // return new User(uId, uEmail, uUsername, uPoint, uLevel, uNumFocusesDone, new ArrayList(), uTimeCreated);
     }
 
+    public void insertUser(User user) {
+        String cleanEmail = user.getEmail().replace('.', ',');
+        mDatabase.child("users").child(cleanEmail).setValue(user);
+    }
+
     public void insertAct(SingleAct act) {
         String cleanOwnerEmail = act.getOwner().replace('.', ',');
-        mDatabase.child("userAct").child(cleanOwnerEmail).child(act.getId()).setValue(true);
+        mDatabase.child("userAct").child(cleanOwnerEmail).child(act.getId()).setValue(act);
         mDatabase.child("act").child(act.getId()).setValue(act);
     }
 

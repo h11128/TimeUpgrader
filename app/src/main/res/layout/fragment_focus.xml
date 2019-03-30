@@ -40,7 +40,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fDescription"
         app:max="3600"
-        app:progressColor="#f25b1a"
+        app:progressColor="?attr/allColor"
         app:startAngle="-90" />
 
     <TextView

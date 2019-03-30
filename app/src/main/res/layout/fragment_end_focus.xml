@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f25b1a"
+    android:background="@color/colorMain"
     android:orientation="vertical">
 
     <TextView
@@ -76,7 +76,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="Return"
-        android:textColor="#f25b1a"
+        android:textColor="?attr/allColor"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

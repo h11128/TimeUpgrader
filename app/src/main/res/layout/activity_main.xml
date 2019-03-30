@@ -9,7 +9,7 @@
         android:id="@+id/toolbarProfile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#f25b1a"
+        android:background="?attr/allColor"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:layout_constraintEnd_toEndOf="parent"

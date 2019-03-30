@@ -12,7 +12,7 @@
         android:id="@+id/toolbarLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f25b1a"
+        android:background="?attr/allColor"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         tools:layout_editor_absoluteX="0dp"
