@@ -19,7 +19,10 @@ public class AchievementFragment extends Fragment {
                              Bundle savedInstanceState) {
         view =  inflater.inflate(R.layout.fragment_achievement, container, false);
         mAchievement = view.findViewById(R.id.textAchievement);
-        mAchievement.setText(mUser.getPoint()+" ");
+        mUser = User.getCurrentUser();
+        String display ="level: "+mUser.getLevel()+"\n"+"point:"+ mUser.getPoint()+"\n"
+                +"NumFocus: "+mUser.getNumFocusesDone();
+        mAchievement.setText(display);
         return view;
     }
 

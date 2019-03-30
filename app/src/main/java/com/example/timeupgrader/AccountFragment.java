@@ -100,14 +100,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             case R.id.btnNickName:
                 Log.i(TAG, "in AccountFragment btnNickName pressed!!");
 
-                Log.i(TAG, "in AccountFragment btnNickName 2!!");
-
                 mFUser = FirebaseAuth.getInstance().getCurrentUser();
                 Log.i(TAG, "in AccountFragment btnNickName 3!!");
                 if (mFUser != null) {
-
                     changenameDialog();
-                    Toast.makeText(getActivity(), "changed!!", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Toast.makeText(getActivity(), "You are not sign in yet!!", Toast.LENGTH_SHORT).show();
@@ -134,12 +130,12 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
                         mButtonText = "Nickname: " + mNewUserName;
                         mNickNameButton.setText(mButtonText);
+                        Toast.makeText(getActivity(), "changed!!", Toast.LENGTH_SHORT).show();
 
-                        //TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getActivity().getApplicationContext());
-                        //dbHelper.updateUsername(mUser,mNewUserName);
+                        TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getActivity().getApplicationContext());
+                        dbHelper.updateUsername(mUser,mNewUserName);
                         Log.i(TAG, "On account 1");
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        Log.i(TAG, "On account 2");
                         mDatabase.child("users").child(mUser.getEmail().replace('.', ',')).child("username").setValue(mNewUserName)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
@@ -152,12 +148,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                         }
                                     }
                                 });
-                        Log.i(TAG, "On account 3");
                         mUser.setUsername(mNewUserName);
-                        Log.i(TAG, "On account 4");
-                        dialogOn = false;
-                        Log.i(TAG, "On account 5");
-
                     }
                 });
         builder.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {

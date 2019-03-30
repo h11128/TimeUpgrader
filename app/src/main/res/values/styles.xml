@@ -5,15 +5,9 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="allColor">@color/colorMain</item>
     </style>
-    <style name="ToolbarPopupTheme" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
-        <item name="android:colorBackground">#fff</item>
-        <item name="overlapAnchor">false</item>
-        <item name="android:textColorPrimary">@android:color/black</item>
-        <item name="actionMenuTextColor">@android:color/white</item>
-    </style>
     <style name="AppTheme2" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorAccent</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="allColor">@color/colorAccent</item>
     </style>
@@ -25,8 +19,14 @@
     </style>
     <style name="AppTheme4" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="allColor">@color/colorPrimary</item>
+    </style>
+    <style name="ToolbarPopupTheme" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="android:colorBackground">#fff</item>
+        <item name="overlapAnchor">false</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
     </style>
 </resources>

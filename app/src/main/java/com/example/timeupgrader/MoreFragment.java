@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -84,33 +85,32 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 mColorMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(getActivity(), "Selected Item: ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Selected Item", Toast.LENGTH_SHORT).show();
                         switch (item.getItemId()) {
                             case R.id.color_1:
                                 getActivity().setTheme(R.style.AppTheme);
-                                getActivity().finish();
-                                startActivity(getActivity().getIntent());
+                                recreate(getActivity().getintent());
+                                //ChangeColor();
                                 return true;
                             case R.id.color_2:
                                 getActivity().setTheme(R.style.AppTheme2);
-                                getActivity().finish();
-                                startActivity(getActivity().getIntent());
+                                //ChangeColor();
                                 return true;
                             case R.id.color_3:
                                 getActivity().setTheme(R.style.AppTheme3);
-                                getActivity().finish();
-                                startActivity(getActivity().getIntent());
+                                //ChangeColor();
                                 return true;
                             case R.id.color_4:
                                 getActivity().setTheme(R.style.AppTheme4);
-                                getActivity().finish();
-                                startActivity(getActivity().getIntent());
+                                //ChangeColor();
                                 return true;
                             default:
                                 return false;
                         }
+
                     }
                 });
+
                 mColorMenu.inflate(R.menu.menu_changecolor);
                 mColorMenu.show();
                 break;
@@ -125,9 +125,11 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void ChangeColor(Integer id){
-        ConstraintLayout li=view.findViewById(R.id.splashActivity);
-        li.setBackgroundColor(id);
+    public void ChangeColor(){
+        TaskStackBuilder.create(getActivity())
+                .addNextIntent(new Intent(getActivity(), MainActivity.class))
+                .addNextIntent(getActivity().getIntent())
+                .startActivities();
     }
 
 
