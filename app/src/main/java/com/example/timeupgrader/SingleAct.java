@@ -13,7 +13,11 @@ public class SingleAct extends Act {
     private long currentTime;
     private boolean synced;
 
+
+
+
     public SingleAct(String id, String name, String description, int type, long startTime, boolean notify, boolean isTiming, long rewardPoint, String owner, int status, long duration, long currentTime, boolean synced) {
+
         super(id, name, description, type, startTime, notify, isTiming, rewardPoint);
         this.owner = owner;
         this.status = status;

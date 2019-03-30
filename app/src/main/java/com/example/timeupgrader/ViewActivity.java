@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -27,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
-import static android.widget.Toast.makeText;
 import static java.lang.Integer.parseInt;
 
 public class ViewActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -37,16 +34,17 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
     Button buttonAddTask;
     Button buttonPickTime;
     Button buttonPickDate;
-    Button buttonPickLength;
+    //Button buttonPickLength;
     Spinner spinnerType;
     TextView textView;
     DatabaseReference databaseTasks;
+    TaskDatabaseHelper dbHelper;
     FireBaseHelper fbHelper;
-    TaskDatabaseHelper taskDatabaseHelper;
     Date date;
     long startTime;
-    int chosenYear, chosenMonth, chosenDay, chosenHour, chosenMinute;
+    int chosenDay, chosenYear, chosenMonth, chosenHour, chosenMinute;
     private LocalDateTime mLocalDateTime = new LocalDateTime();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences mThemeprefs = getSharedPreferences(
@@ -68,6 +66,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         textView = (TextView)findViewById(R.id.textView);
         textView = (TextView)findViewById(R.id.textView2);
         databaseTasks = FirebaseDatabase.getInstance().getReference();
+
         buttonPickTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,6 +74,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 timePicker.show(getSupportFragmentManager(), "time picker ");
             }
         });
+
         buttonPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,25 +82,30 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 datePicker.show(getSupportFragmentManager(),"date picker");
             }
         });
-//        buttonPickLength.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Dia
-//            }
-//        });
+
         buttonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = editTextName.getText().toString();
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.YEAR, chosenYear);
+                c.set(Calendar.MONTH, chosenMonth);
+                c.set(Calendar.DAY_OF_MONTH, chosenDay);
+                c.set(Calendar.HOUR_OF_DAY, chosenHour);
+                c.set(Calendar.MINUTE, chosenMinute);
+                date = c.getTime();
+                startTime = date.getTime();
+
                 User u = User.getCurrentUser();
                 UUID uuid = UUID.randomUUID();
                 Date currentTime = Calendar.getInstance().getTime();
                 long CurrentTime = currentTime.getTime();
                 int rewardPoint = parseInt(spinnerType.getSelectedItem().toString());
-                SingleAct act = new SingleAct(uuid.toString(), editTextName.toString(), editTextDescription.toString(), 0,
-                        startTime, true, false, rewardPoint, u.getEmail(), SingleAct.SET,0,CurrentTime,false);
+                SingleAct act = new SingleAct(uuid.toString(), editTextName.toString(),
+                        editTextDescription.toString(), 0, startTime, true,
+                        false, rewardPoint, u.getEmail(), SingleAct.SET,0,
+                        CurrentTime,false);
                 fbHelper.insertAct(act);
-                taskDatabaseHelper.insert_Activity(act);
+                dbHelper.insert_Activity(act);
 
             }
         });
@@ -111,7 +116,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         chosenHour = hourOfDay;
         chosenMinute = minute;
         TextView textView = (TextView)findViewById(R.id.textView);
-        textView.setText(hourOfDay + "  :  " + minute );
+        textView.setText((hourOfDay < 10 ? "0" : "") + hourOfDay + "  :  " + (minute < 10 ? "0" : "") + minute);
     }
 
     @Override
@@ -120,14 +125,13 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
+        chosenYear = year;
+        chosenMonth = month;
+        chosenDay = dayOfMonth;
         String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
         TextView textView2 = (TextView)findViewById(R.id.textView2);
         textView2.setText(currentDateString);
-        c.set(Calendar.HOUR_OF_DAY, chosenHour);
-        c.set(Calendar.MINUTE, chosenMinute);
-        date = c.getTime();
-        startTime = date.getTime();
+
     }
 
 //    private void addTask(){
