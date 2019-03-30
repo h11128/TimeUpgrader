@@ -7,13 +7,13 @@ public abstract class Act {
     private String id;
     private String name;
     private String description;
-    private long type;
+    private int type;
     private long startTime;
     private boolean notify;
     private boolean isTiming;
     private long rewardPoint;
 
-    public Act(String id, String name, String description, long type, long startTime, boolean notify, boolean isTiming, long rewardPoint) {
+    public Act(String id, String name, String description, int type, long startTime, boolean notify, boolean isTiming, long rewardPoint) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -48,11 +48,11 @@ public abstract class Act {
         this.description = description;
     }
 
-    public long getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(long type) {
+    public void setType(int type) {
         this.type = type;
     }
 

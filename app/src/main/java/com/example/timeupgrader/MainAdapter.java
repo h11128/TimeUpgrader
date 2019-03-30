@@ -1,10 +1,6 @@
 package com.example.timeupgrader;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +19,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     private TaskDatabaseHelper dbHelper;
     private FireBaseHelper fbHelper;
 
-    public MainAdapter(List<SingleAct> data, Context context) {
+    MainAdapter(List<SingleAct> data, Context context) {
         this.mData = data;
         this.mContext = context;
         this.dbHelper = new TaskDatabaseHelper(mContext);
@@ -38,49 +34,52 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.description.setText(act.getDescription());
         holder.status.setText(act.getStatusText());
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
+        // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
         holder.startTime.setText("Start: " + sdf1.format(act.getStartTime()));
-        holder.duration.setText("Duration: " + sdf2.format(act.getDuration()));
-        if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.PAUSE) {
-            holder.start.setVisibility(View.VISIBLE);
-            holder.pause.setVisibility(View.GONE);
+        if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
+            holder.complete.setVisibility(View.VISIBLE);
+            holder.delete.setVisibility(View.VISIBLE);
         }
-        else if (act.getStatus() == SingleAct.START) {
-            holder.start.setVisibility(View.GONE);
-            holder.pause.setVisibility(View.VISIBLE);
+        else if (act.getStatus() == SingleAct.END) {
+            holder.complete.setVisibility(View.GONE);
+            holder.delete.setVisibility(View.VISIBLE);
         }
+        else {
+            holder.complete.setVisibility(View.GONE);
+            holder.delete.setVisibility(View.GONE);
+        }
+
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {}
         });
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {}
         });
-        holder.start.setOnClickListener(new View.OnClickListener() {
+
+        holder.complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.PAUSE) {
-                    holder.start.setVisibility(View.GONE);
-                    holder.pause.setVisibility(View.VISIBLE);
+                if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
+                    act.setStatus(SingleAct.END);
+                    notifyDataSetChanged();
+                    dbHelper.updateActivityStatus(act.getId(), SingleAct.END);
+                    fbHelper.updateActStatus(act, SingleAct.END);
+                    holder.complete.setVisibility(View.GONE);
                 }
             }
         });
-        holder.pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (act.getStatus() == SingleAct.START) {
-                    holder.start.setVisibility(View.VISIBLE);
-                    holder.pause.setVisibility(View.GONE);
-                }
-            }
-        });
+
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mData.remove(position);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
                 dbHelper.updateActivityStatus(act.getId(), SingleAct.DELETE);
                 fbHelper.updateActStatus(act, SingleAct.DELETE);
-                removeData(position);
             }
         });
     }
@@ -92,12 +91,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     protected SingleAct getItem(int position){
         return mData.get(position);
-    }
-
-    public void removeData(int position) {
-        mData.remove(position);
-        notifyItemRemoved(position);
-        notifyDataSetChanged();
     }
 
     @Override
@@ -112,9 +105,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         public TextView description;
         public TextView status;
         public TextView startTime;
-        public TextView duration;
-        public Button start;
-        public Button pause;
+        public Button complete;
         public Button delete;
 
         public MainViewHolder(View v) {
@@ -124,9 +115,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             description = itemView.findViewById(R.id.aDescription);
             status = itemView.findViewById(R.id.aStatus);
             startTime = itemView.findViewById(R.id.aStartTime);
-            duration = itemView.findViewById(R.id.aDuration);
-            start = itemView.findViewById(R.id.aStart);
-            pause = itemView.findViewById(R.id.aPause);
+            complete = itemView.findViewById(R.id.aComplete);
             delete = itemView.findViewById(R.id.aDelete);
         }
     }

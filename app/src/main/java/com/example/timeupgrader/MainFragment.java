@@ -94,11 +94,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    if (snapshot.child("status").getValue(Integer.class) < SingleAct.END) {
+                    if (snapshot.child("status").getValue(Integer.class) < SingleAct.PAUSE) {
                         mData.add(new SingleAct(snapshot.child("id").getValue().toString(),
                                 snapshot.child("name").getValue().toString(),
                                 snapshot.child("description").getValue().toString(),
-                                (long) snapshot.child("type").getValue(),
+                                snapshot.child("type").getValue(Integer.class),
                                 (long) snapshot.child("startTime").getValue(),
                                 (boolean) snapshot.child("notify").getValue(),
                                 (boolean) snapshot.child("isTiming").getValue(),
