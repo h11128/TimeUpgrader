@@ -133,10 +133,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
     public void ChangeColor(){
         TaskStackBuilder.create(getActivity())
                 .addNextIntent(new Intent(getActivity(), MainActivity.class))
-                .addNextIntent(getActivity().getIntent())
                 .startActivities();
+        getActivity().finish();
     }
-
-
-
 }

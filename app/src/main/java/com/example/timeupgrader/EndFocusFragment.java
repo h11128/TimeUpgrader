@@ -70,6 +70,6 @@ public class EndFocusFragment extends Fragment {
     }
 
     private long convertToPoints(long time) {
-        return time / 10000;
+        return time / 10000 + 1;
     }
 }
