@@ -40,7 +40,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
     FireBaseHelper fbHelper;
     Date date;
     long startTime;
-    int  chosenHour, chosenMinute;
+    int chosenDay, chosenYear, chosenMonth, chosenHour, chosenMinute;
     private LocalDateTime mLocalDateTime = new LocalDateTime();
 
     @Override
@@ -78,6 +78,15 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         buttonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Calendar c = Calendar.getInstance();
+                c.set(Calendar.YEAR, chosenYear);
+                c.set(Calendar.MONTH, chosenMonth);
+                c.set(Calendar.DAY_OF_MONTH, chosenDay);
+                c.set(Calendar.HOUR_OF_DAY, chosenHour);
+                c.set(Calendar.MINUTE, chosenMinute);
+                date = c.getTime();
+                startTime = date.getTime();
+
                 User u = User.getCurrentUser();
                 UUID uuid = UUID.randomUUID();
                 Date currentTime = Calendar.getInstance().getTime();
@@ -108,14 +117,13 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
+        chosenYear = year;
+        chosenMonth = month;
+        chosenDay = dayOfMonth;
         String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
         TextView textView2 = (TextView)findViewById(R.id.textView2);
         textView2.setText(currentDateString);
-        c.set(Calendar.HOUR_OF_DAY, chosenHour);
-        c.set(Calendar.MINUTE, chosenMinute);
-        date = c.getTime();
-        startTime = date.getTime();
+
     }
 
 //    private void addTask(){
