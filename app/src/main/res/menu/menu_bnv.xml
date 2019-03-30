@@ -8,10 +8,10 @@
         android:id="@+id/item_bottom_2"
         android:icon="@drawable/ic_action_alarm"
         android:title="Focus" />
-    <!--<item
+    <item
         android:id="@+id/item_bottom_3"
         android:icon="@drawable/ic_action_users"
-        android:title="Group" />-->
+        android:title="Group" />
     <item
         android:id="@+id/item_bottom_4"
         android:icon="@drawable/ic_action_paste"

@@ -125,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView;
         MainFragment fragment1 = new MainFragment();
         AddFocusFragment fragment2 = new AddFocusFragment();
-        // GroupFragment fragment3 = new GroupFragment();
+        GroupFragment fragment3 = new GroupFragment();
         HistoryFragment fragment4 = new HistoryFragment();
         MoreFragment fragment5 = new MoreFragment();
-        fragments = new Fragment[] {fragment1, fragment2, /*fragment3,*/ fragment4, fragment5};
+        fragments = new Fragment[] {fragment1, fragment2, fragment3, fragment4, fragment5};
         lastFragment = 0;
         getSupportFragmentManager().beginTransaction().replace(R.id.container_main, fragment1).show(fragment1).commit();
         bottomNavigationView = findViewById(R.id.bnv_menu);
@@ -153,24 +153,24 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return true;
                 }
-                /*case R.id.item_bottom_3: {
-                    if(lastFragment != 2) {
-                        switchFragment(lastFragment, 2);
-                        lastFragment = 2;
-                    }
-                    return true;
-                }*/
-                case R.id.item_bottom_4: {
+                case R.id.item_bottom_3: {
                     if(lastFragment != 2) {
                         switchFragment(lastFragment, 2);
                         lastFragment = 2;
                     }
                     return true;
                 }
-                case R.id.item_bottom_5: {
+                case R.id.item_bottom_4: {
                     if(lastFragment != 3) {
                         switchFragment(lastFragment, 3);
                         lastFragment = 3;
+                    }
+                    return true;
+                }
+                case R.id.item_bottom_5: {
+                    if(lastFragment != 4) {
+                        switchFragment(lastFragment, 4);
+                        lastFragment = 4;
                     }
                     return true;
                 }
