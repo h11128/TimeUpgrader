@@ -1,7 +1,6 @@
 package com.example.timeupgrader;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class GroupAct extends Act {
@@ -12,7 +11,7 @@ public class GroupAct extends Act {
     private HashMap memberCurrentTime;
     private int leader;
 
-    public GroupAct(String id, String name, String description, long type, long startTime, boolean notify, boolean isTiming, int rewardPoint, ArrayList memberIds, HashMap members, HashMap memberStatus, HashMap memberTotalTime, HashMap memberCurrentTime, int leader) {
+    public GroupAct(String id, String name, String description, int type, long startTime, boolean notify, boolean isTiming, int rewardPoint, ArrayList memberIds, HashMap members, HashMap memberStatus, HashMap memberTotalTime, HashMap memberCurrentTime, int leader) {
         super(id, name, description, type, startTime, notify, isTiming, rewardPoint);
         this.memberIds = memberIds;
         this.members = members;

@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    tools:context="com.example.timeupgrader.HistoryActivity"
-    >
+    android:layout_height="match_parent">
 
-    <ListView
-        android:id="@+id/ActList"
+    <TextView
+        android:id="@+id/history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
-    </ListView>
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:text="History"
+        android:textColor="@android:color/black"
+        android:textSize="30sp"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/historyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/history" />
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

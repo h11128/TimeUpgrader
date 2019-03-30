@@ -12,14 +12,14 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder>{
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>{
 
     private Context mContext;
     private List<SingleAct> mData;
     private TaskDatabaseHelper dbHelper;
     private FireBaseHelper fbHelper;
 
-    MainAdapter(List<SingleAct> data, Context context) {
+    HistoryAdapter(List<SingleAct> data, Context context) {
         this.mData = data;
         this.mContext = context;
         this.dbHelper = new TaskDatabaseHelper(mContext);
@@ -27,7 +27,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     }
 
     @Override
-    public void onBindViewHolder(final MainViewHolder holder, final int position) {
+    public void onBindViewHolder(final HistoryViewHolder holder, final int position) {
         final SingleAct act = getItem(position);
 
         holder.name.setText(act.getName());
@@ -36,18 +36,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
         holder.startTime.setText("Start: " + sdf1.format(act.getStartTime()));
-        if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
-            holder.complete.setVisibility(View.VISIBLE);
-            holder.delete.setVisibility(View.VISIBLE);
-        }
-        else if (act.getStatus() == SingleAct.END) {
-            holder.complete.setVisibility(View.GONE);
-            holder.delete.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.complete.setVisibility(View.GONE);
-            holder.delete.setVisibility(View.GONE);
-        }
 
         holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,19 +45,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {}
-        });
-
-        holder.complete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
-                    act.setStatus(SingleAct.END);
-                    notifyDataSetChanged();
-                    dbHelper.updateActivityStatus(act.getId(), SingleAct.END);
-                    fbHelper.updateActStatus(act, SingleAct.END);
-                    holder.complete.setVisibility(View.GONE);
-                }
-            }
         });
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
@@ -94,29 +69,27 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     }
 
     @Override
-    public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_main, parent, false);
-        return new MainViewHolder(v);
+    public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
+        return new HistoryViewHolder(v);
     }
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder{
+    public static class HistoryViewHolder extends RecyclerView.ViewHolder{
         public LinearLayout root;
         public TextView name;
         public TextView description;
         public TextView status;
         public TextView startTime;
-        public Button complete;
         public Button delete;
 
-        public MainViewHolder(View v) {
+        public HistoryViewHolder(View v) {
             super(v);
-            root = itemView.findViewById(R.id.list_root);
-            name = itemView.findViewById(R.id.aName);
-            description = itemView.findViewById(R.id.aDescription);
-            status = itemView.findViewById(R.id.aStatus);
-            startTime = itemView.findViewById(R.id.aStartTime);
-            complete = itemView.findViewById(R.id.aComplete);
-            delete = itemView.findViewById(R.id.aDelete);
+            root = itemView.findViewById(R.id.history_root);
+            name = itemView.findViewById(R.id.hName);
+            description = itemView.findViewById(R.id.hDescription);
+            status = itemView.findViewById(R.id.hStatus);
+            startTime = itemView.findViewById(R.id.hStartTime);
+            delete = itemView.findViewById(R.id.hDelete);
         }
     }
 }

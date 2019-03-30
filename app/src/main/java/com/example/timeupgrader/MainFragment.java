@@ -14,10 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,8 +37,6 @@ public class MainFragment extends Fragment {
     private List<SingleAct> mData;
     private DatabaseReference mDatabase;
     private FireBaseHelper fbHelper;
-    private Button sp;
-    private Button delete;
 
     public MainFragment() {}
 
@@ -94,11 +90,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    if (snapshot.child("status").getValue(Integer.class) < SingleAct.END) {
+                    if (snapshot.child("status").getValue(Integer.class) < SingleAct.PAUSE) {
                         mData.add(new SingleAct(snapshot.child("id").getValue().toString(),
                                 snapshot.child("name").getValue().toString(),
                                 snapshot.child("description").getValue().toString(),
-                                (long) snapshot.child("type").getValue(),
+                                snapshot.child("type").getValue(Integer.class),
                                 (long) snapshot.child("startTime").getValue(),
                                 (boolean) snapshot.child("notify").getValue(),
                                 (boolean) snapshot.child("isTiming").getValue(),
@@ -123,14 +119,14 @@ public class MainFragment extends Fragment {
                 Toast.makeText(getContext(), "Firebase error: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        Log.i(TAG, "in Main finish query databse!!!");
+        Log.i(TAG, "in Main finish query database!!!");
 
         mRecyclerView = v.findViewById(R.id.mainRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        Log.i(TAG, "in Main finsh building recyclerview!!!");
+        Log.i(TAG, "in Main finish building recyclerview!!!");
         /*adapter = new MainAdapter(mData);
         mRecyclerView.setAdapter(adapter);*/
 
