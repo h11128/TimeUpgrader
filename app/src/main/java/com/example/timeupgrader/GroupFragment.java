@@ -30,13 +30,13 @@ public class GroupFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_group, container, false);
-        mFab = getActivity().findViewById(R.id.addmember);
+        /*mFab = getActivity().findViewById(R.id.addmember);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), ViewActivity.class));
             }
-        });
+        });*/
         return view;
     }
 

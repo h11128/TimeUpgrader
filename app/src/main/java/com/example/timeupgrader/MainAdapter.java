@@ -78,7 +78,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbHelper.update_Activity_Status(act.getId(), SingleAct.DELETE);
+                dbHelper.updateActivityStatus(act.getId(), SingleAct.DELETE);
                 fbHelper.updateActStatus(act, SingleAct.DELETE);
                 removeData(position);
             }

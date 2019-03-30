@@ -80,11 +80,11 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
                         intent.putExtra("time", total);
 
                         mUser = User.getCurrentUser();
-                        mUser.setNumFocusesDone(mUser.getNumFocusesDone()+1);
+                        mUser.setNumFocusesDone(mUser.getNumFocusesDone() + 1);
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        mDatabase.child("users").child(mUser.getEmail()).child("username").setValue(mUser.getNumFocusesDone());
+                        mDatabase.child("users").child(mUser.getEmail().replace('.', ',')).child("username").setValue(mUser.getNumFocusesDone());
                         TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getActivity().getApplicationContext());
-                        dbHelper.updateNumFocus(mUser,mUser.getNumFocusesDone());
+                        dbHelper.updateNumFocus(mUser, mUser.getNumFocusesDone());
 
                         startActivity(intent);
                         getActivity().finish();
