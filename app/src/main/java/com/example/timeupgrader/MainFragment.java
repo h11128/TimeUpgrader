@@ -89,9 +89,9 @@ public class MainFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mData.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     if (snapshot.child("status").getValue(Integer.class) < SingleAct.PAUSE) {
-                        mData.clear();
                         mData.add(new SingleAct(snapshot.child("id").getValue().toString(),
                                 snapshot.child("name").getValue().toString(),
                                 snapshot.child("description").getValue().toString(),

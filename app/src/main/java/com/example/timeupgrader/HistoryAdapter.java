@@ -37,7 +37,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
         holder.startTime.setText("Start: " + sdf1.format(act.getStartTime()));
 
-        holder.root.setOnClickListener(new View.OnClickListener() {
+        /*holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {}
         });
@@ -45,7 +45,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {}
-        });
+        });*/
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override

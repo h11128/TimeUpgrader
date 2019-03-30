@@ -56,6 +56,9 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
 
+        dbHelper = new TaskDatabaseHelper(getApplicationContext());
+        fbHelper = new FireBaseHelper();
+
         editTextName = (EditText) findViewById(R.id.editTextName);
         editTextDescription = (EditText) findViewById(R.id.editTextDescription);
         buttonAddTask = (Button) findViewById(R.id.buttonAddTask);
@@ -99,14 +102,14 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 UUID uuid = UUID.randomUUID();
                 Date currentTime = Calendar.getInstance().getTime();
                 long CurrentTime = currentTime.getTime();
-                int rewardPoint = parseInt(spinnerType.getSelectedItem().toString());
-                SingleAct act = new SingleAct(uuid.toString(), editTextName.toString(),
-                        editTextDescription.toString(), 0, startTime, true,
-                        false, rewardPoint, u.getEmail(), SingleAct.SET,0,
+                // int rewardPoint = parseInt(spinnerType.getSelectedItem().toString());
+                SingleAct act = new SingleAct(uuid.toString(), editTextName.getText().toString(),
+                        editTextDescription.getText().toString(), 0, startTime, true,
+                        false, 66, u.getEmail(), SingleAct.SET,0,
                         CurrentTime,false);
                 fbHelper.insertAct(act);
                 dbHelper.insert_Activity(act);
-
+                finish();
             }
         });
     }
@@ -116,7 +119,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         chosenHour = hourOfDay;
         chosenMinute = minute;
         TextView textView = (TextView)findViewById(R.id.textView);
-        textView.setText((hourOfDay < 10 ? "0" : "") + hourOfDay + "  :  " + (minute < 10 ? "0" : "") + minute);
+        textView.setText((hourOfDay < 10 ? "0" : "") + hourOfDay + " : " + (minute < 10 ? "0" : "") + minute);
     }
 
     @Override

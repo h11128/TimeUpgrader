@@ -78,9 +78,9 @@ public class HistoryFragment extends Fragment {
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mData.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.child("status").getValue(Integer.class) == SingleAct.END) {
-                        mData.clear();
                         mData.add(new SingleAct(snapshot.child("id").getValue().toString(),
                                 snapshot.child("name").getValue().toString(),
                                 snapshot.child("description").getValue().toString(),

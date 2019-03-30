@@ -78,7 +78,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), AccountActivity.class));
                 break;
             case R.id.btnSettings:
-                startActivity(new Intent(getActivity(), SettingActivity.class));
+                // startActivity(new Intent(getActivity(), SettingActivity.class));
                 break;
             case R.id.btnAchievement:
                 startActivity(new Intent(getActivity(), AchievementActivity.class));

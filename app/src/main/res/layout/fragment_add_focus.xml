@@ -111,7 +111,7 @@
             android:paddingEnd="30dp"
             android:background="@drawable/button_ripple1"
             android:textColor="#fff"
-            android:text="OK"/>
+            android:text="Start focusing"/>
 
     </LinearLayout>
 

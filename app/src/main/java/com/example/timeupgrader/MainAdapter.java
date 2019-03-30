@@ -49,7 +49,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             holder.delete.setVisibility(View.GONE);
         }
 
-        holder.root.setOnClickListener(new View.OnClickListener() {
+        /*holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {}
         });
@@ -57,7 +57,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {}
-        });
+        });*/
 
         holder.complete.setOnClickListener(new View.OnClickListener() {
             @Override
