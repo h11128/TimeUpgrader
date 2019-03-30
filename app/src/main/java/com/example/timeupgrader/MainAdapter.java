@@ -8,8 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder>{
@@ -63,11 +65,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             @Override
             public void onClick(View v) {
                 if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
-                    act.setStatus(SingleAct.END);
-                    mData.remove(position);
-                    notifyItemRemoved(position);
-                    dbHelper.updateActivityStatus(act.getId(), SingleAct.END);
-                    fbHelper.updateActStatus(act, SingleAct.END);
+                    Date date = new Date();
+                    if (act.getStartTime() <= date.getTime()) {
+                        act.setStatus(SingleAct.END);
+                        mData.remove(position);
+                        notifyItemRemoved(position);
+                        dbHelper.updateActivityStatus(act.getId(), SingleAct.END);
+                        fbHelper.updateActStatus(act, SingleAct.END);
+                    }
+                    else {
+                        Toast.makeText(mContext, "Too early to start!", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
