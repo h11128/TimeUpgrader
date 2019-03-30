@@ -117,11 +117,14 @@ public class HistoryFragment extends Fragment {
 
     public void UpdateList(Map<String,Object> userAct) {
 
-        for (Map.Entry<String, Object> entry : userAct.entrySet()){
+        for (Map.Entry<String, Object> entry : userAct.entrySet()) {
             Map singleActivity = (Map) entry.getValue();
-            ActName.add((String)singleActivity.get("name"));
-            ActDuration.add((Long)singleActivity.get("duration"));
-            ActIcon.add((Integer) R.drawable.baseline_account_circle_black_24);
+            if ((Integer) singleActivity.get("status") != 3) {
+
+                ActName.add((String) singleActivity.get("name"));
+                ActDuration.add((Long) singleActivity.get("duration"));
+                ActIcon.add((Integer) R.drawable.baseline_account_circle_black_24);
+            }
         }
 
 
