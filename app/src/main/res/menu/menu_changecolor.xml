@@ -3,18 +3,18 @@
 
     <item
         android:id="@+id/color_1"
-        android:title=" "
+        android:title="1"
         android:background = "@color/colorMain"/>
     <item
         android:id="@+id/color_2"
-        android:title=" "
+        android:title="2"
         android:background = "@color/colorAccent"/>
     <item
         android:id="@+id/color_3"
-        android:title=" "
+        android:title="3"
         android:background = "@color/colorPrimaryDark" />
     <item
         android:id="@+id/color_4"
-        android:title=" "
+        android:title="4"
         android:background = "@color/colorPrimary" />
 </menu>
