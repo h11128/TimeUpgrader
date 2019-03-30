@@ -36,12 +36,13 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
     Spinner spinnerType;
     TextView textView;
     DatabaseReference databaseTasks;
+    TaskDatabaseHelper dbHelper;
     FireBaseHelper fbHelper;
-    TaskDatabaseHelper taskDatabaseHelper;
     Date date;
     long startTime;
     int  chosenHour, chosenMinute;
     private LocalDateTime mLocalDateTime = new LocalDateTime();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         textView = (TextView)findViewById(R.id.textView);
         textView = (TextView)findViewById(R.id.textView2);
         databaseTasks = FirebaseDatabase.getInstance().getReference();
+
         buttonPickTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +66,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 timePicker.show(getSupportFragmentManager(), "time picker ");
             }
         });
+
         buttonPickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,16 +78,17 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         buttonAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 User u = User.getCurrentUser();
                 UUID uuid = UUID.randomUUID();
                 Date currentTime = Calendar.getInstance().getTime();
                 long CurrentTime = currentTime.getTime();
                 int rewardPoint = parseInt(spinnerType.getSelectedItem().toString());
-                SingleAct act = new SingleAct(uuid.toString(), editTextName.toString(), editTextDescription.toString(), 0,
-                        startTime, true, false, rewardPoint, u.getEmail(), SingleAct.SET,0,CurrentTime,false);
+                SingleAct act = new SingleAct(uuid.toString(), editTextName.toString(),
+                        editTextDescription.toString(), 0, startTime, true,
+                        false, rewardPoint, u.getEmail(), SingleAct.SET,0,
+                        CurrentTime,false);
                 fbHelper.insertAct(act);
-                taskDatabaseHelper.insert_Activity(act);
+                dbHelper.insert_Activity(act);
 
             }
         });
@@ -95,7 +99,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         chosenHour = hourOfDay;
         chosenMinute = minute;
         TextView textView = (TextView)findViewById(R.id.textView);
-        textView.setText(hourOfDay + "  :  " + minute );
+        textView.setText((hourOfDay < 10 ? "0" : "") + hourOfDay + "  :  " + (minute < 10 ? "0" : "") + minute);
     }
 
     @Override
