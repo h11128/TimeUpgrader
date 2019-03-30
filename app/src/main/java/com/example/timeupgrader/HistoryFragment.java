@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,34 +30,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
 public class HistoryFragment extends Fragment {
-    private View view;
     private FirebaseUser mFUser;
     private User mUser;
-    private ListView mActList;
+    private RecyclerView mRecyclerView;
     private DatabaseReference mDatabaseReference;
     private List<SingleAct> mData;
-    private ActListAdapter adapter;
+    private HistoryAdapter adapter;
 
     public HistoryFragment() {}
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_history, container, false);
+        View v = inflater.inflate(R.layout.fragment_history, container, false);
 
         mFUser = FirebaseAuth.getInstance().getCurrentUser();
         mUser = User.getCurrentUser();
         mData = new ArrayList<>();
         Log.i(TAG, "in history finish variable!!!");
-        adapter = new ActListAdapter(getActivity(), mData);
-        Log.i(TAG, "in history 1");
-        mActList = view.findViewById(R.id.ActList);
-        mActList.setAdapter(adapter);
         /*mActList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,7 +98,8 @@ public class HistoryFragment extends Fragment {
                                 return Long.compare(o2.getStartTime(), o1.getStartTime());
                             }
                         });
-                        adapter.notifyDataSetChanged();
+                        adapter = new HistoryAdapter(mData, getContext());
+                        mRecyclerView.setAdapter(adapter);
                     }
                 }
             }
@@ -112,41 +109,20 @@ public class HistoryFragment extends Fragment {
             }
         });
         Log.i(TAG, "in history finish 3!!!");
-        adapter.notifyDataSetChanged();
+
+        mRecyclerView = v.findViewById(R.id.historyRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         Log.i(TAG, "in history finish 4!!!");
 
-        return view;
+        return v;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    public class ActListAdapter extends ArrayAdapter<SingleAct> {
-
-        private final Activity context;
-
-        ActListAdapter(Activity context, List<SingleAct> acts) {
-            super(context, R.layout.item_history, acts);
-            this.context = context;
-            Log.i(TAG, "in history finish initialize!!!");
-        }
-
-        public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater=context.getLayoutInflater();
-            View rowView = inflater.inflate(R.layout.item_history, null,true);
-
-            TextView name = rowView.findViewById(R.id.hName);
-            TextView description = rowView.findViewById(R.id.hDescription);
-            TextView status = rowView.findViewById(R.id.hStatus);
-            TextView startTime = rowView.findViewById(R.id.hStartTime);
-            Button delete = rowView.findViewById(R.id.hDelete);
-            
-            Log.i(TAG, "in history finsh getview!!!");
-            return rowView;
-
-        }
     }
 }
 
