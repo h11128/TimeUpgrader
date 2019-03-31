@@ -3,18 +3,14 @@
 
     <item
         android:id="@+id/color_1"
-        android:title="theme1"
-        android:background="@color/colorMain"/>
+        android:title="Orange" />
     <item
         android:id="@+id/color_2"
-        android:title="theme2"
-        android:background="@color/colorAccent"/>
+        android:title="Pink" />
     <item
         android:id="@+id/color_3"
-        android:title="theme3"
-        android:background="@color/colorPrimaryDark" />
+        android:title="Hat Green" />
     <item
         android:id="@+id/color_4"
-        android:title="theme4"
-        android:background="@color/colorPrimary" />
+        android:title="Blue" />
 </menu>

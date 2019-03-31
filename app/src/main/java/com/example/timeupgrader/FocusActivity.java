@@ -26,7 +26,6 @@ public class FocusActivity extends AppCompatActivity {
     boolean atTop;
     long total;
     private FocusActivity.ScreenBroadcastReceiver mScreenReceiver;
-    private FocusFragment fragment;
     private ToFragmentListener mToFragmentListener;
 
     @Override
@@ -53,7 +52,7 @@ public class FocusActivity extends AppCompatActivity {
         startScreenBroadcastReceiver();
 
         FragmentManager fm = getSupportFragmentManager();
-        fragment = (FocusFragment) fm.findFragmentById(R.id.container_focus);
+        FocusFragment fragment = (FocusFragment) fm.findFragmentById(R.id.container_focus);
         if (fragment == null) {
             fragment = new FocusFragment();
             fm.beginTransaction().add(R.id.container_focus, fragment).commit();
@@ -91,7 +90,7 @@ public class FocusActivity extends AppCompatActivity {
                 UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
                 long time = System.currentTimeMillis();
                 List<UsageStats> stats;
-                stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - total - 1000, time);
+                stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 30 * 1000, time);
                 if(stats != null) {
                     TreeMap<Long, UsageStats> sortedMap = new TreeMap<>();
                     for (UsageStats usageStats : stats) {

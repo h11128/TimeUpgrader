@@ -39,7 +39,7 @@ public class AddFocusFragment extends Fragment {
         min = v.findViewById(R.id.focusMin);
         sec = v.findViewById(R.id.focusSec);
 
-        hr.setMaxValue(23);
+        hr.setMaxValue(11);
         hr.setMinValue(0);
         hr.setValue(0);
         min.setMaxValue(59);
@@ -98,13 +98,12 @@ public class AddFocusFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    private boolean hasPermission(Context context)
-    {
-        /*PackageManager pm = getActivity().getPackageManager();
+    private boolean hasPermission(Context context) {
+        PackageManager pm = getActivity().getPackageManager();
         return PackageManager.PERMISSION_GRANTED ==
-                pm.checkPermission("android.permission.PACKAGE_USAGE_STATS", "com.example.timeupgrader");*/
-        int perm = context.checkCallingOrSelfPermission("android.permission.PACKAGE_USAGE_STATS");
-        return perm == PackageManager.PERMISSION_GRANTED;
+                pm.checkPermission("android.permission.PACKAGE_USAGE_STATS", "com.example.timeupgrader");
+        /*int perm = context.checkCallingOrSelfPermission("android.permission.PACKAGE_USAGE_STATS");
+        return perm == PackageManager.PERMISSION_GRANTED;*/
     }
 
     private void showPermissionDialog(){
