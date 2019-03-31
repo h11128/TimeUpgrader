@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -23,8 +24,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
 
@@ -125,10 +134,20 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), HelpActivity.class));
                 break;
             case R.id.btnSyncFrom:
-                syncFrom();
+                if (ConnectionUtils.isConn(getContext())) {
+                    syncFrom();
+                }
+                else {
+                    Toast.makeText(getContext(), "No network connection.", Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.btnSyncTo:
-                syncTo();
+                if (ConnectionUtils.isConn(getContext())) {
+                    syncTo();
+                }
+                else {
+                    Toast.makeText(getContext(), "No network connection.", Toast.LENGTH_LONG).show();
+                }
                 break;
             default:
                 break;
@@ -142,11 +161,69 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         getActivity().finish();
     }
 
-    private boolean syncFrom() {
-        return true;
+    private void syncFrom() {
+        final TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getContext());
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        Query query = mDatabase.child("userAct").child(Email.getCurrentEmail().getEmail().replace('.', ','));
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.child("status").getValue(Integer.class) < SingleAct.DELETE) {
+                        Cursor cursor = dbHelper.getActCursorById(snapshot.child("id").getValue().toString());
+                        if (cursor.getCount() == 0) {
+                            dbHelper.insert_Activity(new SingleAct(snapshot.child("id").getValue().toString(),
+                                    snapshot.child("name").getValue().toString(),
+                                    snapshot.child("description").getValue().toString(),
+                                    snapshot.child("type").getValue(Integer.class),
+                                    (long) snapshot.child("startTime").getValue(),
+                                    (boolean) snapshot.child("notify").getValue(),
+                                    (boolean) snapshot.child("timing").getValue(),
+                                    (long) snapshot.child("rewardPoint").getValue(),
+                                    snapshot.child("owner").getValue().toString(),
+                                    snapshot.child("status").getValue(Integer.class),
+                                    (long) snapshot.child("duration").getValue(),
+                                    (long) snapshot.child("currentTime").getValue(),
+                                    (boolean) snapshot.child("synced").getValue()));
+                        }
+                        cursor.close();
+                    }
+                }
+                Toast.makeText(getContext(), "Synced successfully!", Toast.LENGTH_LONG).show();
+                Intent intentRestart = getActivity().getIntent();
+                startActivity(intentRestart);
+                getActivity().finish();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Firebase error: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
-    private boolean syncTo() {
-        return true;
+    private void syncTo() {
+        try {
+            TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getContext());
+            FireBaseHelper fbHelper = new FireBaseHelper();
+            int[] status = new int[]{SingleAct.SET, SingleAct.START, SingleAct.PAUSE, SingleAct.END};
+            List<SingleAct> listAct = dbHelper.loadActivityByStatus(Email.getCurrentEmail().getEmail(), status, true);
+            for (SingleAct act : listAct) {
+                fbHelper.insertAct(act);
+            }
+            User u = User.getCurrentUser();
+            if (u != null && u.getEmail().equals(Email.getCurrentEmail().getEmail())) {
+                fbHelper.insertUser(u);
+            }
+            else {
+                throw new InconsistentException("User email and email inconsistent!");
+            }
+            Toast.makeText(getContext(), "Synced successfully!", Toast.LENGTH_LONG).show();
+            Intent intentRestart = getActivity().getIntent();
+            startActivity(intentRestart);
+            getActivity().finish();
+        }
+        catch (InconsistentException e) {
+            Toast.makeText(getContext(), "Sync failed. " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }

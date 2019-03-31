@@ -205,7 +205,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 selectionArgs);
     }
 
-    public List<SingleAct> loadActivityByStatus(String email, int[] status) {
+    public List<SingleAct> loadActivityByStatus(String email, int[] status, boolean syncRequested) {
 
         List<SingleAct> listAct = new ArrayList<>();
 
@@ -237,33 +237,53 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()) {
             int curStatus = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Status));
-            boolean flag = false;
-            for (int s : status) {
-                if (curStatus == s) {
-                    flag = true;
-                    break;
+            boolean synced = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Synced)) == 1;
+            if (!syncRequested || !synced) {
+                boolean flag = false;
+                for (int s : status) {
+                    if (curStatus == s) {
+                        flag = true;
+                        break;
+                    }
                 }
-            }
-            if (flag) {
-                String id = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActId));
-                String owner = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_Owner));
-                String name = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActName));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActDescription));
-                int type = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_ActType));
-                long startTime = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_StartTime));
-                boolean notify = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Notify)) == 1;
-                boolean isTiming = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_IsTiming)) == 1;
-                long duration = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_Duration));
-                long rewardPoint = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_RewardPoint));
-                boolean synced = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Synced)) == 1;
-                listAct.add(new SingleAct(id, name, description, type, startTime, notify, isTiming,
-                        rewardPoint, owner, curStatus, duration, 0, synced));
+                if (flag) {
+                    String id = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActId));
+                    String owner = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_Owner));
+                    String name = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActName));
+                    String description = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_ActDescription));
+                    int type = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_ActType));
+                    long startTime = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_StartTime));
+                    boolean notify = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_Notify)) == 1;
+                    boolean isTiming = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_IsTiming)) == 1;
+                    long duration = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_Duration));
+                    long rewardPoint = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_RewardPoint));
+                    listAct.add(new SingleAct(id, name, description, type, startTime, notify, isTiming,
+                            rewardPoint, owner, curStatus, duration, 0, synced));
+                }
             }
         }
 
         cursor.close();
 
         return listAct;
+    }
+
+    public Cursor getActCursorById(String id) {
+        String selection = ActSchema.ACT.Column_ActId + " = ?";
+        String[] projection = {
+                ActSchema.ACT.Column_ActId,
+                ActSchema.ACT.Column_Owner,
+                ActSchema.ACT.Column_Synced,
+        };
+        return getReadableDatabase().query(
+                ActSchema.ACT.Table_Activity,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                new String[] {id},          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
     }
 }
 

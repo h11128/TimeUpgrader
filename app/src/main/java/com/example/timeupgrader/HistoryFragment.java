@@ -120,7 +120,7 @@ public class HistoryFragment extends Fragment {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     // Toast.makeText(getActivity(), "Firebase error: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
-                    mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.END});
+                    mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.END}, false);
                     Collections.sort(mData, new Comparator<SingleAct>() {
                         public int compare(SingleAct o1, SingleAct o2) {
                             return Long.compare(o2.getStartTime(), o1.getStartTime());
@@ -132,7 +132,7 @@ public class HistoryFragment extends Fragment {
             });
         }
         else {
-            mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.END});
+            mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.END}, false);
             if (mData == null || mData.size() == 0) {
                 Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data from cloud database in More.", Toast.LENGTH_LONG).show();
             }
