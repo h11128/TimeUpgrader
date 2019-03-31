@@ -10,10 +10,12 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 public class NotificationService extends Service {
-    private Context mContext;
+
     private NotificationManager notificationManager;
     private Notification.Builder mBuilder;
     private Notification notification;
+    private TaskDatabaseHelper dbHelper;
+    private FireBaseHelper fbHelper;
 
     @Nullable
     @Override
@@ -24,28 +26,32 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = this;
-        notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        mBuilder = new Notification.Builder(mContext);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mBuilder = new Notification.Builder(this);
     }
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-
-        Intent newIntent = new Intent();
-        newIntent.setClass(NotificationService.this, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification = mBuilder.setContentTitle(intent.getStringExtra("title"))
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(intent.getStringExtra("title"))
-                .setContentText(intent.getStringExtra("text"))
-                .setContentIntent(contentIntent)
-                .build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notification.flags |= Notification.DEFAULT_LIGHTS;
-        notification.flags |= Notification.DEFAULT_VIBRATE;
-        notificationManager.notify(0, notification);
-
+        int alarmCount = intent.getIntExtra("alarmCount", 0);
+        String name = intent.getStringExtra("actName");
+        String id = intent.getStringExtra("actId");
+        if (alarmCount != 0 && !name.equals("") && !id.equals("")) {
+            Intent newIntent = new Intent(NotificationService.this, MainActivity.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, alarmCount, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notification = mBuilder.setSmallIcon(R.mipmap.ic_launcher_round)
+                    .setContentTitle("Time for activity!")
+                    .setContentText("Your activity " + name + " starts now.")
+                    .setContentIntent(contentIntent)
+                    .build();
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            notification.flags |= Notification.DEFAULT_LIGHTS;
+            notification.flags |= Notification.DEFAULT_VIBRATE;
+            notificationManager.notify(alarmCount, notification);
+            dbHelper = new TaskDatabaseHelper(this);
+            fbHelper = new FireBaseHelper();
+            dbHelper.updateActivityStatus(id, SingleAct.START);
+            fbHelper.updateActStatusById(id, SingleAct.START);
+        }
         return START_REDELIVER_INTENT;
     }
 }

@@ -1,8 +1,11 @@
 package com.example.timeupgrader;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -119,7 +122,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                             CurrentTime, false);
                     fbHelper.insertAct(act);
                     dbHelper.insert_Activity(act);
-                    setAlarm();
+                    setAlarm(uuid.toString(), editTextName.getText().toString(), startTime);
                     finish();
                 }
             }
@@ -163,10 +166,16 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
 //        }
 //    }
 
-    private void setAlarm() {
+    private void setAlarm(String id, String name, long start) {
         SharedPreferences sp = getSharedPreferences("alarm", Context.MODE_PRIVATE);
         int alarmCount = sp.getInt("count", 0);
-
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(ViewActivity.this, NotificationService.class);
+        intent.putExtra("alarmCount", alarmCount + 1);
+        intent.putExtra("actName", name);
+        intent.putExtra("actId", id);
+        PendingIntent pendingIntent = PendingIntent.getService(this, alarmCount + 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, start, pendingIntent);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("count", alarmCount + 1);
         editor.apply();

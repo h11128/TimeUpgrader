@@ -2,11 +2,12 @@ package com.example.timeupgrader;
 
 // import android.util.Log;
 
-// import com.google.firebase.database.DataSnapshot;
-// import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-// import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 // import java.util.ArrayList;
 
@@ -57,5 +58,21 @@ public class FireBaseHelper {
         String cleanOwnerEmail = act.getOwner().replace('.', ',');
         mDatabase.child("userAct").child(cleanOwnerEmail).child(act.getId()).child("status").setValue(status);
         mDatabase.child("act").child(act.getId()).child("status").setValue(status);
+    }
+
+    public void updateActStatusById(final String id, final int status) {
+        Query query = mDatabase.child("act").child(id);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String cleanOwnerEmail = dataSnapshot.child("owner").getValue(String.class).replace('.', ',');
+                mDatabase.child("userAct").child(cleanOwnerEmail).child(id).child("status").setValue(status);
+                mDatabase.child("act").child(id).child("status").setValue(status);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Toast.makeText(getContext(), "Firebase error: " + databaseError.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
