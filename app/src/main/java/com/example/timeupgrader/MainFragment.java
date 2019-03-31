@@ -114,7 +114,7 @@ public class MainFragment extends Fragment {
         else {
             mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.SET, SingleAct.START});
             if (mData == null || mData.size() == 0) {
-                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data in More.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data from cloud database in More.", Toast.LENGTH_LONG).show();
             }
             else {
                 Collections.sort(mData, new Comparator<SingleAct>() {
@@ -150,27 +150,6 @@ public class MainFragment extends Fragment {
                 startActivity(new Intent(getActivity(), ViewActivity.class));
             }
         });
-    }
-
-    private void showNormalDialog(){
-        Log.i(TAG, "in Main showNormalDialog called!!!");
-        final AlertDialog.Builder normalDialog = new AlertDialog.Builder(getActivity());
-        normalDialog.setTitle("Exit");
-        normalDialog.setMessage("Are you sure to exit?");
-        normalDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                getActivity().finish();
-            }
-        });
-        normalDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        normalDialog.create().show();
     }
 
     /*private void fetch() {

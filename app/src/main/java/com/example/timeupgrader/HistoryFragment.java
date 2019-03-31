@@ -134,7 +134,7 @@ public class HistoryFragment extends Fragment {
         else {
             mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.END});
             if (mData == null || mData.size() == 0) {
-                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data in More.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data from cloud database in More.", Toast.LENGTH_LONG).show();
             }
             else {
                 Collections.sort(mData, new Comparator<SingleAct>() {
