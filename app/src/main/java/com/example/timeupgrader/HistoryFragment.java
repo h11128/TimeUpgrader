@@ -1,9 +1,11 @@
 package com.example.timeupgrader;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -134,7 +136,7 @@ public class HistoryFragment extends Fragment {
         else {
             mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.END}, false);
             if (mData == null || mData.size() == 0) {
-                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data from cloud database in More.", Toast.LENGTH_LONG).show();
+                showDataDialog();
             }
             else {
                 Collections.sort(mData, new Comparator<SingleAct>() {
@@ -154,6 +156,18 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    private void showDataDialog() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+        dialog.setMessage("No local data, please check your network connection, then go to More and sync your data from cloud database.");
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create().show();
     }
 }
 

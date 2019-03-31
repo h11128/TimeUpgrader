@@ -102,7 +102,13 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 date = c.getTime();
                 startTime = date.getTime();
                 Date curDate = new Date();
-                if (!editTextName.getText().toString().equals("") && startTime > curDate.getTime()) {
+                if (editTextName.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter a name!", Toast.LENGTH_LONG).show();
+                }
+                else if (startTime <= curDate.getTime()) {
+                    Toast.makeText(getApplicationContext(), "Please set a future time!", Toast.LENGTH_LONG).show();
+                }
+                else {
                     UUID uuid = UUID.randomUUID();
                     Date currentTime = Calendar.getInstance().getTime();
                     long CurrentTime = currentTime.getTime();
@@ -113,13 +119,8 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                             CurrentTime, false);
                     fbHelper.insertAct(act);
                     dbHelper.insert_Activity(act);
+                    setAlarm();
                     finish();
-                }
-                else if (editTextName.getText().toString().equals("")) {
-                    Toast.makeText(getApplicationContext(), "Please enter a name!", Toast.LENGTH_LONG).show();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "Please set a future time!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -161,4 +162,13 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
 //            makeText(this,"You should enter a task name", Toast.LENGTH_LONG).show();
 //        }
 //    }
+
+    private void setAlarm() {
+        SharedPreferences sp = getSharedPreferences("alarm", Context.MODE_PRIVATE);
+        int alarmCount = sp.getInt("count", 0);
+
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt("count", alarmCount + 1);
+        editor.apply();
+    }
 }

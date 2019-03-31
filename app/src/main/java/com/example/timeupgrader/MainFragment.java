@@ -114,7 +114,7 @@ public class MainFragment extends Fragment {
         else {
             mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.SET, SingleAct.START}, false);
             if (mData == null || mData.size() == 0) {
-                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data from cloud database in More.", Toast.LENGTH_LONG).show();
+                showDataDialog();
             }
             else {
                 Collections.sort(mData, new Comparator<SingleAct>() {
@@ -216,5 +216,17 @@ public class MainFragment extends Fragment {
     public void onStop() {
         super.onStop();
         //adapter.stopListening();
+    }
+
+    private void showDataDialog() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+        dialog.setMessage("No local data, please check your network connection, then go to More and sync your data from cloud database.");
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create().show();
     }
 }
