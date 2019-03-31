@@ -26,13 +26,11 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
     private User mUser;
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFUser;
     private Button mIconButton;
     private Button mNickNameButton;
     private Button mChangePasswordButton;
     private EditText mInput;
     private String mButtonText;
-    boolean dialogOn;
     View view;
     public AccountFragment() {}
 
@@ -41,7 +39,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         Log.i(TAG, "in AccountFragment onCreatView() called!!!");
 
-        dialogOn = false;
         view = inflater.inflate(R.layout.fragment_account, container, false);
 
         mUser = User.getCurrentUser();
@@ -58,11 +55,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         mChangePasswordButton.setOnClickListener(this);
         Log.i(TAG, "get all the buttons!!!");
 
-        mButtonText = "Nickname: " + mUser.getUsername();
+        mButtonText = "Nickname: " + (mUser.getEmail().equals(Email.getCurrentEmail().getEmail()) ? mUser.getUsername() : "");
         Log.i(TAG, "in AccountFragment changetext!!");
         mNickNameButton.setText(mButtonText);
         onClick(view);
-
 
         return view;
     }
@@ -70,7 +66,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Log.i(TAG, "onCreate() called!!!");
 
     }
@@ -81,45 +76,45 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 Log.i(TAG, "in AccountFragment btnIcon pressed!!");
                 break;
             case R.id.btnChangePassword:
-
                 Log.i(TAG, "in AccountFragment btnChangePassword pressed!!");
-                mFirebaseAuth = FirebaseAuth.getInstance();
-                mFirebaseAuth.sendPasswordResetEmail(mUser.getEmail())
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "An email has been sent to you.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getActivity(), "Some error happens!", Toast.LENGTH_SHORT).show();
+                if (ConnectionUtils.isConn(getContext())) {
+                    mFirebaseAuth = FirebaseAuth.getInstance();
+                    mFirebaseAuth.sendPasswordResetEmail(Email.getCurrentEmail().getEmail())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getActivity(), "An email has been sent to you.", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getActivity(), "Some error happens!", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
-
+                            });
+                }
+                else {
+                    Toast.makeText(getActivity(), "No network connection.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btnNickName:
                 Log.i(TAG, "in AccountFragment btnNickName pressed!!");
-
-                mFUser = FirebaseAuth.getInstance().getCurrentUser();
                 Log.i(TAG, "in AccountFragment btnNickName 3!!");
-                if (mFUser != null) {
+                if (ConnectionUtils.isConn(getContext())) {
                     changenameDialog();
                 }
                 else {
-                    Toast.makeText(getActivity(), "You are not sign in yet!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "No network connection.", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
     private void changenameDialog() {
-        dialogOn = true;
-
 
         AlertDialog builder = new AlertDialog.Builder(getActivity()).create();
         mInput = new EditText(getActivity());
         builder.setCancelable(false);
         builder.setTitle("Change Nickname");
         builder.setView(mInput);
+        mInput.setText(mUser.getEmail().equals(Email.getCurrentEmail().getEmail()) ? mUser.getUsername() : "");
         builder.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -133,10 +128,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                         Toast.makeText(getActivity(), "changed!!", Toast.LENGTH_SHORT).show();
 
                         TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getActivity().getApplicationContext());
-                        dbHelper.updateUsername(mUser, mNewUserName);
+                        if (mUser.getEmail().equals(Email.getCurrentEmail().getEmail())) dbHelper.updateUsername(mUser, mNewUserName);
                         Log.i(TAG, "On account 1");
                         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-                        mDatabase.child("users").child(mUser.getEmail().replace('.', ',')).child("username").setValue(mNewUserName)
+                        mDatabase.child("users").child(Email.getCurrentEmail().getEmail().replace('.', ',')).child("username").setValue(mNewUserName)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -148,20 +143,16 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                                         }
                                     }
                                 });
-                        mUser.setUsername(mNewUserName);
+                        if (mUser.getEmail().equals(Email.getCurrentEmail().getEmail())) mUser.setUsername(mNewUserName);
                     }
                 });
         builder.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                dialogOn = false;
             }
         });
-
         builder.show();
-
-
     }
 }
 

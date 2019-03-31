@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 // import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -57,10 +58,12 @@ public class MainFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         final User u = User.getCurrentUser();
+        Log.i("uEmail", u != null ? u.getEmail() : "");
+        Log.i("curEmail", Email.getCurrentEmail().getEmail());
         Log.i(TAG, "in Main begin query database!!!");
         if (ConnectionUtils.isConn(getContext())) {
             Query query;
-            if (u != null) {
+            if (u != null && u.getEmail().equals(Email.getCurrentEmail().getEmail())) {
                 query = mDatabase.child("userAct").child(u.getEmail().replace('.', ','));
             } else {
                 query = mDatabase.child("userAct").child(Email.getCurrentEmail().getEmail().replace('.', ','));
@@ -110,11 +113,16 @@ public class MainFragment extends Fragment {
         }
         else {
             mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.SET, SingleAct.START});
-            Collections.sort(mData, new Comparator<SingleAct>() {
-                public int compare(SingleAct o1, SingleAct o2) {
-                    return Long.compare(o1.getStartTime(), o2.getStartTime());
-                }
-            });
+            if (mData == null || mData.size() == 0) {
+                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data in More.", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Collections.sort(mData, new Comparator<SingleAct>() {
+                    public int compare(SingleAct o1, SingleAct o2) {
+                        return Long.compare(o1.getStartTime(), o2.getStartTime());
+                    }
+                });
+            }
             adapter = new MainAdapter(mData, getContext());
             mRecyclerView.setAdapter(adapter);
         }

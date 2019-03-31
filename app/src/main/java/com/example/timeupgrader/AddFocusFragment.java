@@ -1,10 +1,9 @@
 package com.example.timeupgrader;
 
+import android.app.AppOpsManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -69,7 +68,7 @@ public class AddFocusFragment extends Fragment {
                     Toast.makeText(getActivity(),"Focus time can not be less than 10 minutes", Toast.LENGTH_LONG).show();
                 }*/
                 else {
-                    if (!hasPermission(getContext())) {
+                    if (hasPermission(getContext())) {
                         Intent intent = new Intent(getActivity(), FocusActivity.class);
                         intent.putExtra("name", focusName.getText().toString());
                         intent.putExtra("description", focusDescription.getText().toString());
@@ -99,23 +98,29 @@ public class AddFocusFragment extends Fragment {
     }
 
     private boolean hasPermission(Context context) {
-        PackageManager pm = getActivity().getPackageManager();
+        /*PackageManager pm = getActivity().getPackageManager();
         return PackageManager.PERMISSION_GRANTED ==
-                pm.checkPermission("android.permission.PACKAGE_USAGE_STATS", "com.example.timeupgrader");
+                pm.checkPermission("android.permission.PACKAGE_USAGE_STATS", "com.example.timeupgrader");*/
         /*int perm = context.checkCallingOrSelfPermission("android.permission.PACKAGE_USAGE_STATS");
         return perm == PackageManager.PERMISSION_GRANTED;*/
+        AppOpsManager appOps = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+        int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), context.getPackageName());
+        return mode == AppOpsManager.MODE_ALLOWED;
+        /*UsageStatsManager mUsageStatsManager = (UsageStatsManager) context.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
+        long time = System.currentTimeMillis();
+        List<UsageStats> stats = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, time - 30 * 1000, time);
+        if (stats == null || stats.size() == 0) return false;
+        else return true;*/
     }
 
     private void showPermissionDialog(){
         final AlertDialog.Builder normalDialog = new AlertDialog.Builder(getActivity());
         normalDialog.setTitle("Permission required");
-        normalDialog.setMessage("Please grant permission PACKAGE_USAGE_STATS to TimeUpgrader to let focus run correctly.");
+        normalDialog.setMessage("TimeUpgrade needs your permission to access app usage stats to make sure you have not switched to other apps during focus mode.");
         normalDialog.setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-                    startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
-                }
+                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
                 dialog.dismiss();
             }
         });

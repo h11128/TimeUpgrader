@@ -35,8 +35,6 @@ import java.util.List;
 import static android.support.constraint.Constraints.TAG;
 
 public class HistoryFragment extends Fragment {
-    private FirebaseUser mFUser;
-    private User mUser;
     private RecyclerView mRecyclerView;
     private TaskDatabaseHelper dbHelper;
     private DatabaseReference mDatabase;
@@ -51,8 +49,6 @@ public class HistoryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
         dbHelper = new TaskDatabaseHelper(getContext());
-        mFUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUser = User.getCurrentUser();
         mData = new ArrayList<>();
         mRecyclerView = v.findViewById(R.id.historyRecyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -83,9 +79,11 @@ public class HistoryFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final User u = User.getCurrentUser();
+        Log.i("uEmail", u != null ? u.getEmail() : "");
+        Log.i("curEmail", Email.getCurrentEmail().getEmail());
         if (ConnectionUtils.isConn(getContext())) {
             Query query;
-            if (u != null) {
+            if (u != null && u.getEmail().equals(Email.getCurrentEmail().getEmail())) {
                 query = mDatabase.child("userAct").child(u.getEmail().replace('.', ','));
             } else {
                 query = mDatabase.child("userAct").child(Email.getCurrentEmail().getEmail().replace('.', ','));
@@ -135,11 +133,16 @@ public class HistoryFragment extends Fragment {
         }
         else {
             mData = dbHelper.loadActivityByStatus(u != null ? u.getEmail() : Email.getCurrentEmail().getEmail(), new int[]{SingleAct.END});
-            Collections.sort(mData, new Comparator<SingleAct>() {
-                public int compare(SingleAct o1, SingleAct o2) {
-                    return Long.compare(o2.getStartTime(), o1.getStartTime());
-                }
-            });
+            if (mData == null || mData.size() == 0) {
+                Toast.makeText(getContext(), "No local data, please check your network connection, then sync your data in More.", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Collections.sort(mData, new Comparator<SingleAct>() {
+                    public int compare(SingleAct o1, SingleAct o2) {
+                        return Long.compare(o2.getStartTime(), o1.getStartTime());
+                    }
+                });
+            }
             adapter = new HistoryAdapter(mData, getContext());
             mRecyclerView.setAdapter(adapter);
         }

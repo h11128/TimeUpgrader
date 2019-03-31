@@ -103,14 +103,13 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 startTime = date.getTime();
                 Date curDate = new Date();
                 if (!editTextName.getText().toString().equals("") && startTime > curDate.getTime()) {
-                    User u = User.getCurrentUser();
                     UUID uuid = UUID.randomUUID();
                     Date currentTime = Calendar.getInstance().getTime();
                     long CurrentTime = currentTime.getTime();
                     // int rewardPoint = parseInt(spinnerType.getSelectedItem().toString());
                     SingleAct act = new SingleAct(uuid.toString(), editTextName.getText().toString(),
                             editTextDescription.getText().toString(), 0, startTime, true,
-                            false, 66, u.getEmail(), SingleAct.SET, 0,
+                            false, 66, Email.getCurrentEmail().getEmail(), SingleAct.SET, 0,
                             CurrentTime, false);
                     fbHelper.insertAct(act);
                     dbHelper.insert_Activity(act);

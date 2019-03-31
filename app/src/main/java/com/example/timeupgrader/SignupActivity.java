@@ -121,7 +121,6 @@ public class SignupActivity extends AppCompatActivity {
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                         @Override
                                         public void onComplete(@NonNull Task<AuthResult> task) {
-                                            progressBar.setVisibility(View.GONE);
                                             if (task.isSuccessful()) {
                                                 Date d = new Date();
                                                 Log.i("Time Created", d.toString());
@@ -134,16 +133,19 @@ public class SignupActivity extends AppCompatActivity {
                                                         Toast.LENGTH_LONG).show();
                                                 email.setText("");
                                                 password.setText("");
+                                                progressBar.setVisibility(View.GONE);
                                                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
                                                 finish();
                                             }
                                             else {
+                                                progressBar.setVisibility(View.GONE);
                                                 Toast.makeText(SignupActivity.this, task.getException().getMessage(),
                                                         Toast.LENGTH_LONG).show();
                                             }
                                         }
                                     });
-                        } else {
+                        }
+                        else {
                             Toast.makeText(getApplicationContext(), "Invalid E-mail or password", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -236,7 +238,9 @@ public class SignupActivity extends AppCompatActivity {
     private void tryLoadUser(String email) {
         dbHelper.getLoginUser(email);
         Email e = new Email(email);
-        if (User.getCurrentUser() == null) {
+        Log.i("email", email);
+        // Log.i("tryUEmail", User.getCurrentUser().getEmail());
+        if (User.getCurrentUser() == null || !User.getCurrentUser().getEmail().equals(email)) {
             String cleanEmail = email.replace('.', ',');
             DatabaseReference udr = mDatabase.child("users").child(cleanEmail);
             udr.addListenerForSingleValueEvent(new ValueEventListener() {

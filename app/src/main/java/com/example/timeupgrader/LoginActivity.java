@@ -86,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
-                                        progressBar.setVisibility(View.GONE);
                                         if (task.isSuccessful()) {
                                             Log.i("Login email", em);
                                             tryLoadUser(em);
@@ -95,9 +94,11 @@ public class LoginActivity extends AppCompatActivity {
                                             editor.putString("email", em);
                                             editor.putString("password", pw);
                                             editor.apply();
+                                            progressBar.setVisibility(View.GONE);
                                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                         }
                                         else {
+                                            progressBar.setVisibility(View.GONE);
                                             Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     }
@@ -238,7 +239,9 @@ public class LoginActivity extends AppCompatActivity {
     private void tryLoadUser(String email) {
         dbHelper.getLoginUser(email);
         Email e = new Email(email);
-        if (User.getCurrentUser() == null) {
+        Log.i("email", email);
+        // Log.i("tryUEmail", User.getCurrentUser().getEmail());
+        if (User.getCurrentUser() == null || !User.getCurrentUser().getEmail().equals(email)) {
             String cleanEmail = email.replace('.', ',');
             DatabaseReference udr = FirebaseDatabase.getInstance().getReference().child("users").child(cleanEmail);
             udr.addListenerForSingleValueEvent(new ValueEventListener() {
