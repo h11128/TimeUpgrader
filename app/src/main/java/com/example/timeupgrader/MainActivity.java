@@ -16,8 +16,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        syncTo();
     }
 
     @Override
@@ -228,6 +233,31 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
                 break;
+        }
+    }
+
+    private void syncTo() {
+        try {
+            TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(this);
+            FireBaseHelper fbHelper = new FireBaseHelper();
+            int[] status = new int[]{SingleAct.SET, SingleAct.START, SingleAct.PAUSE, SingleAct.END};
+            List<SingleAct> listAct = dbHelper.loadActivityByStatus(Email.getCurrentEmail().getEmail(), status, true);
+            for (SingleAct act : listAct) {
+                fbHelper.insertAct(act);
+            }
+            User u = User.getCurrentUser();
+            if (u != null && u.getEmail().equals(Email.getCurrentEmail().getEmail())) {
+                fbHelper.insertUser(u);
+            }
+            else {
+                throw new InconsistentException("User email and email inconsistent!");
+            }
+            /*Intent intentRestart = getActivity().getIntent();
+            startActivity(intentRestart);
+            getActivity().finish();*/
+        }
+        catch (InconsistentException e) {
+            Toast.makeText(this, "Sync failed. " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }
