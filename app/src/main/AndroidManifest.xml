@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.timeupgrader">
 
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".TimeUpgraderApp"
@@ -17,11 +19,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EndFocusActivity"></activity>
+
+        <activity android:name=".EndFocusActivity" />
         <activity android:name=".AccountActivity" />
         <activity android:name=".GroupActivity" />
         <activity android:name=".HistoryActivity" />
-        <activity android:name=".FocusActivity"
+        <activity
+            android:name=".FocusActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".AddFocusActivity" />
         <activity android:name=".HelpActivity" />
@@ -36,11 +40,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".SignupActivity" />
-        <service android:enabled="true" android:name=".NotificationService" android:process="system"></service>
+
+        <service
+            android:name=".NotificationService"
+            android:enabled="true"
+            android:process="system" />
+
+        <receiver android:name=".AlarmReceiver">
+            <intent-filter>
+                <action android:name="com.example.ALARM_ACTION_REPEATING" />
+                <action android:name="com.example.ALARM_ACTION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

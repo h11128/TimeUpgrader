@@ -1,7 +1,10 @@
 package com.example.timeupgrader;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +17,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 // import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -29,9 +31,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
 
 public class MainFragment extends Fragment {
+
+    private final static int VIEW_ACTIVITY_REQUEST_CODE = 1;
+    public static final String RECEIVER_ACTION_DATA_CHANGE = "receiver_action_data_change";
+
     private FloatingActionButton fab;
     private RecyclerView mRecyclerView;
     private MainAdapter adapter;
@@ -40,6 +47,8 @@ public class MainFragment extends Fragment {
     private DatabaseReference mDatabase;
     private FireBaseHelper fbHelper;
 
+    private AdapterDataChangeReceiver mReceiver;
+
     public MainFragment() {}
 
     @Override
@@ -47,6 +56,9 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.i(TAG, "in Main onCreateView called!!!");
         View v = inflater.inflate(R.layout.fragment_main, container, false);
+
+        mReceiver = new AdapterDataChangeReceiver();
+        registerDataChangeReceiver();
 
         dbHelper = new TaskDatabaseHelper(getContext());
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -147,64 +159,25 @@ public class MainFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), ViewActivity.class));
+                startActivityForResult(new Intent(getActivity(), ViewActivity.class), VIEW_ACTIVITY_REQUEST_CODE);
             }
         });
     }
 
-    /*private void fetch() {
-        User u = User.getCurrentUser();
-        Query query = FirebaseDatabase.getInstance().getReference().child("userAct").child(u.getEmail().replace('.', ','))
-                .endAt(SingleAct.END, "status").orderByChild("startTime");
-
-        FirebaseRecyclerOptions<SingleAct> options =
-                new FirebaseRecyclerOptions.Builder<SingleAct>().setQuery(query, new SnapshotParser<SingleAct>() {
-                    @NonNull
-                    @Override
-                    public SingleAct parseSnapshot(@NonNull DataSnapshot snapshot) {
-                        if (snapshot == null) return new SingleAct("","","",0,0,false,false,0,"",-1,0,0,false);
-                        return new SingleAct(snapshot.child("id").getValue().toString(),
-                                snapshot.child("name").getValue().toString(),
-                                snapshot.child("description").getValue().toString(),
-                                (int) snapshot.child("type").getValue(),
-                                (long) snapshot.child("startTime").getValue(),
-                                (boolean) snapshot.child("notify").getValue(),
-                                (boolean) snapshot.child("isTiming").getValue(),
-                                (long) snapshot.child("rewardPoint").getValue(),
-                                snapshot.child("owner").getValue().toString(),
-                                (int) snapshot.child("status").getValue(),
-                                (long) snapshot.child("duration").getValue(),
-                                (long) snapshot.child("currentTime").getValue(),
-                                (boolean) snapshot.child("synced").getValue());
-                    }
-                }).build();
-
-        adapter = new FirebaseRecyclerAdapter<SingleAct, ViewHolder>(options) {
-            @Override
-            public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_main, parent, false);
-                return new ViewHolder(view);
-            }
-            @Override
-            protected void onBindViewHolder(ViewHolder holder, final int position, SingleAct act) {
-                if (act.getId().equals("")) return;
-                holder.name.setText(act.getName());
-                holder.description.setText(act.getDescription());
-                holder.status.setText(act.getStatus());
-                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                SimpleDateFormat sdf2 = new SimpleDateFormat("HH hr mm min ss sec");
-                holder.startTime.setText(sdf1.format(act.getStartTime()));
-                holder.duration.setText(sdf2.format(act.getDuration()));
-                holder.root.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {}
-                });
-            }
-        };
-
-        mRecyclerView.setAdapter(adapter);
-    }*/
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+            case VIEW_ACTIVITY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    startActivity(new Intent(getActivity(), MainActivity.class));
+                    getActivity().finish();
+                }
+                break;
+            default:
+                break;
+        }
+    }
 
     @Override
     public void onStart() {
@@ -218,6 +191,14 @@ public class MainFragment extends Fragment {
         //adapter.stopListening();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+        }
+    }
+
     private void showDataDialog() {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
         dialog.setMessage("No local data, please check your network connection, then go to More and sync your data from cloud database.");
@@ -228,5 +209,30 @@ public class MainFragment extends Fragment {
             }
         });
         dialog.create().show();
+    }
+
+    public class AdapterDataChangeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (adapter != null) {
+                String id = intent.getStringExtra("actId");
+                int status = intent.getIntExtra("status", -1);
+                if (status != -1 && !id.equals("")) {
+                    for (int i = 0; i < mData.size(); i++) {
+                        if (mData.get(i).getId().equals(id)) {
+                            mData.get(i).setStatus(status);
+                        }
+                    }
+                    adapter = new MainAdapter(mData, getContext());
+                    mRecyclerView.setAdapter(adapter);
+                }
+            }
+        }
+    }
+
+    private void registerDataChangeReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVER_ACTION_DATA_CHANGE);
+        getActivity().registerReceiver(mReceiver, intentFilter);
     }
 }

@@ -7,10 +7,12 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -123,6 +125,8 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                     fbHelper.insertAct(act);
                     dbHelper.insert_Activity(act);
                     setAlarm(uuid.toString(), editTextName.getText().toString(), startTime);
+                    Intent intent = new Intent(ViewActivity.this, MainFragment.class);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
@@ -170,12 +174,22 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         SharedPreferences sp = getSharedPreferences("alarm", Context.MODE_PRIVATE);
         int alarmCount = sp.getInt("count", 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(ViewActivity.this, NotificationService.class);
+        Intent intent = new Intent();
+        intent.setAction("com.example.ALARM_ACTION");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("alarmCount", alarmCount + 1);
         intent.putExtra("actName", name);
         intent.putExtra("actId", id);
-        PendingIntent pendingIntent = PendingIntent.getService(this, alarmCount + 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, start, pendingIntent);
+        Log.i("alarmCount", alarmCount + "");
+        Log.i("name", name);
+        Log.i("id", id);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmCount + 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, start, pendingIntent);
+        }
+        else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, start, pendingIntent);
+        }
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt("count", alarmCount + 1);
         editor.apply();

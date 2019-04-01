@@ -1,6 +1,7 @@
 package com.example.timeupgrader;
 
 import android.content.Context;
+import android.content.IntentFilter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder>{
+public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
 
     private Context mContext;
-    private List<SingleAct> mData;
+    public List<SingleAct> mData;
     private TaskDatabaseHelper dbHelper;
     private FireBaseHelper fbHelper;
 

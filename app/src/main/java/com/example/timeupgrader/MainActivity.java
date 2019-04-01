@@ -20,6 +20,9 @@ import android.widget.ProgressBar;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+
+    private final static int VIEW_ACTIVITY_REQUEST_CODE = 1;
+
     private static final String TAG = MainActivity.class.getSimpleName();
     private Fragment[] fragments;
     private int lastFragment;
@@ -212,5 +215,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         normalDialog.create().show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+            case VIEW_ACTIVITY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    // Do nothing. Reserved for MainFragment.
+                }
+                break;
+            default:
+                break;
+        }
     }
 }

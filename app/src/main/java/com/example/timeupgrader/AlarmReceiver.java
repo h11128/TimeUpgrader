@@ -4,36 +4,18 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-public class NotificationService extends Service {
-
-    private TaskDatabaseHelper dbHelper;
-    private FireBaseHelper fbHelper;
-
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        dbHelper = new TaskDatabaseHelper(this);
-        fbHelper = new FireBaseHelper();
-    }
-
-    @Override
-    public int onStartCommand(final Intent intent, int flags, int startId) {
+    public void onReceive(Context context, Intent intent) {
         int alarmCount = intent.getIntExtra("alarmCount", 0);
         String name = intent.getStringExtra("actName");
         String id = intent.getStringExtra("actId");
@@ -41,10 +23,10 @@ public class NotificationService extends Service {
         Log.i("name", name);
         Log.i("id", id);
         if (alarmCount != 0 && !name.equals("") && !id.equals("")) {
-            Intent newIntent = new Intent(NotificationService.this, MainActivity.class);
+            Intent newIntent = new Intent(context, MainActivity.class);
             newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, alarmCount, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "notify");
+            PendingIntent contentIntent = PendingIntent.getActivity(context, alarmCount, newIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "notify");
             Notification notification = builder.setSmallIcon(R.mipmap.ic_launcher_round)
                     .setContentTitle("Time for activity!")
                     .setContentText("Your activity " + name + " has started.")
@@ -57,7 +39,7 @@ public class NotificationService extends Service {
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setCategory(Notification.CATEGORY_ALARM)
                     .build();
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel("notify", "Time for activity!", NotificationManager.IMPORTANCE_HIGH);
                 channel.setDescription("Your activity " + name + " has started.");
@@ -70,9 +52,14 @@ public class NotificationService extends Service {
                 notificationManager.createNotificationChannel(channel);
             }
             notificationManager.notify(alarmCount, notification);
+            TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(context);
+            FireBaseHelper fbHelper = new FireBaseHelper();
             dbHelper.updateActivityStatus(id, SingleAct.START);
             fbHelper.updateActStatusById(id, SingleAct.START);
+            Intent broadcastIntent = new Intent(MainFragment.RECEIVER_ACTION_DATA_CHANGE);
+            broadcastIntent.putExtra("actId", id);
+            broadcastIntent.putExtra("status", SingleAct.START);
+            context.sendBroadcast(broadcastIntent);
         }
-        return START_REDELIVER_INTENT;
     }
 }
