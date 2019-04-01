@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
             getActivity().finish();*/
         }
         catch (InconsistentException e) {
-            Toast.makeText(this, "Sync failed. " + e.getMessage(), Toast.LENGTH_LONG).show();
+            // Toast.makeText(this, "Sync failed. " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

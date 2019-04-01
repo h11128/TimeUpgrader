@@ -29,5 +29,6 @@
     <string name="NewUserName">NewUserName</string>
     <string name="actname">ActName</string>
     <string name="actduration">ActDuration</string>
+    <string name="doNotAskAgain">Don\'t ask again</string>
 
 </resources>

@@ -1,11 +1,15 @@
 package com.example.timeupgrader;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +22,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     private List<SingleAct> mData;
     private TaskDatabaseHelper dbHelper;
     private FireBaseHelper fbHelper;
+    private SharedPreferences spDelete;
 
     HistoryAdapter(List<SingleAct> data, Context context) {
         this.mData = data;
@@ -35,7 +40,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.status.setText(act.getStatusText());
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
-        holder.startTime.setText("Start: " + sdf1.format(act.getStartTime()));
+        holder.startTime.setText("Start time: " + sdf1.format(act.getStartTime()));
 
         /*holder.root.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,14 +52,55 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             public void onClick(View v) {}
         });*/
 
+        spDelete = mContext.getSharedPreferences("deleteButton", Context.MODE_PRIVATE);
+
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mData.remove(position);
-                notifyItemRemoved(position);
-                notifyDataSetChanged();
-                dbHelper.updateActivityStatus(act.getId(), SingleAct.DELETE);
-                fbHelper.updateActStatus(act, SingleAct.DELETE);
+                boolean noReminder = spDelete.getBoolean("noReminder", false);
+                if (!noReminder) {
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+                    dialog.setTitle("Delete your activity");
+                    dialog.setMessage("Are you sure to delete your activity? You can not recover your activity any more if you delete it.");
+                    final CheckBox checkBox = new CheckBox(mContext);
+                    checkBox.setText(R.string.doNotAskAgain);
+                    dialog.setView(checkBox);
+                    dialog.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (checkBox.isChecked()) {
+                                SharedPreferences.Editor editor = spDelete.edit();
+                                editor.putBoolean("noReminder", true);
+                                editor.apply();
+                            }
+                            mData.remove(position);
+                            notifyItemRemoved(position);
+                            notifyDataSetChanged();
+                            dbHelper.updateActivityStatus(act.getId(), SingleAct.DELETE);
+                            fbHelper.updateActStatus(act, SingleAct.DELETE);
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (checkBox.isChecked()) {
+                                SharedPreferences.Editor editor = spDelete.edit();
+                                editor.putBoolean("noReminder", true);
+                                editor.apply();
+                            }
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.create().show();
+                }
+                else {
+                    mData.remove(position);
+                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
+                    dbHelper.updateActivityStatus(act.getId(), SingleAct.DELETE);
+                    fbHelper.updateActStatus(act, SingleAct.DELETE);
+                }
             }
         });
     }
