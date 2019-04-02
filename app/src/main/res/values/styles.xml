@@ -23,6 +23,18 @@
         <item name="colorAccent">#0000c6</item>
         <item name="allColor">#0000c6</item>
     </style>
+    <style name="AppTheme5" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">#e00</item>
+        <item name="colorAccent">#e00</item>
+        <item name="allColor">#e00</item>
+    </style>
+    <style name="AppTheme6" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">#dd0</item>
+        <item name="colorAccent">#dd0</item>
+        <item name="allColor">#dd0</item>
+    </style>
     <style name="ToolbarPopupTheme" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
         <item name="android:colorBackground">#fff</item>
         <item name="overlapAnchor">false</item>

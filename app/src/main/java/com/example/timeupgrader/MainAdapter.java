@@ -24,8 +24,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     public List<SingleAct> mData;
     private TaskDatabaseHelper dbHelper;
     private FireBaseHelper fbHelper;
-    private SharedPreferences spComplete;
-    private SharedPreferences spDelete;
+    private SharedPreferences settings;
 
     MainAdapter(List<SingleAct> data, Context context) {
         this.mData = data;
@@ -67,8 +66,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             public void onClick(View v) {}
         });*/
 
-        spComplete = mContext.getSharedPreferences("completeButton", Context.MODE_PRIVATE);
-        spDelete = mContext.getSharedPreferences("deleteButton", Context.MODE_PRIVATE);
+        settings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
 
         holder.complete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,8 +74,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
                     Date date = new Date();
                     if (act.getStartTime() <= date.getTime()) {
-                        boolean noReminder = spComplete.getBoolean("noReminder", false);
-                        if (!noReminder) {
+                        boolean reminder = settings.getBoolean("checkReminder", true);
+                        if (reminder) {
                             final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                             dialog.setTitle("Check your activity");
                             dialog.setMessage("Are you sure to check your activity as ended?");
@@ -88,8 +86,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (checkBox.isChecked()) {
-                                        SharedPreferences.Editor editor = spComplete.edit();
-                                        editor.putBoolean("noReminder", true);
+                                        SharedPreferences.Editor editor = settings.edit();
+                                        editor.putBoolean("checkReminder", false);
                                         editor.apply();
                                     }
                                     act.setStatus(SingleAct.END);
@@ -98,6 +96,15 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                                     notifyDataSetChanged();
                                     dbHelper.updateActivityStatus(act.getId(), SingleAct.END);
                                     fbHelper.updateActStatus(act, SingleAct.END);
+                                    User u = User.getCurrentUser();
+                                    if (u != null && u.getEmail().equals(Email.getCurrentEmail().getEmail())) {
+                                        u.addPoint(act.getRewardPoint());
+                                    }
+                                    long prePoint = dbHelper.getPointByEmail(act.getOwner());
+                                    if (prePoint != -1) {
+                                        dbHelper.updatePointByEmail(act.getOwner(), prePoint + act.getRewardPoint());
+                                        fbHelper.updatePointByEmail(act.getOwner(), prePoint + act.getRewardPoint());
+                                    }
                                     dialog.dismiss();
                                 }
                             });
@@ -105,8 +112,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (checkBox.isChecked()) {
-                                        SharedPreferences.Editor editor = spComplete.edit();
-                                        editor.putBoolean("noReminder", true);
+                                        SharedPreferences.Editor editor = settings.edit();
+                                        editor.putBoolean("checkReminder", false);
                                         editor.apply();
                                     }
                                     dialog.dismiss();
@@ -133,11 +140,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean noReminder = spDelete.getBoolean("noReminder", false);
-                if (!noReminder) {
+                boolean reminder = settings.getBoolean("deleteReminder", true);
+                if (reminder) {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                     dialog.setTitle("Delete your activity");
-                    dialog.setMessage("Are you sure to delete your activity? You can not recover your activity any more if you delete it.");
+                    dialog.setMessage("Are you sure to delete your activity? You will not be able to get any reward point or recover deleted activity.");
                     final CheckBox checkBox = new CheckBox(mContext);
                     checkBox.setText(R.string.doNotAskAgain);
                     dialog.setView(checkBox);
@@ -145,8 +152,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (checkBox.isChecked()) {
-                                SharedPreferences.Editor editor = spDelete.edit();
-                                editor.putBoolean("noReminder", true);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("deleteReminder", false);
                                 editor.apply();
                             }
                             mData.remove(position);
@@ -161,8 +168,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (checkBox.isChecked()) {
-                                SharedPreferences.Editor editor = spDelete.edit();
-                                editor.putBoolean("noReminder", true);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("deleteReminder", false);
                                 editor.apply();
                             }
                             dialog.dismiss();

@@ -22,7 +22,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     private List<SingleAct> mData;
     private TaskDatabaseHelper dbHelper;
     private FireBaseHelper fbHelper;
-    private SharedPreferences spDelete;
+    private SharedPreferences settings;
 
     HistoryAdapter(List<SingleAct> data, Context context) {
         this.mData = data;
@@ -52,16 +52,16 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             public void onClick(View v) {}
         });*/
 
-        spDelete = mContext.getSharedPreferences("deleteButton", Context.MODE_PRIVATE);
+        settings = mContext.getSharedPreferences("settings", Context.MODE_PRIVATE);
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean noReminder = spDelete.getBoolean("noReminder", false);
-                if (!noReminder) {
+                boolean reminder = settings.getBoolean("deleteReminder", true);
+                if (reminder) {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                     dialog.setTitle("Delete your activity");
-                    dialog.setMessage("Are you sure to delete your activity? You can not recover your activity any more if you delete it.");
+                    dialog.setMessage("Are you sure to delete your activity? You can not recover deleted activity.");
                     final CheckBox checkBox = new CheckBox(mContext);
                     checkBox.setText(R.string.doNotAskAgain);
                     dialog.setView(checkBox);
@@ -69,8 +69,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (checkBox.isChecked()) {
-                                SharedPreferences.Editor editor = spDelete.edit();
-                                editor.putBoolean("noReminder", true);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("deleteReminder", false);
                                 editor.apply();
                             }
                             mData.remove(position);
@@ -85,8 +85,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (checkBox.isChecked()) {
-                                SharedPreferences.Editor editor = spDelete.edit();
-                                editor.putBoolean("noReminder", true);
+                                SharedPreferences.Editor editor = settings.edit();
+                                editor.putBoolean("deleteReminder", false);
                                 editor.apply();
                             }
                             dialog.dismiss();

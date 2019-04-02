@@ -2,6 +2,8 @@ package com.example.timeupgrader;
 
 // import android.util.Log;
 
+import android.content.ContentValues;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +48,16 @@ public class FireBaseHelper {
     public void insertUser(User user) {
         String cleanEmail = user.getEmail().replace('.', ',');
         mDatabase.child("users").child(cleanEmail).setValue(user);
+    }
+
+    public void updatePoint(User user, long point) {
+        String cleanEmail = user.getEmail().replace('.', ',');
+        mDatabase.child("users").child(cleanEmail).child("point").setValue(point);
+    }
+
+    public void updatePointByEmail(String email, long point) {
+        String cleanEmail = email.replace('.', ',');
+        mDatabase.child("users").child(cleanEmail).child("point").setValue(point);
     }
 
     public void insertAct(SingleAct act) {

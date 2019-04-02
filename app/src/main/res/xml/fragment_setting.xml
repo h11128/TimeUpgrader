@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Notification">
+
+        <!--<CheckBoxPreference
+            android:key="checkbox"
+            android:title="@string/title_checkbox_preference"
+            android:summary="@string/summary_checkbox_preference"/>-->
+
+        <SwitchPreference
+            android:key="notify"
+            android:title="Activity notification"
+            android:summary="Notify me when activity starts"
+            android:defaultValue="true"
+            app:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Reminders">
+
+        <SwitchPreference
+            android:key="checkReminder"
+            android:title="Check button reminder"
+            android:summary="Ask me when check button is pressed"
+            android:defaultValue="true"
+            app:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="deleteReminder"
+            android:title="Delete button reminder"
+            android:summary="Ask me when delete button is pressed"
+            android:defaultValue="true"
+            app:defaultValue="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

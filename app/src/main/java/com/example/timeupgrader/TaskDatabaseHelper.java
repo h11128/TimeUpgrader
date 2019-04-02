@@ -104,8 +104,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         cv.put(UASchema.Column_Level, user.getLevel());
         cv.put(UASchema.Column_Point, user.getPoint());
         cv.put(UASchema.Column_NumFocuses, user.getNumFocusesDone());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        cv.put(UASchema.Column_TimeCreated, sdf.format(user.getTimeCreated()));
+        cv.put(UASchema.Column_TimeCreated, user.getTimeCreated());
         return getWritableDatabase().insert(UASchema.Table_UserAccount, null, cv);
     }
 
@@ -169,9 +168,48 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         return getWritableDatabase().update(ACT.Table_Activity, values, selection, selectionArgs);
     }
 
+    public long getPointByEmail(String email) {
+        String selection = UASchema.Column_Email + " = ?";
+        String[] projection = {
+                UASchema.Column_Point,
+        };
+
+        Cursor cursor = getReadableDatabase().query(
+                UASchema.Table_UserAccount,   // The table to query
+                projection,             // The array of columns to return (pass null to get all)
+                selection,              // The columns for the WHERE clause
+                new String[] {email},          // The values for the WHERE clause
+                null,                   // don't group the rows
+                null,                   // don't filter by row groups
+                null               // The sort order
+        );
+
+        long point = -1;
+        if (cursor.getCount() == 1) {
+            cursor.moveToNext();
+            point = cursor.getLong(cursor.getColumnIndexOrThrow(UASchema.Column_Point));
+        }
+
+        cursor.close();
+
+        return point;
+    }
+
     public int updatePoint(User user, long point) {
         String selection = UASchema.Column_Email + " = ?";
         String[] selectionArgs = { user.getEmail() };
+        ContentValues values = new ContentValues();
+        values.put(UASchema.Column_Point, point);
+        return getWritableDatabase().update(
+                UASchema.Table_UserAccount,
+                values,
+                selection,
+                selectionArgs);
+    }
+
+    public int updatePointByEmail(String email, long point) {
+        String selection = UASchema.Column_Email + " = ?";
+        String[] selectionArgs = { email };
         ContentValues values = new ContentValues();
         values.put(UASchema.Column_Point, point);
         return getWritableDatabase().update(

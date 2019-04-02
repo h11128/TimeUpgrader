@@ -121,6 +121,14 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
                                 mThemeprefs.edit().putLong("myTheme", R.style.AppTheme4).apply();
                                 ChangeColor();
                                 return true;
+                            case R.id.color_5:
+                                mThemeprefs.edit().putLong("myTheme", R.style.AppTheme5).apply();
+                                ChangeColor();
+                                return true;
+                            case R.id.color_6:
+                                mThemeprefs.edit().putLong("myTheme", R.style.AppTheme6).apply();
+                                ChangeColor();
+                                return true;
                             default:
                                 return false;
                         }
