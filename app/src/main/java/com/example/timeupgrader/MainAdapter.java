@@ -78,10 +78,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                         if (reminder) {
                             final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                             dialog.setTitle("Check your activity");
-                            dialog.setMessage("Are you sure to check your activity as ended?");
-                            final CheckBox checkBox = new CheckBox(mContext);
-                            checkBox.setText(R.string.doNotAskAgain);
-                            dialog.setView(checkBox);
+                            dialog.setMessage("Are you sure to complete your activity?");
+                            LayoutInflater inflater = LayoutInflater.from(mContext);
+                            View view = inflater.inflate(R.layout.checkbox_do_not_ask, null);
+                            final CheckBox checkBox = view.findViewById(R.id.checkboxDoNotAsk);
+                            dialog.setView(view);
                             dialog.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -106,6 +107,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                                         fbHelper.updatePointByEmail(act.getOwner(), prePoint + act.getRewardPoint());
                                     }
                                     dialog.dismiss();
+                                    Toast.makeText(mContext, "Activity completed! You got " + act.getRewardPoint() + " reward points.", Toast.LENGTH_LONG).show();
+
                                 }
                             });
                             dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -128,6 +131,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                             notifyDataSetChanged();
                             dbHelper.updateActivityStatus(act.getId(), SingleAct.END);
                             fbHelper.updateActStatus(act, SingleAct.END);
+                            Toast.makeText(mContext, "Activity completed! You got " + act.getRewardPoint() + " reward points.", Toast.LENGTH_LONG).show();
                         }
                     }
                     else {
@@ -144,10 +148,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
                 if (reminder) {
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                     dialog.setTitle("Delete your activity");
-                    dialog.setMessage("Are you sure to delete your activity? You will not be able to get any reward point or recover deleted activity.");
-                    final CheckBox checkBox = new CheckBox(mContext);
-                    checkBox.setText(R.string.doNotAskAgain);
-                    dialog.setView(checkBox);
+                    dialog.setMessage("Are you sure to delete your activity? You can not recover deleted activity.");
+                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                    View view = inflater.inflate(R.layout.checkbox_do_not_ask, null);
+                    final CheckBox checkBox = view.findViewById(R.id.checkboxDoNotAsk);
+                    dialog.setView(view);
                     dialog.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

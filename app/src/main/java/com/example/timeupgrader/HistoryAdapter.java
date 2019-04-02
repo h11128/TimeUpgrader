@@ -62,9 +62,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
                     final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
                     dialog.setTitle("Delete your activity");
                     dialog.setMessage("Are you sure to delete your activity? You can not recover deleted activity.");
-                    final CheckBox checkBox = new CheckBox(mContext);
-                    checkBox.setText(R.string.doNotAskAgain);
-                    dialog.setView(checkBox);
+                    LayoutInflater inflater = LayoutInflater.from(mContext);
+                    View view = inflater.inflate(R.layout.checkbox_do_not_ask, null);
+                    final CheckBox checkBox = view.findViewById(R.id.checkboxDoNotAsk);
+                    dialog.setView(view);
                     dialog.setPositiveButton("Sure", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
