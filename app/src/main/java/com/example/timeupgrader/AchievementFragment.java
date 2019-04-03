@@ -11,6 +11,8 @@ import android.widget.TextView;
 public class AchievementFragment extends Fragment {
     private View view;
     private TextView mAchievement;
+    private TextView mPoints;
+    private TextView mNumFocus;
     private User mUser;
     public AchievementFragment() {}
 
@@ -18,13 +20,20 @@ public class AchievementFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view =  inflater.inflate(R.layout.fragment_achievement, container, false);
-        mAchievement = view.findViewById(R.id.textAchievement);
+        mAchievement = view.findViewById(R.id.textLevel);
+        mPoints = view.findViewById(R.id.textPoint);
+        mNumFocus = view.findViewById(R.id.textNumFocus);
         mUser = User.getCurrentUser();
-        String display ="level: "+mUser.getLevel()+"\n"+"point:"+ mUser.getPoint()+"\n"
-                +"NumFocus: "+mUser.getNumFocusesDone();
-        mAchievement.setText(display);
+        String level = "Level: "+mUser.getLevel()+"\n";
+
+        String point = "Point:" + mUser.getPoint() + "\n";
+        String numFocus = "Num of Focus:" + mUser.getNumFocusesDone() + "\n";
+        mAchievement.setText(level);
+        mPoints.setText(point);
+        mNumFocus.setText(numFocus);
         return view;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
