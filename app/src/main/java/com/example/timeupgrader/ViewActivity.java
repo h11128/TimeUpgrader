@@ -1,5 +1,6 @@
 package com.example.timeupgrader;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
@@ -7,9 +8,13 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -64,7 +69,19 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
 
         dbHelper = new TaskDatabaseHelper(getApplicationContext());
         fbHelper = new FireBaseHelper();
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            int permission = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION);
+            if (permission == PackageManager.PERMISSION_GRANTED){
 
+            }
+            else{
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST);
+            }
+        }
         toolbar = findViewById(R.id.toolbarMain);
         toolbar.setTitle("Add a new activity");
         editTextName = (EditText) findViewById(R.id.editTextName);
@@ -121,7 +138,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                     SingleAct act = new SingleAct(uuid.toString(), editTextName.getText().toString(),
                             editTextDescription.getText().toString(), 0, startTime, true,
                             false, 66, Email.getCurrentEmail().getEmail(), SingleAct.SET, 0,
-                            CurrentTime, false);
+                            CurrentTime, false, );
                     fbHelper.insertAct(act);
                     dbHelper.insert_Activity(act);
                     setAlarm(uuid.toString(), editTextName.getText().toString(), startTime);

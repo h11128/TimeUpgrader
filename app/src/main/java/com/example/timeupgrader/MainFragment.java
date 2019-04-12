@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.LocationManager;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +37,9 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 import static android.support.constraint.Constraints.TAG;
+import static android.support.v4.content.ContextCompat.getSystemService;
+
+import android.Manifest;
 
 public class MainFragment extends Fragment {
 
