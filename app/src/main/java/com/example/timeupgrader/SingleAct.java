@@ -1,5 +1,7 @@
 package com.example.timeupgrader;
 
+import android.location.Location;
+
 public class SingleAct extends Act {
     public static final int SET = 0;
     public static final int START = 1;
@@ -12,8 +14,11 @@ public class SingleAct extends Act {
     private long duration;
     private long currentTime;
     private boolean synced;
+    private String location;
 
-    public SingleAct(String id, String name, String description, int type, long startTime, boolean notify, boolean isTiming, long rewardPoint, String owner, int status, long duration, long currentTime, boolean synced) {
+    public SingleAct(String id, String name, String description, int type, long startTime, boolean notify,
+                     boolean isTiming, long rewardPoint, String owner, int status, long duration,
+                     long currentTime, boolean synced, String location) {
 
         super(id, name, description, type, startTime, notify, isTiming, rewardPoint);
         this.owner = owner;
@@ -21,6 +26,7 @@ public class SingleAct extends Act {
         this.duration = duration;
         this.currentTime = currentTime;
         this.synced = synced;
+        this.location = location;
     }
 
     public String getOwner() {
@@ -29,6 +35,14 @@ public class SingleAct extends Act {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public int getStatus() {

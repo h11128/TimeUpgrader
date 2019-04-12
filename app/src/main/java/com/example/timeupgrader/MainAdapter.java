@@ -43,6 +43,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
         holder.startTime.setText("Start time: " + sdf1.format(act.getStartTime()));
+        holder.location.setText("Location: " + (act.getLocation() == null ? "N/A" : act.getLocation()));
         if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
             holder.complete.setVisibility(View.VISIBLE);
             holder.delete.setVisibility(View.VISIBLE);
@@ -214,6 +215,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         public TextView description;
         public TextView status;
         public TextView startTime;
+        public TextView location;
         public Button complete;
         public Button delete;
 
@@ -224,6 +226,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             description = itemView.findViewById(R.id.aDescription);
             status = itemView.findViewById(R.id.aStatus);
             startTime = itemView.findViewById(R.id.aStartTime);
+            location = itemView.findViewById(R.id.aLocation);
             complete = itemView.findViewById(R.id.aComplete);
             delete = itemView.findViewById(R.id.aDelete);
         }

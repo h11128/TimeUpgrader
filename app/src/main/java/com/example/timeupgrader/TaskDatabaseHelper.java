@@ -52,7 +52,8 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 ACT.Column_ActType + " INTEGER," + ACT.Column_StartTime + " INTEGER," +
                 ACT.Column_Notify + " INTEGER," + ACT.Column_IsTiming + " INTEGER," +
                 ACT.Column_Duration + " INTEGER," + ACT.Column_RewardPoint + " INTEGER," +
-                ACT.Column_Status + " INTEGER," + ACT.Column_Synced + " INTEGER)");
+                ACT.Column_Status + " INTEGER," + ACT.Column_Synced + " INTEGER," +
+                ACT.Column_Location + " TEXT)");
     }
 
     @Override
@@ -150,6 +151,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         cv.put(ACT.Column_RewardPoint, act.getRewardPoint());
         cv.put(ACT.Column_Status, act.getStatus());
         cv.put(ACT.Column_Synced, act.isSynced() ? 1 : 0);
+        cv.put(ACT.Column_Location, act.getLocation());
         return getWritableDatabase().insert(ACT.Table_Activity, null, cv);
     }
 
@@ -165,6 +167,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(ACT.Column_Status, status);
         values.put(ACT.Column_Synced, 0);
+
         return getWritableDatabase().update(ACT.Table_Activity, values, selection, selectionArgs);
     }
 
@@ -261,6 +264,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                 ACT.Column_RewardPoint,
                 ACT.Column_Status,
                 ACT.Column_Synced,
+                ACT.Column_Location
         };
 
         Cursor cursor = getReadableDatabase().query(
@@ -295,8 +299,9 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper {
                     boolean isTiming = cursor.getInt(cursor.getColumnIndexOrThrow(ACT.Column_IsTiming)) == 1;
                     long duration = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_Duration));
                     long rewardPoint = cursor.getLong(cursor.getColumnIndexOrThrow(ACT.Column_RewardPoint));
+                    String location = cursor.getString(cursor.getColumnIndexOrThrow(ACT.Column_Location));
                     listAct.add(new SingleAct(id, name, description, type, startTime, notify, isTiming,
-                            rewardPoint, owner, curStatus, duration, 0, synced));
+                            rewardPoint, owner, curStatus, duration, 0, synced, location));
                 }
             }
         }

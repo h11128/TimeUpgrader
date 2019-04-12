@@ -18,5 +18,6 @@ public final class ActSchema {
         public static final String Column_RewardPoint = "RewardPoint";
         public static final String Column_Status = "Status";
         public static final String Column_Synced = "Synced";
+        public static final String Column_Location = "Location";
     }
 }

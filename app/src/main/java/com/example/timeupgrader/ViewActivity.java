@@ -1,5 +1,6 @@
 package com.example.timeupgrader;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
@@ -7,9 +8,16 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,14 +30,22 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.joda.time.LocalDateTime;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class ViewActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -47,8 +63,12 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
     TaskDatabaseHelper dbHelper;
     FireBaseHelper fbHelper;
     Date date;
+    String location;
+    List<Address> addresses;
+    Geocoder geocoder;
     long startTime;
     int chosenDay, chosenYear, chosenMonth, chosenHour, chosenMinute;
+    private static final int PERMISSIONS_REQUEST = 100;
     private LocalDateTime mLocalDateTime = new LocalDateTime();
 
     @Override
@@ -64,7 +84,24 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
 
         dbHelper = new TaskDatabaseHelper(getApplicationContext());
         fbHelper = new FireBaseHelper();
+        LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            int permission = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION);
+            if (permission == PackageManager.PERMISSION_GRANTED){
+                requestLocationUpdates();
 
+            }
+            else{
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST);
+            }
+        }
+        else {
+            Toast.makeText(this, "No GPS. Please enable your gps service.", Toast.LENGTH_LONG).show();
+        }
         toolbar = findViewById(R.id.toolbarMain);
         toolbar.setTitle("Add a new activity");
         editTextName = (EditText) findViewById(R.id.editTextName);
@@ -121,7 +158,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                     SingleAct act = new SingleAct(uuid.toString(), editTextName.getText().toString(),
                             editTextDescription.getText().toString(), 0, startTime, true,
                             false, 66, Email.getCurrentEmail().getEmail(), SingleAct.SET, 0,
-                            CurrentTime, false);
+                            CurrentTime, false, location);
                     fbHelper.insertAct(act);
                     dbHelper.insert_Activity(act);
                     setAlarm(uuid.toString(), editTextName.getText().toString(), startTime);
@@ -139,6 +176,57 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         chosenMinute = minute;
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText((hourOfDay < 10 ? "0" : "") + hourOfDay + " : " + (minute < 10 ? "0" : "") + minute);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[]
+            grantResults) {
+
+        if (requestCode == PERMISSIONS_REQUEST && grantResults.length == 1
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+
+            requestLocationUpdates();
+        } else {
+
+            Toast.makeText(this, "Please enable location services to allow GPS tracking", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void requestLocationUpdates() {
+        LocationRequest request = new LocationRequest();
+
+        request.setInterval(10000);
+
+
+
+        geocoder = new Geocoder(this, Locale.getDefault());
+        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
+        final String path = getString(R.string.firebase_path);
+        int permission = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permission == PackageManager.PERMISSION_GRANTED) {
+
+            client.requestLocationUpdates(request, new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+
+                    Location olocation = locationResult.getLastLocation();
+                    try {
+                        addresses = geocoder.getFromLocation(olocation.getLatitude(),olocation.getLongitude(), 1);
+                        location = addresses.get(0).getAddressLine(0);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Something Wrong with your Location", Toast.LENGTH_SHORT).show();
+                        location = "NULL";
+                    }
+
+
+                }
+            }, null);
+        }
+
     }
 
     @Override
