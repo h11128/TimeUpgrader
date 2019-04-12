@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginTop="4dp"
-                android:text="Start time:"
+                android:text="Location:"
                 android:textSize="14sp" />
 
             <!--<TextView

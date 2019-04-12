@@ -104,7 +104,8 @@ public class MainFragment extends Fragment {
                                     snapshot.child("status").getValue(Integer.class),
                                     (long) snapshot.child("duration").getValue(),
                                     (long) snapshot.child("currentTime").getValue(),
-                                    (boolean) snapshot.child("synced").getValue()));
+                                    (boolean) snapshot.child("synced").getValue(),
+                            (String) snapshot.child("location").getValue()));
                         }
                     }
                     Collections.sort(mData, new Comparator<SingleAct>() {
