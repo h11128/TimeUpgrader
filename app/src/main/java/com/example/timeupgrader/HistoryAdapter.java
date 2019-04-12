@@ -38,6 +38,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.name.setText(act.getName());
         holder.description.setText(act.getDescription());
         holder.status.setText(act.getStatusText());
+        holder.location.setText("Location: " + act.getLocation());
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
         holder.startTime.setText("Start time: " + sdf1.format(act.getStartTime()));
@@ -127,6 +128,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         public TextView description;
         public TextView status;
         public TextView startTime;
+        public TextView location;
         public Button delete;
 
         public HistoryViewHolder(View v) {
@@ -136,6 +138,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             description = itemView.findViewById(R.id.hDescription);
             status = itemView.findViewById(R.id.hStatus);
             startTime = itemView.findViewById(R.id.hStartTime);
+            location = itemView.findViewById(R.id.aLocation);
             delete = itemView.findViewById(R.id.hDelete);
         }
     }
