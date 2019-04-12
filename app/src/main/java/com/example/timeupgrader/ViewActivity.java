@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -38,9 +40,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.joda.time.LocalDateTime;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class ViewActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -59,7 +64,8 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
     FireBaseHelper fbHelper;
     Date date;
     String location;
-
+    List<Address> addresses;
+    Geocoder geocoder;
     long startTime;
     int chosenDay, chosenYear, chosenMonth, chosenHour, chosenMinute;
     private static final int PERMISSIONS_REQUEST = 100;
@@ -190,6 +196,8 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         request.setInterval(10000);
 
 
+
+        geocoder = new Geocoder(this, Locale.getDefault());
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
         final String path = getString(R.string.firebase_path);
@@ -202,8 +210,16 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 public void onLocationResult(LocationResult locationResult) {
 
                     Location olocation = locationResult.getLastLocation();
-                    location = Location.convert(olocation.getLatitude(), Location.FORMAT_DEGREES) + " " +
-                            Location.convert(olocation.getLongitude(), Location.FORMAT_DEGREES);
+                    try {
+                        addresses = geocoder.getFromLocation(olocation.getLatitude(),olocation.getLongitude(), 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Something Wrong with your Location", Toast.LENGTH_SHORT).show();
+                    }
+                    String address = addresses.get(0).getAddressLine(0);
+                    String city = addresses.get(0).getLocality();
+                    location = address + " " + city;
+
                 }
             }, null);
         }
