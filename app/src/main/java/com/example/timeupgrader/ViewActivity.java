@@ -100,7 +100,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
             }
         }
         else {
-            Toast.makeText(this, "No GPS. Please enable your gps service.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No GPS. Please enable your GPS service and re-add your activity.", Toast.LENGTH_LONG).show();
         }
         toolbar = findViewById(R.id.toolbarMain);
         toolbar.setTitle("Add a new activity");
@@ -155,6 +155,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                     Date currentTime = Calendar.getInstance().getTime();
                     long CurrentTime = currentTime.getTime();
                     // int rewardPoint = parseInt(spinnerType.getSelectedItem().toString());
+                    // requestLocationUpdates();
                     SingleAct act = new SingleAct(uuid.toString(), editTextName.getText().toString(),
                             editTextDescription.getText().toString(), 0, startTime, true,
                             false, 66, Email.getCurrentEmail().getEmail(), SingleAct.SET, 0,
