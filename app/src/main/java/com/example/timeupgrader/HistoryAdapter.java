@@ -38,7 +38,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         holder.name.setText(act.getName());
         holder.description.setText(act.getDescription());
         holder.status.setText(act.getStatusText());
-        holder.location.setText("Location: " + act.getLocation());
+        holder.location.setText("Location: " + (act.getLocation() == null ? "N/A" : act.getLocation()));
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
         holder.startTime.setText("Start time: " + sdf1.format(act.getStartTime()));

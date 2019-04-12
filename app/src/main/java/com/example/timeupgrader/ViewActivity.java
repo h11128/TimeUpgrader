@@ -99,6 +99,9 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                         PERMISSIONS_REQUEST);
             }
         }
+        else {
+            Toast.makeText(this, "No GPS. Please enable your gps service.", Toast.LENGTH_LONG).show();
+        }
         toolbar = findViewById(R.id.toolbarMain);
         toolbar.setTitle("Add a new activity");
         editTextName = (EditText) findViewById(R.id.editTextName);
@@ -212,13 +215,13 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                     Location olocation = locationResult.getLastLocation();
                     try {
                         addresses = geocoder.getFromLocation(olocation.getLatitude(),olocation.getLongitude(), 1);
+                        location = addresses.get(0).getAddressLine(0);
                     } catch (IOException e) {
                         e.printStackTrace();
                         Toast.makeText(getApplicationContext(), "Something Wrong with your Location", Toast.LENGTH_SHORT).show();
+                        location = "NULL";
                     }
-                    String address = addresses.get(0).getAddressLine(0);
-                    String city = addresses.get(0).getLocality();
-                    location = address + " " + city;
+
 
                 }
             }, null);

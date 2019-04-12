@@ -43,7 +43,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         // SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
         holder.startTime.setText("Start time: " + sdf1.format(act.getStartTime()));
-        holder.location.setText("Location: " + act.getLocation());
+        holder.location.setText("Location: " + (act.getLocation() == null ? "N/A" : act.getLocation()));
         if (act.getStatus() == SingleAct.SET || act.getStatus() == SingleAct.START) {
             holder.complete.setVisibility(View.VISIBLE);
             holder.delete.setVisibility(View.VISIBLE);
