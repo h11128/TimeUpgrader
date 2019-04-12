@@ -195,13 +195,8 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
 
     private void requestLocationUpdates() {
         LocationRequest request = new LocationRequest();
-
-        request.setInterval(10000);
-
-
-
         geocoder = new Geocoder(this, Locale.getDefault());
-        request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        request.setPriority(LocationRequest.PRIORITY_NO_POWER);
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);
         final String path = getString(R.string.firebase_path);
         int permission = ContextCompat.checkSelfPermission(this,
