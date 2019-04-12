@@ -50,7 +50,6 @@ public class TrackingService extends Service {
 
         request.setInterval(10000);
 
-//Get the most accurate location data available//
 
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(this);

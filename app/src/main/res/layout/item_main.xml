@@ -62,6 +62,14 @@
                 android:layout_marginTop="4dp"
                 android:text="Start time:"
                 android:textSize="14sp" />
+            <TextView
+                android:id="@+id/aLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="4dp"
+                android:text="Start time:"
+                android:textSize="14sp" />
 
             <!--<TextView
                 android:id="@+id/aDuration"
