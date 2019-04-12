@@ -138,7 +138,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             description = itemView.findViewById(R.id.hDescription);
             status = itemView.findViewById(R.id.hStatus);
             startTime = itemView.findViewById(R.id.hStartTime);
-            location = itemView.findViewById(R.id.aLocation);
+            location = itemView.findViewById(R.id.hLocation);
             delete = itemView.findViewById(R.id.hDelete);
         }
     }
