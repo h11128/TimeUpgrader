@@ -169,7 +169,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         getActivity().finish();
     }
 
-    private void syncFrom() {
+    public void syncFrom() {
         final TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getContext());
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         Query query = mDatabase.child("userAct").child(Email.getCurrentEmail().getEmail().replace('.', ','));
@@ -210,7 +210,7 @@ public class MoreFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void syncTo() {
+    public void syncTo() {
         try {
             TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(getContext());
             FireBaseHelper fbHelper = new FireBaseHelper();
