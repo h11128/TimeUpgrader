@@ -1,8 +1,6 @@
 package com.example.timeupgrader;
-import android.os.Parcel;
-import android.util.Pair;
 import android.support.test.runner.AndroidJUnit4;
-import android.view.View;
+
 
 import static org.junit.Assert.*;
 
@@ -27,23 +25,15 @@ public class ReadActivityAndroidUnitTest {
                 7, false, "8");
         TaskDatabaseHelper dbHelper = new TaskDatabaseHelper(vv.getApplicationContext());
         dbHelper.insert_Activity(act);
-        String id = "1";
-        String name = "2";
-        String location = "8";
-        List<SingleAct> mData = new ArrayList<>();
+        List<SingleAct> mData;
         mData = dbHelper.loadActivityByStatus("6",
                 new int[]{SingleAct.SET, SingleAct.START}, false);
+
         SingleAct TestAct = mData.get(0);
         assertEquals(TestAct.getOwner(), "6");
         assertEquals(TestAct.getCurrentTime(), "7");
         assertEquals(TestAct.getStatus(), SingleAct.SET);
         assertEquals(TestAct.getDuration(), 0);
         assertEquals(TestAct.getLocation(), "8");
-
-
-
-
-
-
         }
 }
