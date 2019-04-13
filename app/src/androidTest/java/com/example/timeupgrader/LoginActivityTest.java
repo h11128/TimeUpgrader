@@ -20,7 +20,7 @@ public class LoginActivityTest {
     public ActivityTestRule<LoginActivity> mActivityTestRule = new ActivityTestRule<>(LoginActivity.class);
 
     @Test
-    public void LoginActivityTest() {
+    public void testLoginActivity() {
         onView(withId(R.id.etUserEmail)).perform(typeText("yyz@qq.com"));
         onView(withId(R.id.etUserPassword)).perform(typeText("123456"));
         //onView(withId(R.id.etPassword2)).perform(typeText("123123"),closeSoftKeyboard());
