@@ -44,4 +44,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     testImplementation 'org.robolectric:robolectric:4.2'
     testImplementation "org.robolectric:shadows-supportv4:3.7"
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 }
