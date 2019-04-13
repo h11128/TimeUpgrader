@@ -56,8 +56,7 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
                 @Override
                 public void onTick(long millisUntilFinished) {
                     if (getActivity() != null) {
-                        long remainTime = millisUntilFinished / 1000L;
-                        remainingTime.setText(format(remainTime + 1));
+                        remainingTime.setText(format(millisUntilFinished + 1000));
                         long curProgress = (long)((total - millisUntilFinished) / (double)total * focusTimer.getMax());
                         if (curProgress > progress) {
                             progress = curProgress;
@@ -84,7 +83,9 @@ public class FocusFragment extends Fragment implements FocusActivity.ToFragmentL
         return v;
     }
 
-    private String format(long time) {
+    public String format(long time) {
+        if (time < 0) return "Invalid";
+        time /= 1000;
         long sec = time % 60;
         long min = (time / 60) % 60;
         long hr = (time / 60) / 60;
