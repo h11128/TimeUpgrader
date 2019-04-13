@@ -23,10 +23,9 @@ public class SignUpActivityTest {
     public ActivityTestRule<SignupActivity> mActivityTestRule = new ActivityTestRule<>(SignupActivity.class);
 
     @Test
-    public void SignUpActivityTest(){
+    public void testSignUpActivity(){
         onView(withId(R.id.etEmail)).perform(typeText("yyz@qq.com"));
         onView(withId(R.id.etPassword)).perform(typeText("123456"), closeSoftKeyboard());//onView(withId(R.id.etPassword2)).perform(typeText("123123"),closeSoftKeyboard());
         onView(withId(R.id.btnSignup)).perform(click());
-
     }
 }
