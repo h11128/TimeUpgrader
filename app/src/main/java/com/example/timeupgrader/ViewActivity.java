@@ -194,7 +194,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
         }
     }
 
-    private void requestLocationUpdates() {
+    public String requestLocationUpdates() {
         LocationRequest request = new LocationRequest();
         geocoder = new Geocoder(this, Locale.getDefault());
         request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -222,6 +222,7 @@ public class ViewActivity extends AppCompatActivity implements TimePickerDialog.
                 }
             }, null);
         }
+        return location;
 
     }
 
