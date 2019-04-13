@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.support.test.rule.ActivityTestRule;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -13,12 +15,13 @@ import org.junit.runner.RunWith;
 // @RunWith is required only if you use a mix of JUnit3 and JUnit4.
 @RunWith(AndroidJUnit4.class)
 public class ReadActivityAndroidUnitTest {
-
+    @Rule
+    public ActivityTestRule<MainActivity> rule  = new ActivityTestRule<>(MainActivity.class);
 
 
     @Test
     public void testData() {
-        ViewActivity vv = new ViewActivity();
+        MainActivity vv = rule.getActivity();
         SingleAct act = new SingleAct("1", "2",
                 "3", 0, 4, true,
                 false, 5, "6", SingleAct.SET, 0,
