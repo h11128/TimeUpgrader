@@ -33,20 +33,12 @@ public class ReadActivityAndroidUnitTest {
         List<SingleAct> mData = new ArrayList<>();
         mData = dbHelper.loadActivityByStatus("6",
                 new int[]{SingleAct.SET, SingleAct.START}, false);
-        assertEquals(mData.get(0), "1");
-        assertEquals(mData.get(1), "2");
-        assertEquals(mData.get(2), "3");
-        assertEquals(mData.get(3), 0);
-        assertEquals(mData.get(4), 4);
-        assertEquals(mData.get(5), true);
-        assertEquals(mData.get(6), false);
-        assertEquals(mData.get(7), 5);
-        assertEquals(mData.get(8), "6");
-        assertEquals(mData.get(9), SingleAct.SET);
-        assertEquals(mData.get(10), 0);
-        assertEquals(mData.get(11), 7);
-        assertEquals(mData.get(12), false);
-        assertEquals(mData.get(13), "8");
+        SingleAct TestAct = mData.get(0);
+        assertEquals(TestAct.getOwner(), "6");
+        assertEquals(TestAct.getCurrentTime(), "7");
+        assertEquals(TestAct.getStatus(), SingleAct.SET);
+        assertEquals(TestAct.getDuration(), 0);
+        assertEquals(TestAct.getLocation(), "8");
 
 
 
