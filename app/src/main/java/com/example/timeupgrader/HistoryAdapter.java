@@ -31,6 +31,32 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         this.fbHelper = new FireBaseHelper();
     }
 
+    public static class HistoryViewHolder extends RecyclerView.ViewHolder{
+        public LinearLayout root;
+        public TextView name;
+        public TextView description;
+        public TextView status;
+        public TextView startTime;
+        public TextView location;
+        public Button delete;
+
+        public HistoryViewHolder(View v) {
+            super(v);
+            root = itemView.findViewById(R.id.history_root);
+            name = itemView.findViewById(R.id.hName);
+            description = itemView.findViewById(R.id.hDescription);
+            status = itemView.findViewById(R.id.hStatus);
+            startTime = itemView.findViewById(R.id.hStartTime);
+            location = itemView.findViewById(R.id.hLocation);
+            delete = itemView.findViewById(R.id.hDelete);
+        }
+    }
+
+    @Override
+    public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
+        return new HistoryViewHolder(v);
+    }
     @Override
     public void onBindViewHolder(final HistoryViewHolder holder, final int position) {
         final SingleAct act = getItem(position);
@@ -116,30 +142,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
         return mData.get(position);
     }
 
-    @Override
-    public HistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_history, parent, false);
-        return new HistoryViewHolder(v);
-    }
 
-    public static class HistoryViewHolder extends RecyclerView.ViewHolder{
-        public LinearLayout root;
-        public TextView name;
-        public TextView description;
-        public TextView status;
-        public TextView startTime;
-        public TextView location;
-        public Button delete;
 
-        public HistoryViewHolder(View v) {
-            super(v);
-            root = itemView.findViewById(R.id.history_root);
-            name = itemView.findViewById(R.id.hName);
-            description = itemView.findViewById(R.id.hDescription);
-            status = itemView.findViewById(R.id.hStatus);
-            startTime = itemView.findViewById(R.id.hStartTime);
-            location = itemView.findViewById(R.id.hLocation);
-            delete = itemView.findViewById(R.id.hDelete);
-        }
-    }
+
 }
